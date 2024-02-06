@@ -1,5 +1,7 @@
 # About this project
 
+This project is the backend part for https://github.com/JanessaTech/best-second-hand-market
+
 # Install
 
 ```
@@ -22,12 +24,14 @@ npm install
 
 # Installed dependencies
 
-- npm install --save express
-- npm install --save lodash
-- npm install --save cookie-parser
-- npm install --save winston
-- npm install --save yup
-- npm install --save dotenv
-- npm install --save bcrypt
-- npm install --save jsonwebtoken
-- npm install --save cors
+```
+npm install --save express
+npm install --save lodash
+npm install --save cookie-parser
+npm install --save winston
+npm install --save yup
+npm install --save dotenv
+npm install --save bcrypt
+npm install --save jsonwebtoken
+npm install --save cors
+```
