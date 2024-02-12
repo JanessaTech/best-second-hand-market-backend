@@ -1,4 +1,4 @@
 const config = require('./config.global')
-config.env = 'production'
+config.env = 'stage'
 
 module.exports = config

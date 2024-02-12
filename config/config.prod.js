@@ -1,4 +1,4 @@
 const config = require('./config.global')
-config.env = 'test'
+config.env = 'prod'
 
 module.exports = config
