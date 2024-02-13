@@ -4,12 +4,13 @@ const app = require('../app')
 const config = require('../config')
 const logger = require('../helpers/logger')
 const banner = require('../helpers/banner')
+require('../db')
 
 let port = config.port
-//logger.info(process.env.API_SECRET)
 logger.info(banner)
 logger.info(`Server Port : ${port}`, port)
 logger.info(`Environment type: ${config.env}`)
+logger.info('Database:%O', config.database)
 // Create a web server
 const server = http.createServer(app)
 logger.info('Server is created')

@@ -1,5 +1,7 @@
+const {Student} = require('../db/student')
 
 class UserController {
+
     /**
      * Register a user which is associated with a wallet address
      * @param {*} req 
@@ -7,7 +9,31 @@ class UserController {
      * @param {*} next 
      */
     async register(req, res, next) {
-        
+        try{
+            const stu1 = await Student.findOne({'name' : 'student1'})
+            .populate('teachers')
+            .exec()
+            console.log('stu1:', stu1)
+        }catch(error) {
+            console.log('failed to find student1 due to:', error)
+        }
+    
+        try{
+            const stu2 = await Student.findOne({'name' : 'student2'})
+            .populate('teachers')
+            .exec()
+            console.log('stu2:', stu2)
+        }catch(error) {
+            console.log('failed to find student2 due to:', error)
+        }
+        try{
+            const stu3 = await Student.findOne({'name' : 'student3'})
+            .populate('teachers')
+            .exec()
+            console.log('stu3:', stu3)
+        }catch(error) {
+            console.log('failed to find student3 due to:', error)
+        }
     }
 
     /**

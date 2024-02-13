@@ -6,7 +6,7 @@ const {userSchema} = require('../../helpers/schemas')
 const {validate, authenticate, authorize} = require('../../middlewares')
 const userService = require('../../services/user.service')
 
-// router.post('/register', validate(userSchema.register), controller.register)
+router.post('/register', controller.register)
 // router.post('/login', validate(userSchema.login), controller.login)
 // router.get('/:id', authenticate(userService),authorize(), validate(userSchema.getByUserId), controller.getUserById)
 // router.put('/', authenticate(userService),authorize(), validate(userSchema.updateUser), controller.updateUser)
