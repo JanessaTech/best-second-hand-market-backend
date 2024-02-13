@@ -1,8 +1,11 @@
 const mongoose = require('mongoose')
 const logger = require('../helpers/logger')
+const config = require('../config')
 const initTeacherSchema = require('./student')
+const initUserSchema = require('./user')
 
-mongoose.connect('mongodb://127.0.0.1/stu')
+logger.info(`mongodb connection url: mongodb://${config.database.host}/${config.database.dataBaseName}`)
+mongoose.connect(`mongodb://${config.database.host}/${config.database.dataBaseName}`)
 let db = mongoose.connection
 db.once('open', () => {
     logger.info('Connected to the database.');
@@ -13,5 +16,6 @@ db.on('error', (err) => {
 });
 
 const Student = initTeacherSchema(mongoose)
+const User = initUserSchema(mongoose)
 
-module.exports = {Student}
+module.exports = {Student, User}

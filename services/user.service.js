@@ -1,6 +1,7 @@
 const logger = require("../helpers/logger");
 const bcrypt = require("bcrypt");
 const {UserError} = require("../routes/user/UserErrors");
+const userDao = require('../dao/user')
 
 class UserService {
     userMap = new Map()
@@ -8,14 +9,12 @@ class UserService {
 
     async register(user) {
         logger.info('UserService.register...')
-        let users = this.findUser(user.name)
-        if (users.length !== 0) {
-            throw new UserError({key: 'user_register_duplicated_name', params:[user.name]})
+        try {
+            return await userDao.create(user)
+        } catch(e) {
+            logger.debug('Failed to register the user %O:', user)
+            throw e
         }
-        user.id = this.cnt
-        this.userMap.set(this.cnt, user)
-        this.cnt++
-        return user
     }
 
     async login(user) {

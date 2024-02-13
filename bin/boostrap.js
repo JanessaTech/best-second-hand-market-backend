@@ -10,7 +10,6 @@ let port = config.port
 logger.info(banner)
 logger.info(`Server Port : ${port}`, port)
 logger.info(`Environment type: ${config.env}`)
-logger.info('Database:%O', config.database)
 // Create a web server
 const server = http.createServer(app)
 logger.info('Server is created')

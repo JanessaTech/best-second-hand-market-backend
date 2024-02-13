@@ -1,5 +1,7 @@
-const {Student} = require('../db')
-const logger = require("../helpers/logger");
+const logger = require('../helpers/logger')
+const {sendSuccess} = require('../helpers/reponseHandler')
+const userService = require('../services/user.service')
+const messageHelper = require('../helpers/internationaliztion/messageHelper')
 
 class UserController {
 
@@ -10,31 +12,17 @@ class UserController {
      * @param {*} next 
      */
     async register(req, res, next) {
-
-        try{
-            const stu1 = await Student.findOne({'name' : 'student1'})
-            .populate('teachers')
-            .exec()
-            console.log('stu1:', stu1)
-        }catch(error) {
-            console.log('failed to find student1 due to:', error)
-        }
-    
-        try{
-            const stu2 = await Student.findOne({'name' : 'student2'})
-            .populate('teachers')
-            .exec()
-            console.log('stu2:', stu2)
-        }catch(error) {
-            console.log('failed to find student2 due to:', error)
-        }
-        try{
-            const stu3 = await Student.findOne({'name' : 'student3'})
-            .populate('teachers')
-            .exec()
-            console.log('stu3:', stu3)
-        }catch(error) {
-            console.log('failed to find student3 due to:', error)
+        logger.info('UserController.register')
+        try {
+            const user = {
+                name: req.body.name,
+                address: req.body.address,
+                intro: req.body.intro,
+            }
+            const payload = await userService.register(user)
+            sendSuccess(res, messageHelper.getMessage('user_register', payload.name))
+        } catch (e) {
+            next(e)
         }
     }
 

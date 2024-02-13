@@ -18,7 +18,7 @@ const logger = winston.createLogger({
 
 function getLogLevel(env) {
     switch (env) {
-        case 'prod' : return 'error'
+        case 'prod' : return 'info'
         case 'stage' : return 'info'
         case 'dev' : return 'debug'
         default: return 'info'

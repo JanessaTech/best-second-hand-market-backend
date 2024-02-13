@@ -17,6 +17,7 @@ module.exports = {
     user_login_wrong_password: 'User {0} logined with wrong password',
     user_not_found: 'User {0} is not found',
     user_register_duplicated_name: 'User {0} is already registered',
+    user_register_validiation_failed: 'Failed to register User {0} due to validation failure',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',
