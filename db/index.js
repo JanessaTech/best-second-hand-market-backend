@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const logger = require('../helpers/logger')
+const initTeacherSchema = require('./student')
 
 mongoose.connect('mongodb://127.0.0.1/stu')
 let db = mongoose.connection
@@ -11,4 +12,6 @@ db.on('error', (err) => {
     process.exit()
 });
 
-module.exports = mongoose
+const Student = initTeacherSchema(mongoose)
+
+module.exports = {Student}

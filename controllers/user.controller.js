@@ -1,4 +1,5 @@
-const {Student} = require('../db/student')
+const {Student} = require('../db')
+const logger = require("../helpers/logger");
 
 class UserController {
 
@@ -9,6 +10,7 @@ class UserController {
      * @param {*} next 
      */
     async register(req, res, next) {
+
         try{
             const stu1 = await Student.findOne({'name' : 'student1'})
             .populate('teachers')
