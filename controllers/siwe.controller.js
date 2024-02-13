@@ -26,7 +26,7 @@ class SiweController {
                 let message = messageHelper.getMessage('siwe_verify_success')
                 sendSuccess(res, message, payload)
             } catch(err) {
-                throw new SiweError({key: 'siwe_verify_failed'})
+                throw new SiweError({key: 'siwe_verify_failed', code:400})
             }
         } catch(e) {
             next(e)

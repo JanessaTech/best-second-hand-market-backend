@@ -1,14 +1,15 @@
 module.exports = class BaseError extends Error {
     /**
      * We have 3 attributes in props:
-     *  - key: used to get error code from errorCodes.js and error message from messages_en.js(or messages_zh.js)
+     *  - key: used to get error message from messages_en.js(or messages_zh.js)
      *  - errors: set details of the error. You could set any data you want, eg: string, object or array etc
      *  - params : provide parameters in the form of array if necessary for constructing error message
+     *  - code: error code shown in json response
      *
      *  We seldom use this class directly.
      *  We recommend you introducing a new class by inheriting this class, eg: AccountError
      *  We have three ways to new this inherited class(let's use AccountError as an example):
-     *   1. error = new AccountError({key: 'account_register', params: ['demoAccount'], errors:'dummy errors'})
+     *   1. error = new AccountError({key: 'account_register', params: ['demoAccount'], errors:'dummy errors', code: 400})
      *   2. error = new AccountError({})
      *   3. error = new AccountError()
      *

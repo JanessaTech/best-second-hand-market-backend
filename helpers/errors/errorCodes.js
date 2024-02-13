@@ -9,9 +9,6 @@ module.exports = {
     //todo
     todo_not_found: {code:400},
 
-    //siwe
-    siwe_verify_failed: {code: 400},
-
     // global
     UnSupportedAuthError : {code : 401},
     UnauthorizedError : {code : 401},
