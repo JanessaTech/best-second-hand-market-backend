@@ -3,11 +3,10 @@ const yup = require('yup')
 const schemas = {
     register : yup.object({
         body: yup.object({
-            name : yup.string().min(5).max(15).required(),
-            password: yup.string().min(5).max(10).required(),
-            roles: yup.array().of(yup.string()).min(1).required("Provide at least one role"),
-            age: yup.number().min(18).max(80).optional(),
-            email: yup.string().email().optional()
+            name : yup.string().min(5, 'name must have at least 5 characters').max(20, 'name must have at most 20 characters').required('name is required'),
+            address: yup.string().required('address is required').matches(/^0x[a-fA-F0-9]{40}$/, 'address is invalid cryptocurrency wallet address'),
+            intro: yup.string().max(200, 'intro should be less than 200 characters').optional(),
+            gateway: yup.string().required('gateway is required')
         })
     }),
     login : yup.object({

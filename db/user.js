@@ -7,13 +7,38 @@ const initUserSchema = (mongoose) => {
         id: { type: Number,  unique: true, index: true, min: 1 },
         name: {
             type: String,
+            trim: true,
+            unique: true,
+            minLength: [5, 'name should have at least 5 characters'],
+            maxLength: [20, 'name should have at most 20 characters'], 
             required: [true, 'name is required'],
         },
         address: {
             type: String,
-            required: [true, 'address is required'],
+            index: true,
+            trim: true,
+            unique: true,
+            validate: {
+                validator: function(v) {
+                    var re = /^0x[a-fA-F0-9]{40}$/;
+                    return re.test(v)
+                },
+                message: props => `${props.value} is invalid cryptocurrency wallet address`
+            },
+            required: [true, 'address is invalid'],
         },
-        intro: String
+        intro: {
+            type: String,
+            trim: true,
+            maxLength: [200, 'intro should be less than 200 characters']
+        },
+        gateway: {
+            type: String,
+            trim: true,
+            required: [true, 'gateway is required'],
+        },
+        loginTime: {type: Date},
+        logoutTime: {type: Date},
     }, { timestamps: true })
 
     const CounterModel = initCounterSchema(mongoose)

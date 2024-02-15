@@ -9,7 +9,8 @@ class UserDAO {
             const userDao = new User({
                 name: user.name,
                 address: user.address,
-                intro: user.intro
+                intro: user.intro,
+                gateway: user.gateway
             })
             const savedUser = await userDao.save()
             logger.debug('UserDAO.create. %O is saved successfully', savedUser)

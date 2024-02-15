@@ -18,6 +18,7 @@ class UserController {
                 name: req.body.name,
                 address: req.body.address,
                 intro: req.body.intro,
+                gateway: req.body.gateway
             }
             const payload = await userService.register(user)
             sendSuccess(res, messageHelper.getMessage('user_register', payload.name))
