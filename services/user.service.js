@@ -1,66 +1,37 @@
 const logger = require("../helpers/logger");
-const bcrypt = require("bcrypt");
 const {UserError} = require("../routes/user/UserErrors");
 const userDao = require('../dao/user')
 
 class UserService {
-    userMap = new Map()
-    cnt = 0
-
     async register(user) {
         logger.info('UserService.register...')
         try {
+            const byName = await userDao.findByName(user.name)
+            if (byName) {
+                throw new UserError({key: 'user_register_duplication_name', params:[user.name], code: 400})
+            }
+            const byAddress = await userDao.findByAddress(user.address)
+            if (byAddress) {
+                throw new UserError({key: 'user_register_duplication_address', params:[user.address], code: 400})
+            }
             return await userDao.create(user)
         } catch(e) {
-            logger.debug('Failed to register the user %O:', user)
+            logger.debug('Failed to register the user', user)
             throw e
         }
     }
 
-    async login(user) {
-        logger.info('UserService.login...')
-        let users = this.findUser(user.name)
-        if (users.length !== 0) {
-            if (bcrypt.compareSync(user.password,users[0].password)) {
-                return users[0]
-            } else {
-                throw new UserError({key: 'user_login_wrong_password', params:[user.name]})
+    async getUserByAddress(address) {
+        logger.info('UserService.getUserByAddress')
+        try {
+            const user = await userDao.findByAddress(address)
+            if (!user) {
+                throw new UserError({key: 'user_not_found_address', params:[address], code: 404})
             }
-        } else {
-            throw new UserError({key: 'user_not_found', params:[user.name]})
-        }
-    }
-
-    findUser(name) {
-        return Array.from(this.userMap.values()).filter(value => value.name === name)
-    }
-
-    async getUserById(id) {
-        if (this.userMap.has(id)) {
-            return this.userMap.get(id)
-        } else {
-            throw new UserError({key: 'user_not_found', params:[id]})
-        }
-    }
-
-    getUserByIdInSyn(id) {
-        if (this.userMap.has(id)) {
-            return this.userMap.get(id)
-        } else {
-            throw new UserError({key: 'user_not_found', params:[id]})
-        }
-    }
-
-    async updateUser(user) {
-        if (this.userMap.has(user.id)) {
-            let u = this.userMap.get(user.id)
-            //u.name = user.name
-            //u.password = user.password
-            u.age = user.age || u.age
-            u.email = user.email || u.email
-            return u
-        } else {
-            throw new UserError({key: 'user_not_found', params:[user.name]})
+            return user
+        } catch (e) {
+            logger.debug('Failed to get user by address ', address)
+            throw e
         }
     }
 }

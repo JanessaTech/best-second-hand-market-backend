@@ -11,13 +11,11 @@ module.exports = {
 
     //user
     user_register: 'User {0} is registered successfully',
-    user_login : 'User {0} logined successfully(en)',
-    user_getById : 'Get user by id {0} successfully',
-    user_update : 'User {0} is updated successfully',
-    user_login_wrong_password: 'User {0} logined with wrong password',
-    user_not_found: 'User {0} is not found',
-    user_register_duplicated_name: 'User {0} is already registered',
-    user_register_validiation_failed: 'Failed to register User {0} due to validation failure',
+    user_register_duplication_name: 'User name {0} is already registered',
+    user_register_duplication_address: 'The address {0} is already registered',
+    user_register_validiation_failed: 'Failed to register user {0} due to validation failure',
+    user_not_found_address:'User is not found by address {0}',
+    user_getByAddress:'Return an user by address {0}', 
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

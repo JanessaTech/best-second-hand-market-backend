@@ -21,7 +21,7 @@ class UserController {
                 gateway: req.body.gateway
             }
             const payload = await userService.register(user)
-            sendSuccess(res, messageHelper.getMessage('user_register', payload.name))
+            sendSuccess(res, messageHelper.getMessage('user_register', payload.name), {user: payload})
         } catch (e) {
             next(e)
         }
@@ -34,7 +34,14 @@ class UserController {
      * @param {*} next 
      */
     async getUserByWalletAddress(req, res, next) {
-
+        logger.info('UserController.getUserByWalletAddress. address = ', req.params.address)
+        try {
+            const address = req.params.address
+            const payload = await userService.getUserByAddress(address)
+            sendSuccess(res, messageHelper.getMessage('user_getByAddress', address), {user: payload})
+        } catch(e) {
+            next(e)
+        }
     }
 
     /**

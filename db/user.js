@@ -32,11 +32,6 @@ const initUserSchema = (mongoose) => {
             trim: true,
             maxLength: [200, 'intro should be less than 200 characters']
         },
-        gateway: {
-            type: String,
-            trim: true,
-            required: [true, 'gateway is required'],
-        },
         loginTime: {type: Date},
         logoutTime: {type: Date},
     }, { timestamps: true })
