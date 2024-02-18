@@ -6,10 +6,20 @@ const messageHelper = require('../helpers/internationaliztion/messageHelper')
 class UserController {
 
     /**
-     * Register a user which is associated with a wallet address
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
+     * Register an user which is associated with a wallet address
+     * @param {
+     *          name    - The name for the new user registered
+     *          address - The wallet address to associate with the new user.
+     *          intro   - The introduction the user describes themselves
+     *        } req : The request sent by frontend
+     * @param {
+     *          success  - The flag to indicate whether the request is successful
+     *          code     - Response code
+     *          message  - The response message
+     *          data     - The data frontend sent back to frontend if it is necessary(optional)
+     *          errors   - The the detailed reason why the request is failed(optional)
+     *        } res : The response sent back to frontend
+     * @param {*} next : The object used by routes to control the workflow of req&res&exception handling
      */
     async register(req, res, next) {
         logger.info('UserController.register')
@@ -17,8 +27,7 @@ class UserController {
             const user = {
                 name: req.body.name,
                 address: req.body.address,
-                intro: req.body.intro,
-                gateway: req.body.gateway
+                intro: req.body.intro
             }
             const payload = await userService.register(user)
             sendSuccess(res, messageHelper.getMessage('user_register', payload.name), {user: payload})
@@ -30,8 +39,8 @@ class UserController {
     /**
      * Get the user which is associated with a wallet address
      * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
+     * @param {*} res  : The response sent back to frontend. The format is the same as register
+     * @param {*} next : The object used by routes to control the workflow of req&res&exception handling
      */
     async getUserByWalletAddress(req, res, next) {
         logger.info('UserController.getUserByWalletAddress. address = ', req.params.address)

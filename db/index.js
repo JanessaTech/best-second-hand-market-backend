@@ -4,13 +4,14 @@ const config = require('../config')
 const initTeacherSchema = require('./student')
 const initUserSchema = require('./user')
 
-logger.info(`mongodb connection url: mongodb://${config.database.host}/${config.database.dataBaseName}`)
 mongoose.connect(`mongodb://${config.database.host}/${config.database.dataBaseName}`)
 let db = mongoose.connection
 db.once('open', () => {
+    logger.info(`mongodb connection url: mongodb://${config.database.host}/${config.database.dataBaseName}`)
     logger.info('Connected to the database.');
 });
 db.on('error', (err) => {
+    logger.debug(`mongodb connection url: mongodb://${config.database.host}/${config.database.dataBaseName}`)
     logger.error(`Database error: ${err}`);
     process.exit()
 });

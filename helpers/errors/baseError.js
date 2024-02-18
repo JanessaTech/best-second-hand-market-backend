@@ -1,9 +1,9 @@
 module.exports = class BaseError extends Error {
     /**
-     * We have 3 attributes in props:
+     * We have 4 attributes in props:
      *  - key: used to get error message from messages_en.js(or messages_zh.js)
-     *  - errors: set details of the error. You could set any data you want, eg: string, object or array etc
      *  - params : provide parameters in the form of array if necessary for constructing error message
+     *  - errors: set details of the error. You could set any data you want, eg: string, object or array etc
      *  - code: error code shown in json response
      *
      *  We seldom use this class directly.

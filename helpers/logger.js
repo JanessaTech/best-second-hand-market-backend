@@ -1,6 +1,5 @@
-const winston = require("winston");
-const {format} = require("winston");
-const util = require('util');
+const winston = require("winston")
+const {format} = require("winston")
 const logLevel = getLogLevel(process.env.NODE_ENV)
 
 const isJson = (obj) => {
