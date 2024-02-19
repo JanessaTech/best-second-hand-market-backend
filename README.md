@@ -24,6 +24,12 @@ npm install
  npm run start
 ```
 
+# Run test cases
+
+```
+npm test
+```
+
 # Installed dependencies
 
 ```
@@ -39,5 +45,7 @@ npm install --save bcrypt
 npm install --save jsonwebtoken
 npm install --save cors
 npm install --save mongoose
+npm install --save-dev jest
+npm install --save-dev @jest-mock/express
 
 ```

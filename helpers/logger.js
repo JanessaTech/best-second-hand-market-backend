@@ -25,7 +25,7 @@ const logger = winston.createLogger({
         customFormat
     ),
     transports: [
-        new winston.transports.Console(),
+        new winston.transports.Console({silent: process.env.JEST_ENABLED === 'yes'}),
         new winston.transports.File({ filename: "logs/app.log" }),
     ],
 });
