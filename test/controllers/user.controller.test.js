@@ -3,7 +3,7 @@ const userService = require('../../services/user.service')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const {mockRequest, mockResponse} = require('../util/interceptor')
 
-describe('userController', () => {
+describe('UserController', () => {
     describe('register', () => {
         test('should register a new user successfully', async () => {
             let req = mockRequest()
@@ -31,7 +31,7 @@ describe('userController', () => {
             })
         });
 
-        test('should throw an error when calling userController.register is failed', async () => {
+        test('should throw an error when calling userService.register is failed', async () => {
             let req = mockRequest()
             let res = mockResponse()
             req.body = {
@@ -45,9 +45,6 @@ describe('userController', () => {
             await userController.register(req, res, next)
 
             expect(next).toHaveBeenCalled()
-        })
-        
-    }
-    
-    )
+        })    
+    })
 })
