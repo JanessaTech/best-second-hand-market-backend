@@ -40,7 +40,7 @@ class UserController {
 
     /**
      * Get the user which is associated with a wallet address
-     * @param {*} req 
+     * @param {params:{address}} req 
      * @param {*} res  : The response sent back to frontend. The format is the same as register
      * @param {*} next : The object used by routes to control the workflow of req&res&exception handling
      */
