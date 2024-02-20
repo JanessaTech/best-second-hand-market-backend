@@ -8,9 +8,11 @@ class UserController {
     /**
      * Register an user which is associated with a wallet address
      * @param {
-     *          name    - The name for the new user registered
-     *          address - The wallet address to associate with the new user.
-     *          intro   - The introduction the user describes themselves
+     *      body: {
+     *           name    - The name for the new user registered
+     *           address - The wallet address to associate with the new user.
+     *           intro   - The introduction the user describes themselves
+     *         }
      *        } req : The request sent by frontend
      * @param {
      *          success  - The flag to indicate whether the request is successful

@@ -4,7 +4,7 @@ const userService = require('../../services/user.service')
 
 describe("UserService", () => {
     describe("register", () => {
-        test('expects UserError when userDao.findByName return empty', async () => {
+        test('expects UserError when userDao.findByName returns empty', async () => {
             const user ={name: 'some-name', address: 'some-address'}
             userDao.findByName = jest.fn(async () => undefined)
 
@@ -14,7 +14,7 @@ describe("UserService", () => {
             expect(userDao.findByName).toHaveBeenCalledWith(user.name)
         })
 
-        test('expect UserError when userDao.findByAddress return empty', async () => {
+        test('expect UserError when userDao.findByAddress returns empty', async () => {
             const user ={name: 'some-name', address: 'some-address'}
             userDao.findByName = jest.fn(async (name) => {})
             userDao.findByAddress = jest.fn(async (address) => undefined)
