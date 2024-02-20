@@ -2,8 +2,6 @@ const userDao = require('../../dao/user')
 const {UserError} = require('../../routes/user/UserErrors')
 const userService = require('../../services/user.service')
 const { when } = require('jest-when')
-const userDAO = require('../../dao/user')
-const { add } = require('winston')
 
 describe("UserService", () => {
     describe("register", () => {

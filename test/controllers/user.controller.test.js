@@ -60,7 +60,6 @@ describe('UserController', () => {
             let req = mockRequest()
             let res = mockResponse()
             req.params = {address: 'some-address'}
-
             userService.getUserByAddress = jest.fn()
             when(userService.getUserByAddress).calledWith(req.params.address).mockRejectedValue(new UserError())
             const next = jest.fn()
