@@ -12,6 +12,11 @@ const schemas = {
         params: yup.object({
             address : yup.string().required('address is required').matches(/^0x[a-fA-F0-9]{40}$/, 'address is invalid cryptocurrency wallet address')
         })
+    }),
+    loginByAddress: yup.object({
+        body: yup.object({
+            address: yup.string().required('address is required').matches(/^0x[a-fA-F0-9]{40}$/, 'address is invalid cryptocurrency wallet address'),
+        }) 
     })
 
 }

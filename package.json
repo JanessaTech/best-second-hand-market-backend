@@ -8,7 +8,8 @@
     "start_win_prod": "set NODE_ENV=prod&&node .\\bin\\boostrap.js",
     "start_win_stage": "set NODE_ENV=stage&&node .\\bin\\boostrap.js",
     "start_win_dev": "set NODE_ENV=dev&&node .\\bin\\boostrap.js",
-    "test": "jest"
+    "test": "jest",
+    "test-one": "jest -t \"should save a new user successfully\""
   },
   "author": "JanessaTech",
   "license": "ISC",

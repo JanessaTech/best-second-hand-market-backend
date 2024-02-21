@@ -16,6 +16,7 @@ module.exports = {
     user_register_validiation_failed: 'Failed to register user {0} due to validation failure',
     user_not_found_address:'User is not found by address {0}',
     user_getByAddress:'Return an user by address {0}', 
+    user_login_success: 'User login by address {0} successfully',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

@@ -27,7 +27,7 @@ npm install
 # Run test cases
 
 ```
-npm test
+npm run test
 ```
 
 # Installed dependencies

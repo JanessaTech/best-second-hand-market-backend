@@ -34,6 +34,21 @@ class UserService {
             throw e
         }
     }
+
+    async loginByAddress(address) {
+        logger.info('UserService.login')
+        try {
+            const user = await userDao.findByAddressAndUpdateLoginTime(address)
+            if (!user) {
+                throw new UserError({key: 'user_not_found_address', params:[address], code: 404})
+            }
+            return user
+        } catch(e) {
+            logger.debug('Failed to login by address =', address)
+            throw e
+        }
+    }
+
 }
 
 const userService = new UserService()

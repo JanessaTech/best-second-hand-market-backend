@@ -3,13 +3,18 @@ const {UserError} = require('../../routes/user/UserErrors')
 const userService = require('../../services/user.service')
 const { when } = require('jest-when')
 
+beforeAll(() => {
+    userDao.findByName = jest.fn()
+    userDao.findByAddress = jest.fn()
+    userDao.create = jest.fn()
+    userDao.findByAddressAndUpdateLoginTime = jest.fn()
+
+})
+
 describe("UserService", () => {
     describe("register", () => {
         test('expects UserError when userDao.findByName returns non empty', async () => {
             const user ={name: 'some-name', address: 'some-address'}
-            userDao.findByName = jest.fn()
-            userDao.findByAddress = jest.fn()
-            userDao.create = jest.fn()
             when(userDao.findByName).calledWith(user.name).mockResolvedValue({})
 
             await expect(userService.register(user))
@@ -22,9 +27,6 @@ describe("UserService", () => {
 
         test('expect UserError when userDao.findByAddress returns non empty', async () => {
             const user ={name: 'some-name', address: 'some-address'}
-            userDao.findByName = jest.fn()
-            userDao.findByAddress = jest.fn()
-            userDao.create = jest.fn()
             when(userDao.findByName).calledWith(user.name).mockResolvedValue(undefined)
             when(userDao.findByAddress).calledWith(user.address).mockResolvedValue({})
             
@@ -38,9 +40,6 @@ describe("UserService", () => {
 
         test('expect UserError when userDao.create is failed', async () => {
             const user ={name: 'some-name', address: 'some-address'}
-            userDao.findByName = jest.fn()
-            userDao.findByAddress = jest.fn()
-            userDao.create = jest.fn()
             when(userDao.findByName).calledWith(user.name).mockResolvedValue(undefined)
             when(userDao.findByAddress).calledWith(user.address).mockResolvedValue(undefined)
             when(userDao.create).calledWith(user).mockRejectedValue(new UserError())
@@ -55,9 +54,6 @@ describe("UserService", () => {
 
         test('should register a new user successfully', async () => {
             const user ={name: 'some-name', address: 'some-address'}
-            userDao.findByName = jest.fn()
-            userDao.findByAddress = jest.fn()
-            userDao.create = jest.fn()
             when(userDao.findByName).calledWith(user.name).mockResolvedValue(undefined)
             when(userDao.findByAddress).calledWith(user.address).mockResolvedValue(undefined)
             when(userDao.create).calledWith(user).mockResolvedValue({})
@@ -74,7 +70,6 @@ describe("UserService", () => {
     describe('getUserByAddress', () => {
         test('expect UserError when userDao.findByAddress returns empty', async () => {
             const address = 'some-address'
-            userDao.findByAddress = jest.fn()
             when(userDao.findByAddress).calledWith(address).mockResolvedValue(undefined)
 
             await expect(userService.getUserByAddress(address))
@@ -85,13 +80,24 @@ describe("UserService", () => {
 
         test('should get an user by the address successfully', async () => {
             const address = 'some-address'
-            userDao.findByAddress = jest.fn()
             when(userDao.findByAddress).calledWith(address).mockResolvedValue({})
 
             const user  = await userService.getUserByAddress(address)
 
             expect(userDao.findByAddress).toHaveBeenCalledWith(address)
             expect(user).toEqual({})
+        })
+    })
+
+    describe('loginByAddress', () => {
+        test('expect UserError when userDao.findByAddressAndUpdateLoginTime returns empty', async () => {
+            const address = 'some-address'
+            when(userDao.findByAddressAndUpdateLoginTime).calledWith(address).mockResolvedValue(null)
+
+            await expect(userService.loginByAddress(address))
+            .rejects
+            .toBeInstanceOf(UserError)
+            expect(userDao.findByAddress).toHaveBeenCalledWith(address)
         })
     })
 })

@@ -40,12 +40,16 @@ class UserController {
 
     /**
      * Get the user which is associated with a wallet address
-     * @param {params:{address}} req 
+     * @param {
+     *          params:{
+     *              address - The wallet address used to get user
+     *          } 
+     *        } req    : The request sent by frontend
      * @param {*} res  : The response sent back to frontend. The format is the same as register
      * @param {*} next : The object used by routes to control the workflow of req&res&exception handling
      */
     async getUserByWalletAddress(req, res, next) {
-        logger.info('UserController.getUserByWalletAddress. address = ', req.params.address)
+        logger.info('UserController.getUserByWalletAddress. address = ', req.params?.address)
         try {
             const address = req.params.address
             const payload = await userService.getUserByAddress(address)
@@ -56,13 +60,24 @@ class UserController {
     }
 
     /**
-     * Login by wallet address, return the user info
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
+     * Login by wallet address, returns the user info
+     * @param {
+     *          body: {
+     *              address - The wallet address used to login. If the user associated with the address doesn't exist, 404 is returned
+     *          }
+     *        } req    : The request sent by frontend
+     * @param {*} res  : The response sent back to frontend. The format is the same as register
+     * @param {*} next : The object used by routes to control the workflow of req&res&exception handling
      */
-    async login(req, res, next) {
-
+    async loginByAddress(req, res, next) {
+        logger.info('UserController.login. address=', req.body.address)
+        try {
+            const address = req.body.address
+            const payload = await userService.loginByAddress(address)
+            sendSuccess(res, messageHelper.getMessage('user_login_success', address), {user: payload})
+        } catch (e) {
+            next(e)
+        }
     }
 
     /**
