@@ -6,9 +6,10 @@ const {validate} = require('../../middlewares')
 const userSchema = require('../../helpers/schemas/user')
 
 
-router.post('/register', controller.register) // validate(userSchema.register)
-router.get('/:address', validate(userSchema.getUserByWalletAddress), controller.getUserByWalletAddress)
+router.post('/register',  validate(userSchema.register), controller.register)
+router.get('/:address', validate(userSchema.getUserByAddress), controller.getUserByAddress)
 router.post('/login', validate(userSchema.loginByAddress), controller.loginByAddress)
+router.post('/logout', validate(userSchema.logoutByAddress), controller.logoutByAddress)
 // router.post('/login', validate(userSchema.login), controller.login)
 // router.get('/:id', authenticate(userService),authorize(), validate(userSchema.getByUserId), controller.getUserById)
 // router.put('/', authenticate(userService),authorize(), validate(userSchema.updateUser), controller.updateUser)

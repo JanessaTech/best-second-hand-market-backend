@@ -48,12 +48,12 @@ class UserController {
      * @param {*} res  : The response sent back to frontend. The format is the same as register
      * @param {*} next : The object used by routes to control the workflow of req&res&exception handling
      */
-    async getUserByWalletAddress(req, res, next) {
-        logger.info('UserController.getUserByWalletAddress. address = ', req.params?.address)
+    async getUserByAddress(req, res, next) {
+        logger.info('UserController.getUserByAddress. address = ', req.params?.address)
         try {
             const address = req.params.address
             const payload = await userService.getUserByAddress(address)
-            sendSuccess(res, messageHelper.getMessage('user_getByAddress', address), {user: payload})
+            sendSuccess(res, messageHelper.getMessage('user_get_by_address', address), {user: payload})
         } catch(e) {
             next(e)
         }
@@ -86,8 +86,15 @@ class UserController {
      * @param {*} res 
      * @param {*} next 
      */
-    async logout(req, res, next) {
-
+    async logoutByAddress(req, res, next) {
+        logger.info('UserController.logout address=', req.body.address)
+        try {
+            const address = req.body.address
+            const payload = await userService.logoutByAddress(address)
+            sendSuccess(res, messageHelper.getMessage('user_logout_success', address), {user: payload})
+        } catch (e) {
+            next(e)
+        }
     }
 
     /**

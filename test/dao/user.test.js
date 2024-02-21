@@ -1,8 +1,7 @@
 const userDao = require('../../dao/user')
 const {User} = require('../../db')
 const { when } = require('jest-when') 
-const {UserError} = require("../../routes/user/UserErrors");
-const { add } = require('winston');
+const {UserError} = require("../../routes/user/UserErrors")
 
 describe('UserDAO', () => {
     describe('create', () => {

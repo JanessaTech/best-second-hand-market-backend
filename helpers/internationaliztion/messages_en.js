@@ -15,8 +15,9 @@ module.exports = {
     user_register_duplication_address: 'The address {0} is already registered',
     user_register_validiation_failed: 'Failed to register user {0} due to validation failure',
     user_not_found_address:'User is not found by address {0}',
-    user_getByAddress:'Return an user by address {0}', 
+    user_get_by_address:'Get an user by address {0}', 
     user_login_success: 'User login by address {0} successfully',
+    user_logout_success: 'User logout by address {0} successfully',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

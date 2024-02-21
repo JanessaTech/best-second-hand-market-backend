@@ -49,6 +49,19 @@ class UserService {
         }
     }
 
+    async logoutByAddress(address) {
+        try {
+            const user = await userDao.findByAddressAndUpdateLogoutTime(address)
+            if (!user) {
+                throw new UserError({key: 'user_not_found_address', params:[address], code: 404})
+            }
+            return user
+        } catch(e) {
+            logger.debug('Failed to logout by address =', address)
+            throw e
+        }
+    }
+
 }
 
 const userService = new UserService()

@@ -41,6 +41,18 @@ class UserDAO {
             throw e
         }
     }
+
+    async findByAddressAndUpdateLogoutTime(address) {
+        const filter = {address: address}
+        const update = {logoutTime: new Date()}
+        try {
+            const user = await User.findOneAndUpdate(filter, update, {new: true})
+            return user
+        } catch (err) {
+            logger.debug('Failed to update logoutTime due to ', err)
+            throw e
+        }
+    }
 }
 
 const userDAO = new UserDAO()
