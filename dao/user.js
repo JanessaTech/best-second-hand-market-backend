@@ -1,5 +1,5 @@
 
-const {User} = require('../db')
+const {User} = require('../models')
 const logger = require('../helpers/logger')
 const {UserError} = require('../routes/user/UserErrors')
 

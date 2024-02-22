@@ -63,12 +63,12 @@ describe('UserController', () => {
         })    
     })
 
-    describe('getUserByWalletAddress', () => {
+    describe('getUserByAddress', () => {
         test('should should go to the error handing chain when userService.getUserByAddress returns empty', async () => {
             req.params = {address: 'some-address'}
             when(userService.getUserByAddress).calledWith(req.params.address).mockRejectedValue(new UserError())
             
-            await userController.getUserByWalletAddress(req, res, next)
+            await userController.getUserByAddress(req, res, next)
 
             await expect(userService.getUserByAddress(req.params.address)).rejects.toBeInstanceOf(UserError)
             expect(next).toHaveBeenCalled()
@@ -78,12 +78,12 @@ describe('UserController', () => {
             req.params = {address: 'some-address'}
             const payload = {name: 'some-name'}
             when(userService.getUserByAddress).calledWith(req.params.address).mockResolvedValue(payload)
-            when(messageHelper.getMessage).calledWith('user_getByAddress', req.params.address).mockReturnValue('some-message')
+            when(messageHelper.getMessage).calledWith('user_get_by_address', req.params.address).mockReturnValue('some-message')
             
-            await userController.getUserByWalletAddress(req, res, next)
+            await userController.getUserByAddress(req, res, next)
 
             await expect(userService.getUserByAddress(req.params.address)).resolves.toEqual(payload)
-            expect(messageHelper.getMessage('user_getByAddress', req.params.address)).toEqual('some-message')
+            expect(messageHelper.getMessage('user_get_by_address', req.params.address)).toEqual('some-message')
             expect(res.status).toHaveBeenCalledWith(200)
             expect(res.json).toHaveBeenCalledWith({
                 success: true,

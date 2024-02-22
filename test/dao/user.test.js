@@ -1,5 +1,5 @@
 const userDao = require('../../dao/user')
-const {User} = require('../../db')
+const {User} = require('../../models')
 const { when } = require('jest-when') 
 const {UserError} = require("../../routes/user/UserErrors")
 
@@ -64,6 +64,5 @@ describe('UserDAO', () => {
             expect(res).toEqual(updatedUser)
             expect(User.findOneAndUpdate).toHaveBeenCalled()
         })
-
     })
 })
