@@ -1,4 +1,6 @@
-
+const logger = require('../helpers/logger')
+const {sendSuccess} = require('../helpers/reponseHandler')
+const messageHelper = require('../helpers/internationaliztion/messageHelper')
 
 class NFTcontroller {
     /**
@@ -37,6 +39,7 @@ class NFTcontroller {
      */
     async mint(req, res, next) {
 
+
     }
 
     /**
@@ -49,3 +52,6 @@ class NFTcontroller {
 
     }
 }
+
+const controller = new NFTcontroller()
+module.exports = controller

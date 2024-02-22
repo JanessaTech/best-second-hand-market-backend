@@ -1,4 +1,3 @@
-
 const {User} = require('../models')
 const logger = require('../helpers/logger')
 const {UserError} = require('../routes/user/UserErrors')
@@ -55,5 +54,5 @@ class UserDAO {
     }
 }
 
-const userDAO = new UserDAO()
-module.exports = userDAO
+const userDao = new UserDAO()
+module.exports = userDao

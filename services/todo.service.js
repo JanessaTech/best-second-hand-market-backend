@@ -5,7 +5,7 @@ class TodoService {
     todoMap = new Map()
     indexMap = new Map()
 
-    async getAllTodos(user){
+    async getAllTodos(user) {
         if (this.todoMap.get(user)) {
             return Object.fromEntries(this.todoMap.get(user))
         }

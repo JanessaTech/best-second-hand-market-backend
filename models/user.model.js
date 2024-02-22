@@ -34,7 +34,12 @@ const userSchema = new Schema({
     loginTime: {type: Date},
     logoutTime: {type: Date},
 }, { timestamps: true })
-
+/**
+ * Add your
+ * - pre-save hooks
+ * - validations
+ * - virtuals
+ */
 userSchema.pre('save', async function (next) {
     if (!this.isNew) {
       next();
@@ -49,7 +54,18 @@ userSchema.pre('save', async function (next) {
       next(err)
     }   
 });
+/**
+ * plugins
+/**
+ * Methods
+ */
+/**
+ * Statics
+ */
 
+/**
+ * Register
+ */
 const User = mongoose.model('User', userSchema)
 
 module.exports = User

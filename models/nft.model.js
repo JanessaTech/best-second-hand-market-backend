@@ -1,7 +1,68 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 
-const nftSchema = new Schema({})
+const nftSchema = new Schema({
+    _id: { type: Number,  min: 1 },
+    tokenId: {
+        type: Number,
+        required: [true, 'tokenId is required'],
+    },
+    title: {
+        type: String,
+        trim: true,
+        minLength: [5, 'title should have at least 5 characters'],
+        maxLength: [20, 'title should have at most 20 characters'], 
+        required: [true, 'title is required'],
+    },
+    category: {
+        type: String,
+        enum: ['pets', 'clothes', 'cosmetics', 'outfits', 'car', 'devices', 'books'],
+        message: '{VALUE} in category not supported',
+        required: [true, 'category is required'],
+    },
+    chainId: {
+        type: Number,
+        index: true, 
+        min: 1,
+        validate: {
+            validator: function (v) {
+                return v >= 1 && Number.isInteger(v);
+            },
+            message: '(props) => `${props.value} should be a positive integer!`,'
+        },
+        required: [true, 'chainId is required'],
+    },
+    address: {
+        type: String,
+        index: true,
+        trim: true,
+        unique: true,
+        validate: {
+            validator: function(v) {
+                var re = /^0x[a-fA-F0-9]{40}$/;
+                return re.test(v)
+            },
+            message: props => `${props.value} is invalid cryptocurrency contract address`
+        },
+        required: [true, 'address is invalid'],
+    },
+    description: {
+        type: String,
+        maxLength: [200, 'description should have at most 200 characters'], 
+        required: [true, 'description is required'],
+    },
+    status: {
+        type: String,
+        enum: ['on', 'off'],
+        default: 'on', 
+        message: '{VALUE} in status not supported',
+        required: [true, 'status is required'],
+    },
+    price: {
+        type: Number,
+        min: [0, 'price can not be a negative number'],
+    }
+})
 
 const NFT = mongoose.model('nft', nftSchema)
 
