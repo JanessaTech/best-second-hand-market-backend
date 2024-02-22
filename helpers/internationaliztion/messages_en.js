@@ -22,6 +22,7 @@ module.exports = {
     //nft
     nft_mint_success: 'Nft with tokenId {0} is minted successfully',
     nft_mint_duplication_tokenId: 'The nft with tokenId {0} is already saved',
+    nft_save_validation_failed: 'Failed to save a new nft record for the toekenId {0} due to validation failure',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',
