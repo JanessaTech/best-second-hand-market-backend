@@ -19,6 +19,10 @@ module.exports = {
     user_login_success: 'User login by address {0} successfully',
     user_logout_success: 'User logout by address {0} successfully',
 
+    //nft
+    nft_mint_success: 'Nft with tokenId {0} is minted successfully',
+    nft_mint_duplication_tokenId: 'The nft with tokenId {0} is already saved',
+
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',
     todo_getAll: 'Get all todos for user {0} successfully',

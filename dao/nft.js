@@ -1,8 +1,13 @@
-const {NFT} = require('../models/nft.model')
-
+const {NFT} = require('../models')
 
 class NftDAO {
+    async create(nft) {
 
+    }
+
+    async findByTokenId(tokenId) {
+
+    }
 }
 
 const nftDao = new NftDAO()

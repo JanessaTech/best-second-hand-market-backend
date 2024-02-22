@@ -1,6 +1,8 @@
 const logger = require('../helpers/logger')
 const {sendSuccess} = require('../helpers/reponseHandler')
+const nftService = require('../services/nft.service')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
+
 
 class NFTcontroller {
     /**
@@ -38,8 +40,23 @@ class NFTcontroller {
      * @param {*} next 
      */
     async mint(req, res, next) {
-
-
+        logger.info('NFTcontroller.mint')
+        try {
+            const nft = {
+                tokenId : req.body.tokenId,
+                title : req.body.title,
+                category: req.body.category,
+                chainId: req.body.chainId,
+                address: req.body.address,
+                description: req.body.description,
+                status: req.body.status,
+                price: req.body.price
+            }
+            const payload = nftService.mint(nft)
+            sendSuccess(res, messageHelper.getMessage('nft_mint_success', payload.tokenId), {nft: payload})
+        } catch (e) {
+            next(e)
+        }
     }
 
     /**

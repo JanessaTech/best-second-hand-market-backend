@@ -1,10 +1,19 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
+const Counter = require('./counter.model')
 
 const nftSchema = new Schema({
     _id: { type: Number,  min: 1 },
     tokenId: {
         type: Number,
+        unique: true, 
+        index: true,
+        validate: {
+            validator: function (v) {
+                return v >= 0 && Number.isInteger(v);
+            },
+            message: '(props) => `${props.value} should be a integer equal or greater than 0!`,'
+        },
         required: [true, 'tokenId is required'],
     },
     title: {
@@ -62,7 +71,22 @@ const nftSchema = new Schema({
         type: Number,
         min: [0, 'price can not be a negative number'],
     }
-})
+}, { timestamps: true })
+
+nftSchema.pre('save', async function (next) {
+    if (!this.isNew) {
+        next();
+        return;
+      }
+      
+      try {
+        const seq = await Counter.increment('nftId')
+        this._id = seq
+        next()
+      } catch(err) {
+        next(err)
+      }   
+});
 
 const NFT = mongoose.model('nft', nftSchema)
 
