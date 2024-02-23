@@ -58,7 +58,7 @@ const nftSchema = new Schema({
     status: {
         type: String,
         enum: ['on', 'off'],
-        default: 'on', 
+        default: 'off', 
         message: '{VALUE} in status not supported',
         required: [true, 'status is required'],
     },
