@@ -28,6 +28,23 @@ class NftDAO {
         const nft = await NFT.findOne({chainId:chainId, address: address, tokenId: tokenId})
         return nft
     }
+
+    async findById(id) {
+        const nft = await NFT.findOne({_id: id})
+        return nft
+    }
+
+    async findByIdAndUpdate(update) {
+        const filter = {_id: update.id}
+        const _update = {price: update.price, status: update.status}
+        try {
+            const nft = await NFT.findOneAndUpdate(filter, _update, {new: true})
+            return nft
+        } catch (err) {
+            logger.debug('Failed to update nft due to ', err)
+            throw e
+        }
+    }
 }
 
 const nftDao = new NftDAO()

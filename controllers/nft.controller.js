@@ -65,8 +65,19 @@ class NFTcontroller {
      * @param {*} res 
      * @param {*} next 
      */
-    async updateNft(req, res, next) {
-
+    async update(req, res, next) {
+        logger.info('NFTcontroller.updateNft')
+        try {
+            const update = {
+                _id: id,
+                price: req.body.price,
+                status: req.body.status
+            }
+            const payload = await nftService.update(update)
+            sendSuccess(res, messageHelper.getMessage('nft_update_success', payload._id), {nft: payload})
+        } catch (e) {
+            next(e)
+        }
     }
 }
 
