@@ -7,7 +7,6 @@ const nftSchema = new Schema({
     tokenId: {
         type: Number,
         unique: true, 
-        index: true,
         validate: {
             validator: function (v) {
                 return v >= 0 && Number.isInteger(v);
@@ -72,6 +71,8 @@ const nftSchema = new Schema({
         min: [0, 'price can not be a negative number'],
     }
 }, { timestamps: true })
+
+nftSchema.index({chainId: 1, address: 1, tokenId: 1},{unique: true})
 
 nftSchema.pre('save', async function (next) {
     if (!this.isNew) {

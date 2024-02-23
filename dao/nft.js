@@ -19,12 +19,17 @@ class NftDAO {
             logger.debug('NftDAO.create. A new nft record is saved successfully', savedNft)
         } catch (err) {
             logger.debug('Failed to save user due to ', err)
-            throw new NftError({key: 'nft_save_validation_failed', params: [tokenId], errors: err.errors ? err.errors : err.message, code: 400})
+            throw new NftError({key: 'nft_save_validation_failed', params: [nft.address, nft.address, nft.tokenId], errors: err.errors ? err.errors : err.message, code: 400})
         }
     }
 
     async findByTokenId(tokenId) {
         const nft = await NFT.findOne({tokenId: tokenId})
+        return nft
+    }
+
+    async findByChainIdAddressTokenId(chainId, address, tokenId) {
+        const nft = await NFT.findOne({chainId:chainId, address: address, tokenId: tokenId})
         return nft
     }
 }
