@@ -7,7 +7,7 @@ class NftService {
     async mint(nft) {
         logger.info('NftService.mint')
         try {
-            const byTokenId = nftDao.findByChainIdAddressTokenId(nft.chainId, nft.address, nft.chainId)
+            const byTokenId = await nftDao.findByChainIdAddressTokenId(nft.chainId, nft.address, nft.chainId)
             if (byTokenId) {
                 throw new NftError({key: 'nft_mint_duplication', params:[nft.chainId, nft.address, nft.chainId], code: 400})
             }

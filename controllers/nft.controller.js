@@ -52,7 +52,7 @@ class NFTcontroller {
                 status: req.body.status,
                 price: req.body.price
             }
-            const payload = nftService.mint(nft)
+            const payload = await nftService.mint(nft)
             sendSuccess(res, messageHelper.getMessage('nft_mint_success', payload.tokenId), {nft: payload})
         } catch (e) {
             next(e)

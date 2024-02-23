@@ -11,7 +11,7 @@ const nftSchema = new Schema({
             validator: function (v) {
                 return v >= 0 && Number.isInteger(v);
             },
-            message: '(props) => `${props.value} should be a integer equal or greater than 0!`,'
+            message: (props) => `${props.value} should be a integer equal or greater than 0!`,
         },
         required: [true, 'tokenId is required'],
     },
@@ -31,12 +31,12 @@ const nftSchema = new Schema({
     chainId: {
         type: Number,
         index: true, 
-        min: 1,
+        min: [1, "chainId should be equal or greater than 1"],
         validate: {
             validator: function (v) {
                 return v >= 1 && Number.isInteger(v);
             },
-            message: '(props) => `${props.value} should be a positive integer!`,'
+            message: (props) => `${props.value} should be a positive integer!`,
         },
         required: [true, 'chainId is required'],
     },
