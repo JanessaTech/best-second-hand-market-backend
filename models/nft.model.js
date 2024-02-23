@@ -6,7 +6,6 @@ const nftSchema = new Schema({
     _id: { type: Number,  min: 1 },
     tokenId: {
         type: Number,
-        unique: true, 
         validate: {
             validator: function (v) {
                 return v >= 0 && Number.isInteger(v);
@@ -30,7 +29,6 @@ const nftSchema = new Schema({
     },
     chainId: {
         type: Number,
-        index: true, 
         min: [1, "chainId should be equal or greater than 1"],
         validate: {
             validator: function (v) {
@@ -42,9 +40,7 @@ const nftSchema = new Schema({
     },
     address: {
         type: String,
-        index: true,
         trim: true,
-        unique: true,
         validate: {
             validator: function(v) {
                 var re = /^0x[a-fA-F0-9]{40}$/;
@@ -68,6 +64,7 @@ const nftSchema = new Schema({
     },
     price: {
         type: Number,
+        default: 0,
         min: [0, 'price can not be a negative number'],
     }
 }, { timestamps: true })

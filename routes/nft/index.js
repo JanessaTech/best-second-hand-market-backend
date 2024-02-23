@@ -5,7 +5,7 @@ const initUserErrorHandlers = require('./nftErrorHandlers')
 const {validate} = require('../../middlewares')
 const nftSchema = require('../../helpers/schemas/nft')
 
-router.post('/mint', controller.mint)
+router.post('/mint', validate(nftSchema.mint), controller.mint)
 
 initUserErrorHandlers(router)
 module.exports = router

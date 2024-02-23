@@ -3,7 +3,7 @@ const { Schema } = mongoose
 const Counter = require('./counter.model')
 
 const userSchema = new Schema({
-    id: { type: Number,  unique: true, index: true, min: 1 },
+    _id: { type: Number,  min: 1 },
     name: {
         type: String,
         trim: true,
@@ -48,7 +48,7 @@ userSchema.pre('save', async function (next) {
     
     try {
       const seq = await Counter.increment('userId')
-      this.id = seq
+      this._id = seq
       next()
     } catch(err) {
       next(err)
