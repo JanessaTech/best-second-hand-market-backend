@@ -18,15 +18,15 @@ class NftService {
     }
 
     async update(update) {
-        logger.log('NftService.update')
+        logger.info('NftService.update')
         try {
-            const byId = await nftDao.findById(update.id)
-            if (byId) {
-                throw new NftError({key: 'nft_update_failed', params:[update.id], code:404})
+            const nft = await nftDao.findByIdAndUpdate(update)
+            if (!nft) {
+                throw new NftError({key: 'nft_not_found', params:[update._id], code:404})
             }
-            return await nftDao.findByIdAndUpdate(update)
+            return nft
         } catch (e) {
-            logger.debug('Failed to update the nft record by id = ', nft.id)
+            logger.debug('Failed to update the nft record by _id = ', update._id)
             throw e
         }
 

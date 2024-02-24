@@ -35,8 +35,14 @@ class NftDAO {
     }
 
     async findByIdAndUpdate(update) {
-        const filter = {_id: update.id}
-        const _update = {price: update.price, status: update.status}
+        const filter = {_id: update._id}
+        var _update = {}
+        if (update?.price) {
+            _update.price = update.price
+        }
+        if (update?.status) {
+            _update.status = update.status
+        }
         try {
             const nft = await NFT.findOneAndUpdate(filter, _update, {new: true})
             return nft

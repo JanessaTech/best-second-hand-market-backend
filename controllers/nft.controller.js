@@ -3,7 +3,6 @@ const {sendSuccess} = require('../helpers/reponseHandler')
 const nftService = require('../services/nft.service')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 
-
 class NFTcontroller {
     /**
      * Get the list of nfts by conditions
@@ -20,6 +19,8 @@ class NFTcontroller {
      * @param {*} next 
      */
     async getNftById(req, res, next) {
+        logger.info('NFTcontroller.getNftById. id=', req.params.id)
+        const id = req.params.id
 
     }
 
@@ -69,7 +70,7 @@ class NFTcontroller {
         logger.info('NFTcontroller.updateNft')
         try {
             const update = {
-                _id: id,
+                _id: req.body.id,
                 price: req.body.price,
                 status: req.body.status
             }

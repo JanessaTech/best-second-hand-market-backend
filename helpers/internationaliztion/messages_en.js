@@ -24,7 +24,7 @@ module.exports = {
     nft_mint_duplication: 'The nft with chainId {0} address {1} and tokenId {2} is already saved',
     nft_save_validation_failed: 'Failed to save a new nft record for the combination of chainId {0} address {1} and tokenId {2} due to validation failure',
     nft_update_success: 'The nft with _id {0} is updated successfully',
-    nft_update_failed: 'The nft with _id {0} is failed to be updated',
+    nft_not_found: 'The nft with _id {0} is not found',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',
