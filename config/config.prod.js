@@ -1,5 +1,5 @@
 const config = require('./config.global')
-config.env = 'prod'
+config.env = 'mainnet'
 config.database = {
     ...config.database,
     dataBaseName: config.env

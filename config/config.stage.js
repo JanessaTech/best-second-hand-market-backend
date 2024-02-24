@@ -1,5 +1,5 @@
 const config = require('./config.global')
-config.env = 'stage'
+config.env = 'testnet'
 config.database = {
     ...config.database,
     dataBaseName: config.env

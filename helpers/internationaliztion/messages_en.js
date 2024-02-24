@@ -25,6 +25,8 @@ module.exports = {
     nft_save_validation_failed: 'Failed to save a new nft record for the combination of chainId {0} address {1} and tokenId {2} due to validation failure',
     nft_update_success: 'The nft with _id {0} is updated successfully',
     nft_not_found: 'The nft with _id {0} is not found',
+    nft_by_id_success: 'The nft with _id {0} is found',
+    nft_contractInst_not_found: 'The corresponding contract instance is not found by chainId {0} and address {1}. Please check the correctness of config.chains in config.global.js',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

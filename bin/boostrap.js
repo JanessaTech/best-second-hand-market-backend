@@ -5,10 +5,11 @@ const config = require('../config')
 const logger = require('../helpers/logger')
 const banner = require('../helpers/banner')
 require('../db')
+require('../contracts')
 
 let port = config.port
 logger.info(banner)
-logger.info(`Server Port : ${port}`, port)
+logger.info(`Server Port : ${port}`)
 logger.info(`Environment type: ${config.env}`)
 // Create a web server
 const server = http.createServer(app)

@@ -21,7 +21,12 @@ class NFTcontroller {
     async getNftById(req, res, next) {
         logger.info('NFTcontroller.getNftById. id=', req.params.id)
         const id = req.params.id
-
+        try {
+            const payload = await nftService.getFullNFTById(id)
+            sendSuccess(res, messageHelper.getMessage('nft_by_id_success', id), {nft: payload})
+        } catch (e) {
+            next(e)
+        }
     }
 
     /**
