@@ -1,35 +1,79 @@
 const logger = require("../helpers/logger");
 const {NftError} = require('../routes/nft/NftErrors')
 const nftDao = require('../dao/nft')
-const {ethers} = require('ethers')
-const providers = require('../contracts')
+const providers = require('../contracts');
+const messageHelper = require("../helpers/internationaliztion/messageHelper");
 
 class NftService {
 
-    getContractInstance(chainId, address) {
+    #getChainName(chainId) {
+        let chainName = undefined
         const provider = providers.get(chainId)
+        if (provider) {
+            if (provider?.chainName) {
+                chainName =  provider?.chainName
+            }
+        }
+        if (!chainName) {
+            logger.error(messageHelper.getMessage('config_chainName_not_found', chainId))
+        }
+        return chainName
+    }
+
+    #getContractInstance(chainId, address) {
+        const provider = providers.get(chainId)
+        let contractInstance = undefined
         if (provider) {
             if (provider?.contracts) {
                 const contract = provider.contracts.get(address)
-                return contract
+                contractInstance = contract.contractInstance
             }
-            return undefined
         }
-        return undefined
+        if(!contractInstance) {
+            logger.error(messageHelper.getMessage('config_contractInst_not_found', chainId, address))
+        }  
+    }
+
+    #getTokenStandard(chainId, address) {
+        const provider = providers.get(chainId)
+        let tokenStandard = undefined
+        if (provider) {
+            if (provider?.contracts) {
+                const contract = provider.contracts.get(address)
+                tokenStandard = contract.tokenStandard
+            }
+        }
+        if (!tokenStandard) {
+            logger.error(messageHelper.getMessage('config_tokenStandard_not_found', chainId, address))
+        }
     }
 
     async getNftOwner(chainId, address, tokenId) {
         try {
-            const contractInstance = this.getContractInstance(chainId, address)
-            if (!contractInstance) {
-                throw new NftError({key: 'nft_contractInst_not_found', params: [chainId, address], code: 400})
-            }
-            const owner = await contractInstance.ownerOfToken(tokenId)
-            logger.info('The owner of tokenId ', tokenId, ' is :', owner)
-            return owner
+            const contractInstance = this.#getContractInstance(chainId, address)
+            if (contractInstance) {
+                const owner = await contractInstance.ownerOfToken(tokenId)
+                logger.info('The owner of tokenId ', tokenId, ' is :', owner)
+                return owner
+            }  
         } catch (e) {
-            logger.debug('Failed to get NFT owner by token id', tokenId, ' due to ', e)
+            logger.error(messageHelper.getMessage('nft_failed_get_owner', tokenId, e))
         }
+        return undefined 
+    }
+
+    async getNftUri(chainId, address, tokenId) {
+        try {
+            const contractInstance = this.#getContractInstance(chainId, address)
+            if (contractInstance) {
+                const uri = await contractInstance.getUri(tokenId)
+                logger.info('The uri of tokenId ', tokenId, ' is :', uri)
+                return uri
+            }
+        } catch (e) {
+            logger.error(messageHelper.getMessage('nft_failed_get_uri', tokenId, e))
+        }
+        return undefined
     }
 
     async mint(nft) {
@@ -67,8 +111,16 @@ class NftService {
             if (!nft) {
                 throw new NftError({key: 'nft_not_found', params:[update._id], code:404})
             }
-            await this.getNftOwner(nft.chainId, nft.address, nft.tokenId)
+            const owner = await this.getNftOwner(nft.chainId, nft.address, nft.tokenId)
+            const uri = await this.getNftUri(nft.chainId, nft.address, nft.tokenId)
+            const chainName = this.#getChainName(nft.chainId)
+            const tokenStandard = this.#getTokenStandard(nft.chainId, nft.address)
 
+            nft.owner = owner
+            nft.uri = uri
+            nft.chainName = chainName
+            nft.tokenStandard = tokenStandard
+            
             return nft
         } catch (e) {
             logger.debug('Failed to get a full nft by id ', id)
