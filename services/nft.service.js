@@ -142,6 +142,10 @@ class NftService {
         }
     }
 
+    async getAllNFTsByUserId(userId) {
+        
+    }
+
     
 }
 
