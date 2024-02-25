@@ -21,6 +21,8 @@ class NftService {
     }
 
     #getContractInstance(chainId, address) {
+        logger.debug('chainId = ', chainId, 'typeof chainId = ', typeof chainId)
+        logger.debug('address = ', address, 'typeof address = ', typeof address)
         const provider = providers.get(chainId)
         let contractInstance = undefined
         if (provider) {
@@ -32,6 +34,7 @@ class NftService {
         if(!contractInstance) {
             logger.error(messageHelper.getMessage('config_contractInst_not_found', chainId, address))
         }  
+        return contractInstance
     }
 
     #getTokenStandard(chainId, address) {
@@ -46,6 +49,7 @@ class NftService {
         if (!tokenStandard) {
             logger.error(messageHelper.getMessage('config_tokenStandard_not_found', chainId, address))
         }
+        return tokenStandard
     }
 
     async getNftOwner(chainId, address, tokenId) {
@@ -53,7 +57,7 @@ class NftService {
             const contractInstance = this.#getContractInstance(chainId, address)
             if (contractInstance) {
                 const owner = await contractInstance.ownerOfToken(tokenId)
-                logger.info('The owner of tokenId ', tokenId, ' is :', owner)
+                logger.debug('The owner of tokenId ', tokenId, ' is :', owner)
                 return owner
             }  
         } catch (e) {
@@ -67,7 +71,7 @@ class NftService {
             const contractInstance = this.#getContractInstance(chainId, address)
             if (contractInstance) {
                 const uri = await contractInstance.getUri(tokenId)
-                logger.info('The uri of tokenId ', tokenId, ' is :', uri)
+                logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
                 return uri
             }
         } catch (e) {
@@ -83,7 +87,8 @@ class NftService {
             if (byTokenId) {
                 throw new NftError({key: 'nft_mint_duplication', params:[nft.chainId, nft.address, nft.tokenId], code: 400})
             }
-            return await nftDao.create(nft)
+            const created = await nftDao.create(nft)
+            return created.toJSON()
         } catch (e) {
             logger.debug('Failed to save nft history ', nft)
             throw e
@@ -97,7 +102,7 @@ class NftService {
             if (!nft) {
                 throw new NftError({key: 'nft_not_found', params:[update._id], code:404})
             }
-            return nft
+            return nft.toJSON()
         } catch (e) {
             logger.debug('Failed to update the nft record by _id = ', update._id)
             throw e
@@ -116,12 +121,13 @@ class NftService {
             const chainName = this.#getChainName(nft.chainId)
             const tokenStandard = this.#getTokenStandard(nft.chainId, nft.address)
 
-            nft.owner = owner
-            nft.uri = uri
-            nft.chainName = chainName
-            nft.tokenStandard = tokenStandard
+            let jsonNFT = nft.toJSON()
+            jsonNFT.owner = owner
+            jsonNFT.uri = uri
+            jsonNFT.chainName = chainName
+            jsonNFT.tokenStandard = tokenStandard
             
-            return nft
+            return jsonNFT
         } catch (e) {
             logger.debug('Failed to get a full nft by id ', id)
             throw e

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 const Counter = require('./counter.model')
+const {toJSON, toObject} = require('./plugins/')
 
 const nftSchema = new Schema({
     _id: { type: Number,  min: 1 },
@@ -67,8 +68,12 @@ const nftSchema = new Schema({
         default: 0,
         min: [0, 'price can not be a negative number'],
     }
-}, { timestamps: true })
+}, 
+{ 
+    timestamps: true 
+})
 
+nftSchema.plugin(toJSON)
 nftSchema.index({chainId: 1, address: 1, tokenId: 1},{unique: true})
 
 nftSchema.pre('save', async function (next) {

@@ -80,7 +80,7 @@ class NFTcontroller {
                 status: req.body.status
             }
             const payload = await nftService.update(update)
-            sendSuccess(res, messageHelper.getMessage('nft_update_success', payload._id), {nft: payload})
+            sendSuccess(res, messageHelper.getMessage('nft_update_success', payload.id), {nft: payload})
         } catch (e) {
             next(e)
         }

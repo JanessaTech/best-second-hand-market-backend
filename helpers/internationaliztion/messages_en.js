@@ -23,9 +23,9 @@ module.exports = {
     nft_mint_success: 'Nft with tokenId {0} is minted successfully',
     nft_mint_duplication: 'The nft with chainId {0} address {1} and tokenId {2} is already saved',
     nft_save_validation_failed: 'Failed to save a new nft record for the combination of chainId {0} address {1} and tokenId {2} due to validation failure',
-    nft_update_success: 'The nft with _id {0} is updated successfully',
-    nft_not_found: 'The nft with _id {0} is not found',
-    nft_by_id_success: 'The nft with _id {0} is found',
+    nft_update_success: 'The nft with id(_id) {0} is updated successfully',
+    nft_not_found: 'The nft with id(_id) {0} is not found',
+    nft_by_id_success: 'The nft with id(_id) {0} is found',
     nft_failed_get_owner: 'Failed to get NFT owner by token id {0} due to {1}',
     nft_failed_get_uri: 'Failed to get NFT uri by token id {0} due to {1}',
 
