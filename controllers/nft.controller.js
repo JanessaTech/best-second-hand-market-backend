@@ -13,7 +13,7 @@ class NFTcontroller {
         const userId = req.query.userId
         try {
             const payload = await nftService.getAllNFTsByUserId(userId)
-            sendSuccess(res, messageHelper.getMessage('nft_get_all', userId), {nfts: payload})
+            sendSuccess(res, messageHelper.getMessage('nft_get_all_success', userId), {nfts: payload})
         } catch (e) {
             next(e)
         }

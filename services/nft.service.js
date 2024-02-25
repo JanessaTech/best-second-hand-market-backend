@@ -58,6 +58,39 @@ class NftService {
         return tokenStandard
     }
 
+    async  #getAllNFTsFromProviders() {
+        for (const [chainId, provider] of providers.entries()) {
+            const contracts = provider.contracts
+            for( const [address, contract] of contracts) {
+                const contractInstance = contract.contractInstance
+                if (!contractInstance) {
+                    throw new NftError({key:'config_contractInst_not_found', params: [chainId, address], code:400})
+                }
+                const nfts = await this.#getAllNFTsFromOneContract(chainId, address, contractInstance)
+            }
+        }
+    }
+
+    async #getAllNFTsFromOneContract(chainId, address, contractInstance) {
+        logger.debug(messageHelper.getMessage('nft_get_all_for_contract', chainId, address))
+        try {
+            const tokenList = await this.#getTokenList(contractInstance)
+        } catch (e) {
+            logger.error(messageHelper.getMessage('nft_get_all_for_contract_failed', chainId, address, e))
+        }
+    }
+
+    async #getTokenList(contractInstance) {
+        try {
+            const tokenList = await contractInstance.getAllTokenIds()
+            logger.debug(tokenList)
+            return tokenList
+        } catch (e) {
+            logger.error('Failed to get token list due to ', e)
+            throw e
+        }
+    }
+
     async getNftOwner(chainId, address, tokenId) {
         try {
             const contractInstance = this.#getContractInstance(chainId, address)
@@ -143,7 +176,10 @@ class NftService {
     }
 
     async getAllNFTsByUserId(userId) {
-        
+        logger.info('NftService.getAllNFTsByUserId. userId=', userId)
+        const nfts = await this.#getAllNFTsFromProviders()
+
+
     }
 
     
