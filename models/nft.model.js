@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 const Counter = require('./counter.model')
-const {toJSON, toObject} = require('./plugins/')
+const {toJSON} = require('./plugins/')
 
 const nftSchema = new Schema({
     _id: { type: Number,  min: 1 },

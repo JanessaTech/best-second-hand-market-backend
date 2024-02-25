@@ -26,13 +26,13 @@ module.exports = {
     nft_update_success: 'The nft with id(_id) {0} is updated successfully',
     nft_not_found: 'The nft with id(_id) {0} is not found',
     nft_by_id_success: 'The nft with id(_id) {0} is found',
-    nft_failed_get_owner: 'Failed to get NFT owner by token id {0} due to {1}',
-    nft_failed_get_uri: 'Failed to get NFT uri by token id {0} due to {1}',
+    nft_failed_get_owner: 'Failed to get NFT owner by token id {0} for the combination of chainId {1} and address {2} due to {3}',
+    nft_failed_get_uri: 'Failed to get NFT uri by token id {0} for the combination of chainId {1} and address {2} due to {3}',
 
     //config
-    config_chainName_not_found: 'The chainName by chainId {0} is not found. Please check the correctness of config.chains in config.global.js',
-    config_contractInst_not_found: 'The corresponding contract instance is not found by chainId {0} and address {1}. Please check the correctness of config.chains in config.global.js',
-    config_tokenStandard_not_found: 'The tokenStandard by chainId {0} and address {1} is not found. Please check the correctness of config.chains in config.global.js',
+    config_chainName_not_found: 'The chainName by chainId {0} is not found. Please check the correctness of config.chains in config.common.js',
+    config_contractInst_not_found: 'The corresponding contract instance is not found by chainId {0} and address {1}. Please check the correctness of config.chains in config.common.js',
+    config_tokenStandard_not_found: 'The tokenStandard by chainId {0} and address {1} is not found. Please check the correctness of config.chains in config.common.js',
     
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

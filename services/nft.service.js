@@ -15,7 +15,9 @@ class NftService {
             }
         }
         if (!chainName) {
-            logger.error(messageHelper.getMessage('config_chainName_not_found', chainId))
+            const errMsg = messageHelper.getMessage('config_chainName_not_found', chainId)
+            logger.error(errMsg)
+            throw new NftError({message: errMsg, code: 400})
         }
         return chainName
     }
@@ -28,11 +30,13 @@ class NftService {
         if (provider) {
             if (provider?.contracts) {
                 const contract = provider.contracts.get(address)
-                contractInstance = contract.contractInstance
+                contractInstance = contract?.contractInstance
             }
         }
         if(!contractInstance) {
-            logger.error(messageHelper.getMessage('config_contractInst_not_found', chainId, address))
+            const errMsg = messageHelper.getMessage('config_contractInst_not_found', chainId, address)
+            logger.error(errMsg)
+            throw new NftError({message: errMsg, code: 400})
         }  
         return contractInstance
     }
@@ -47,7 +51,9 @@ class NftService {
             }
         }
         if (!tokenStandard) {
-            logger.error(messageHelper.getMessage('config_tokenStandard_not_found', chainId, address))
+            const errMsg = messageHelper.getMessage('config_tokenStandard_not_found', chainId, address)
+            logger.error(errMsg)
+            throw new NftError({message: errMsg, code: 400})
         }
         return tokenStandard
     }
@@ -61,9 +67,10 @@ class NftService {
                 return owner
             }  
         } catch (e) {
-            logger.error(messageHelper.getMessage('nft_failed_get_owner', tokenId, e))
+            const errMsg = messageHelper.getMessage('nft_failed_get_owner', tokenId, chainId, address, e)
+            logger.error(errMsg)
+            throw new NftError({message: errMsg, code: 400})
         }
-        return undefined 
     }
 
     async getNftUri(chainId, address, tokenId) {
@@ -75,9 +82,10 @@ class NftService {
                 return uri
             }
         } catch (e) {
-            logger.error(messageHelper.getMessage('nft_failed_get_uri', tokenId, e))
+            const errMsg = messageHelper.getMessage('nft_failed_get_uri', tokenId, chainId, address, e)
+            logger.error(errMsg)
+            throw new NftError({message: errMsg, code: 400})
         }
-        return undefined
     }
 
     async mint(nft) {
@@ -114,7 +122,7 @@ class NftService {
         try {
             const nft = await nftDao.findById(id)
             if (!nft) {
-                throw new NftError({key: 'nft_not_found', params:[update._id], code:404})
+                throw new NftError({key: 'nft_not_found', params:[id], code:404})
             }
             const owner = await this.getNftOwner(nft.chainId, nft.address, nft.tokenId)
             const uri = await this.getNftUri(nft.chainId, nft.address, nft.tokenId)
