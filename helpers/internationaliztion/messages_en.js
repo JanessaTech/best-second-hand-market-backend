@@ -29,13 +29,15 @@ module.exports = {
     nft_failed_get_owner: 'Failed to get NFT owner by token id {0} for the combination of chainId {1} and address {2} due to {3}',
     nft_failed_get_uri: 'Failed to get NFT uri by token id {0} for the combination of chainId {1} and address {2} due to {3}',
     nft_get_all_success: 'Get all nfts by userId {0} successfully',
-    nft_get_all_for_contract: 'Get all nfts by the combination of chainId {0} and address {1}',
-    nft_get_all_for_contract_failed: 'Failed to get all nfts by the combination of chainId {0} and address {1} due to {2}',
 
     //config
     config_chainName_not_found: 'The chainName by chainId {0} is not found. Please check the correctness of config.chains in config.common.js',
     config_contractInst_not_found: 'The corresponding contract instance is not found by chainId {0} and address {1}. Please check the correctness of config.chains in config.common.js',
     config_tokenStandard_not_found: 'The tokenStandard by chainId {0} and address {1} is not found. Please check the correctness of config.chains in config.common.js',
+
+    //contracts
+    contract_get_tokenIds: 'Get tokenIds by the combination of chainId {0} and address {1}',
+    contract_tokenIds_failed: 'Failed to get tokenIds by the combination of chainId {0} and address {1} due to {2}',
     
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

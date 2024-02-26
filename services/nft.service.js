@@ -58,35 +58,35 @@ class NftService {
         return tokenStandard
     }
 
-    async  #getAllNFTsFromProviders() {
+    async  #getTokensFromProviders() {
+        let tokens = []
         for (const [chainId, provider] of providers.entries()) {
             const contracts = provider.contracts
             for( const [address, contract] of contracts) {
-                const contractInstance = contract.contractInstance
-                if (!contractInstance) {
-                    throw new NftError({key:'config_contractInst_not_found', params: [chainId, address], code:400})
-                }
-                const nfts = await this.#getAllNFTsFromOneContract(chainId, address, contractInstance)
+                try {
+                    const contractInstance = contract.contractInstance
+                    if (contractInstance) {
+                        const tokenIds = await this.#getTokenIdsFromOneContract(chainId, address, contractInstance)
+                        tokens.push({chainId: chainId, address: address, tokenIds: tokenIds})
+                    } else {
+                        logger.error(messageHelper.getMessage('config_contractInst_not_found', chainId, address))
+                    }
+                } catch (e) {
+                    logger.error(messageHelper.getMessage('contract_tokenIds_failed', chainId, address, e))
+                    // we suppress the error to make loop continue 
+                } 
             }
         }
+        return tokens
     }
 
-    async #getAllNFTsFromOneContract(chainId, address, contractInstance) {
-        logger.debug(messageHelper.getMessage('nft_get_all_for_contract', chainId, address))
+    async #getTokenIdsFromOneContract(chainId, address, contractInstance) {
+        logger.debug(messageHelper.getMessage('contract_get_tokenIds', chainId, address))
         try {
-            const tokenList = await this.#getTokenList(contractInstance)
+            const tokenIds = await contractInstance.getAllTokenIds()
+            logger.debug('tokenIds:', tokenIds)
+            return tokenIds
         } catch (e) {
-            logger.error(messageHelper.getMessage('nft_get_all_for_contract_failed', chainId, address, e))
-        }
-    }
-
-    async #getTokenList(contractInstance) {
-        try {
-            const tokenList = await contractInstance.getAllTokenIds()
-            logger.debug(tokenList)
-            return tokenList
-        } catch (e) {
-            logger.error('Failed to get token list due to ', e)
             throw e
         }
     }
@@ -177,7 +177,7 @@ class NftService {
 
     async getAllNFTsByUserId(userId) {
         logger.info('NftService.getAllNFTsByUserId. userId=', userId)
-        const nfts = await this.#getAllNFTsFromProviders()
+        const tokens = await this.#getTokensFromProviders()
 
 
     }
