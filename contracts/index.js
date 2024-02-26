@@ -1,10 +1,12 @@
 const config = require('../config')
 const logger = require('../helpers/logger')
 const {ethers} = require('ethers')
+const Chain = require('../contracts/chain')
+const Contract = require('../contracts/contract')
 
-const createProviders = (env) => {
-    logger.info('Create providers for env', env)
-    let providerMap = new Map()
+const createChains = (env) => {
+    logger.info('Create chains for env', env)
+    let chains = new Map()
     const cfgs = config.chains[env]
     if (!cfgs) {
         logger.error('Can not find configuration by env', env, '. Please check the correctness of config.chains in config.global.js')
@@ -15,32 +17,33 @@ const createProviders = (env) => {
         const chainId = cfg.chainId
         const enabled = cfg.enabled
         const chainName = cfg.chainName
+        const currency = cfg.currency
         const rpcUrl = cfg.rpcUrl
         const contracts = cfg.contracts
         logger.debug('chainId =', chainId)
         logger.debug('enabled =', enabled)
         logger.debug('chainName =', chainName)
+        logger.debug('currency =', currency)
         logger.debug('rpcUrl =', rpcUrl)
         logger.debug('contracts =', contracts)
-        let contractMap = new Map()
         const provider = new ethers.JsonRpcProvider(rpcUrl)
         logger.debug('Created a provider by rpcUrl', rpcUrl)
-        contracts.forEach((contract, i) => {
-            logger.debug('contract at index ', i, contract)
-            const address = contract.address
-            const abi = contract.abi
-            const tokenStandard = contract.tokenStandard
-            const contractInstance = new ethers.Contract(address, abi, provider)
+        const chain = new Chain(chainId, chainName, rpcUrl, currency)
+        contracts.forEach((c, i) => {
+            logger.debug('contract at index ', i, c)
+            const address = c.address
+            const abi = c.abi
+            const tokenStandard = c.tokenStandard
+            const contract = new Contract(chainId, address, abi, provider, tokenStandard)
             logger.debug('Created a contractInstance by address', address, 'abi:', abi)
-            contractMap.set(address, {contractInstance: contractInstance, tokenStandard: tokenStandard})
+            chain.addContractInstance(address, contract)
         })
-        providerMap.set(chainId, {chainName: chainName, provider: provider, contracts: contractMap})
+        chains.set(chainId, chain)
     })
-
-    return providerMap
+    return chains
 }
 
 logger.debug(`config.env: ${config.env}`)
-const providers = createProviders(config.env)
+const chains = createChains(config.env)
 
-module.exports = providers
+module.exports = {chains}

@@ -31,9 +31,8 @@ module.exports = {
     nft_get_all_success: 'Get all nfts by userId {0} successfully',
 
     //config
-    config_chainName_not_found: 'The chainName by chainId {0} is not found. Please check the correctness of config.chains in config.common.js',
+    config_chain_not_found: 'The chain with chainId {0} is not found. Please check the correctness of config.chains in config.common.js',
     config_contractInst_not_found: 'The corresponding contract instance is not found by chainId {0} and address {1}. Please check the correctness of config.chains in config.common.js',
-    config_tokenStandard_not_found: 'The tokenStandard by chainId {0} and address {1} is not found. Please check the correctness of config.chains in config.common.js',
 
     //contracts
     contract_get_tokenIds: 'Get tokenIds by the combination of chainId {0} and address {1}',
