@@ -67,7 +67,7 @@ class NftService {
                     const contractInstance = contract.contractInstance
                     if (contractInstance) {
                         const tokenIds = await this.#getTokenIdsFromOneContract(chainId, address, contractInstance)
-                        tokens.push({chainId: chainId, address: address, tokenIds: tokenIds})
+                        tokens.push({chainId: chainId, address: address, tokenIds: tokenIds.map((t) => Number(t))})
                     } else {
                         logger.error(messageHelper.getMessage('config_contractInst_not_found', chainId, address))
                     }
@@ -178,11 +178,12 @@ class NftService {
     async getAllNFTsByUserId(userId) {
         logger.info('NftService.getAllNFTsByUserId. userId=', userId)
         const tokens = await this.#getTokensFromProviders()
+        for (const token of tokens) {
+            logger.debug('token = ', token)
+        }
 
 
-    }
-
-    
+    } 
 }
 
 const nftService = new NftService()

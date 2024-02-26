@@ -1,3 +1,4 @@
+// This file will be shared by frontend
 const config = {}
 
 config.CATEGORIES = ['pets', 'clothes', 'cosmetics', 'outfits', 'car', 'devices', 'books']

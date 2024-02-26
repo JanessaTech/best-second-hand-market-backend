@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 const Counter = require('./counter.model')
 const {toJSON} = require('./plugins/')
+const config = require('../config')
 
 const nftSchema = new Schema({
     _id: { type: Number,  min: 1 },
@@ -24,7 +25,7 @@ const nftSchema = new Schema({
     },
     category: {
         type: String,
-        enum: ['pets', 'clothes', 'cosmetics', 'outfits', 'car', 'devices', 'books'],
+        enum: config.CATEGORIES,
         message: '{VALUE} in category not supported',
         required: [true, 'category is required'],
     },
@@ -58,7 +59,7 @@ const nftSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['on', 'off'],
+        enum: config.NFTSTATUS,
         default: 'off', 
         message: '{VALUE} in status not supported',
         required: [true, 'status is required'],
