@@ -45,13 +45,11 @@ module.exports = class Contract {
 
     async getOwnerOfToken(tokenId) {
         const owner = await this.#instance.ownerOfToken(tokenId)
-        logger.debug('The owner of tokenId ', tokenId, ' is :', owner)
         return owner
     }
 
     async getUri(tokenId) {
         const uri = await this.#instance.getUri(tokenId)
-        logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
         return uri
     }
 

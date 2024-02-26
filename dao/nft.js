@@ -34,6 +34,11 @@ class NftDAO {
         return nft
     }
 
+    async findBy(pagination) {
+        const nfts = await NFT.find({})
+        return nfts
+    }
+
     async findByIdAndUpdate(update) {
         const filter = {_id: update._id}
         var _update = {}

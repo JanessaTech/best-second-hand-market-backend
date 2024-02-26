@@ -1,8 +1,9 @@
 const logger = require("../helpers/logger");
 const {NftError} = require('../routes/nft/NftErrors')
 const nftDao = require('../dao/nft')
-const {chains} = require('../contracts');
-const messageHelper = require("../helpers/internationaliztion/messageHelper");
+const {chains} = require('../contracts')
+const messageHelper = require("../helpers/internationaliztion/messageHelper")
+const {ethers} = require('ethers')
 
 class NftService {
     #getChain(chainId) {
@@ -38,7 +39,7 @@ class NftService {
             const instances = chain.getAllContractInstances()
             for (const [address, instance] of instances) {
                 try {
-                    const tokenIds = await instance.getAllTokenIds()
+                    const tokenIds = await instance.getAllTokenIds()  // todo-check if tokenIds is empty
                     tokens.push({chainId: chainId, address: address, tokenIds: tokenIds})
                 } catch(e) {
                     logger.error(messageHelper.getMessage('contract_tokenIds_failed', chainId, address, e))
@@ -49,11 +50,30 @@ class NftService {
         return tokens
     }
 
-    async getNftOwner(chainId, address, tokenId) {
+    async #addExtraInfo(nft) {
+        const chain = this.#getChain(nft.chainId)
+        const owner = await this.#getNftOwner(nft.chainId, nft.address, nft.tokenId)
+        const uri = await this.#getNftUri(nft.chainId, nft.address, nft.tokenId)
+        const chainName = chain.chainName
+        const tokenStandard = chain.getContractInstance(nft.address)?.tokenStandard
+
+        let jsonNFT = nft.toJSON()
+        jsonNFT.owner = owner
+        jsonNFT.uri = uri
+        jsonNFT.chainName = chainName
+        jsonNFT.tokenStandard = tokenStandard
+        
+        return jsonNFT
+    }
+
+    async #getNftOwner(chainId, address, tokenId) {
         try {
             const contractInstance = this.#getContractInstance(chainId, address)
             const owner = await contractInstance.getOwnerOfToken(tokenId)
             logger.debug('The owner of tokenId ', tokenId, ' is :', owner)
+            if (owner === ethers.ZeroAddress) {
+                throw new NftError({key: 'contract_token_not_found', params:[tokenId, chainId, address], code:404})
+            }
             return owner
         } catch (e) {
             const errMsg = messageHelper.getMessage('nft_failed_get_owner', tokenId, chainId, address, e)
@@ -62,11 +82,14 @@ class NftService {
         }
     }
 
-    async getNftUri(chainId, address, tokenId) {
+    async #getNftUri(chainId, address, tokenId) {
         try {
             const contractInstance = this.#getContractInstance(chainId, address)
             const uri = await contractInstance.getUri(tokenId)
             logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
+            if (!uri) {
+                throw new NftError({key: 'contract_invalid_uri', params:[tokenId, chainId, address], code:400})
+            }
             return uri
         } catch (e) {
             const errMsg = messageHelper.getMessage('nft_failed_get_uri', tokenId, chainId, address, e)
@@ -111,31 +134,35 @@ class NftService {
             if (!nft) {
                 throw new NftError({key: 'nft_not_found', params:[id], code:404})
             }
-            const chain = this.#getChain(nft.chainId)
-            const owner = await this.getNftOwner(nft.chainId, nft.address, nft.tokenId)
-            const uri = await this.getNftUri(nft.chainId, nft.address, nft.tokenId)
-            const chainName = chain.chainName
-            const tokenStandard = chain.getContractInstance(nft.address)?.tokenStandard
 
-            let jsonNFT = nft.toJSON()
-            jsonNFT.owner = owner
-            jsonNFT.uri = uri
-            jsonNFT.chainName = chainName
-            jsonNFT.tokenStandard = tokenStandard
-            
-            return jsonNFT
+            const fullNFT = await this.#addExtraInfo(nft)
+            return fullNFT
         } catch (e) {
             logger.debug('Failed to get a full nft by id ', id)
             throw e
         }
     }
 
+    /**
+     * The method will have performance issue. using redis? to enhance it?
+     * @param {*} userId 
+     * @returns 
+     */
     async getAllNFTsByUserId(userId) {
         logger.info('NftService.getAllNFTsByUserId. userId=', userId)
-        const tokens = await this.#getTokensFromChains()
-        for (const token of tokens) {
-            logger.debug('token = ', token)
+        let res = []
+        const nfts = await nftDao.findBy({})
+        if (nfts && nfts.length > 0) {
+            for (const nft of nfts) {
+                try {
+                    const fullNft = await this.#addExtraInfo(nft)
+                    res.push(fullNft)
+                } catch (e) {
+                    logger.error(e)
+                }
+            }
         }
+        return res
     } 
 }
 
