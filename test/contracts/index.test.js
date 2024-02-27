@@ -1,7 +1,7 @@
 const {chains} = require('../../contracts')
 const config  = require('../../config')
 
-describe('createProviders', () => {
+describe('createChains', () => {
     // you need to set process.env.NODE_ENV = 'test' in .jest/setEnvVars.js
     test('check if chains on local are created successfully', () => {
         if (config.env === 'local') {
@@ -37,7 +37,7 @@ describe('createProviders', () => {
         }
     })
     // you need to set process.env.NODE_ENV = 'prod' in .jest/setEnvVars.js
-    test('check if providers on mainnet are created successfully', () => {
+    test('check if chains on mainnet are created successfully', () => {
         if (config.env === 'mainnet') {
             const cfgs = config.chains[config.env]
             cfgs.filter((cfg) => cfg.enabled).forEach((cfg) => {
