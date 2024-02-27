@@ -9,12 +9,13 @@ class NFTcontroller {
      * The method is used when wallet is not connected
      */
     async getAllNfts(req, res, next) {
-        logger.info('NFTcontroller.getAllNfts. userId =', req.query.userId, ' page = ', req.query.page, ' limit = ', req.query.limit)
+        logger.info('NFTcontroller.getAllNfts. userId =', req.query.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
         const userId = req.query.userId
         const page = req.query.page
         const limit = req.query.limit
+        const sortBy = req.query.sortBy
         try {
-            const payload = await nftService.queryNFTs(userId, page, limit)
+            const payload = await nftService.queryNFTs(userId, page, limit, sortBy)
             sendSuccess(res, messageHelper.getMessage('nft_get_all_success', userId), payload)
         } catch (e) {
             next(e)

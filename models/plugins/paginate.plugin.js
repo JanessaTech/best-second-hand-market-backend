@@ -1,9 +1,16 @@
+const logger = require('../../helpers/logger')
 const paginate = (schema, options) => {
     schema.statics.paginate = async function (filter, options) {
         let sort = {_id: 1}
+        const sortingCriteria = {}
         if (options.sortBy) {
-            sort = options.sortBy
+          options.sortBy.split(',').forEach((sort) => {
+            const [key, order] = sort.split(':')
+            sortingCriteria[key] = order === 'asc' ? 1 : -1
+          })
+            sort = sortingCriteria
         }
+        logger.debug('paginate. sort = ', sort)
         const limit = options.limit && parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 10;
         const page = options.page && parseInt(options.page, 10) > 0 ? parseInt(options.page, 10) : 1;
         const skip = (page - 1) * limit;
