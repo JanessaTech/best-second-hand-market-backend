@@ -147,10 +147,10 @@ class NftService {
      * @param {*} userId 
      * @returns 
      */
-    async queryNFTs(userId) {
+    async queryNFTs(userId, page, limit) {
         logger.info('NftService.getAllNFTsByUserId. userId=', userId)
         const filter = await this.#getFilterByChains()
-        const options = {sortBy: {chainId:1, tokenId:-1}, page: 0, limit: 2}
+        const options = {sortBy: {chainId:1, tokenId:-1}, page: page, limit: limit}
         let nfts = []
         const resultByFilter = await nftDao.findBy(filter, options)
         if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
@@ -163,6 +163,7 @@ class NftService {
                 }
             }
         }
+        logger.info(`${resultByFilter.totalResults} nfts are returned`)
         return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
     } 
 }

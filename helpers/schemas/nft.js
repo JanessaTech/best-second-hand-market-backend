@@ -33,8 +33,10 @@ const schemas = {
     }),
     getAllNfts: yup.object({
         query: yup.object({
-            userId: yup.number().optional().min(1, 'userId should be equal to or greater than 1!').integer('Please enter a valid integer for userId!').optional(),
-        }) 
+            userId: yup.number().min(1, 'userId should be equal to or greater than 1!').integer('Please enter a valid integer for userId!').optional(),
+            page: yup.number().min(1, 'page should be equal to or greater than 1!').integer('Please enter a valid integer for page!').optional(),
+            limit: yup.number().min(1, 'limit should be equal to or greater than 1!').max(100, 'limit can not be greater than 100').integer('Please enter a valid integer for page!').optional(),
+        })
     })
 }
 
