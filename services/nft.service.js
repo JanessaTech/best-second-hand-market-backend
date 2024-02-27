@@ -109,7 +109,7 @@ class NftService {
         }
     }
 
-    async getFullNFTById(id) {
+    async getNFTById(id) {
         logger.info('NftService.getFullNFTById. id=', id)
         try {
             const nft = await nftDao.findById(id)
@@ -125,26 +125,45 @@ class NftService {
         }
     }
 
+    async #getFilterByChains() {
+        let merged = []
+        for (const [chainId, chain] of chains.entries()) {
+            if (chain.getAllContractInstances()) {
+                for(const [address, instance] of chain.getAllContractInstances()) {
+                    const tokenIds = await instance.getAllTokenIds()
+                    if (tokenIds && tokenIds.length > 0) {
+                        merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
+                    }
+                }
+            }
+        }
+        const filter = {$or: merged}
+        logger.debug('filter = ', filter)
+        return filter
+    }
+
     /**
      * The method will have performance issue. using redis? to enhance it?
      * @param {*} userId 
      * @returns 
      */
-    async getAllNFTsByUserId(userId) {
+    async queryNFTs(userId) {
         logger.info('NftService.getAllNFTsByUserId. userId=', userId)
-        let res = []
-        const nfts = await nftDao.findBy({})
-        if (nfts && nfts.length > 0) {
-            for (const nft of nfts) {
+        const filter = await this.#getFilterByChains()
+        const options = {sortBy: {chainId:1, tokenId:-1}, page: 0, limit: 2}
+        let nfts = []
+        const resultByFilter = await nftDao.findBy(filter, options)
+        if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
+            for (const nft of resultByFilter.results) {
                 try {
-                    const fullNft = await this.#addExtraInfo(nft)
-                    res.push(fullNft)
+                    const fullNft = await this.#addExtraInfo(nft)  //todo- should get extra info from cache saying redis instead
+                    nfts.push(fullNft)
                 } catch (e) {
-                    logger.error(messageHelper.getMessage('nft_get_full_failed', nft._id, e))
+                    logger.error(messageHelper.getMessage('nft_get_full_failed', nft._id, e)) // the code should hit here. If that happened, pls fix it to make it not happen again
                 }
             }
         }
-        return res
+        return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
     } 
 }
 

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 const Counter = require('./counter.model')
-const {toJSON} = require('./plugins/')
+const {toJSON, paginate} = require('./plugins/')
 const config = require('../config')
 
 const nftSchema = new Schema({
@@ -75,6 +75,8 @@ const nftSchema = new Schema({
 })
 
 nftSchema.plugin(toJSON)
+nftSchema.plugin(paginate)
+
 nftSchema.index({chainId: 1, address: 1, tokenId: 1},{unique: true})
 
 nftSchema.pre('save', async function (next) {

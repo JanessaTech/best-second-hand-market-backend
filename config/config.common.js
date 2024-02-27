@@ -29,6 +29,24 @@ config.chains = {
                 'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public'
             ],
             tokenStandard: '1155'
+          },
+          {
+            address: '0x8438Ad1C834623CfF278AB6829a248E37C2D7E3f', 
+            abi: [
+                'function symbol() public view returns (string)',
+                'function ownerOfToken(uint _tokenId) public view returns (address)',
+                'function tokensOfAddress(address _address) public view returns(uint[])',
+                'function mint(address to, string _uri) public returns(uint)',
+                'function mintBatch(address to, string[] _uris) public returns(uint[])',
+                'function getAllTokenIds() public view returns(uint[])',
+                'function getNextToken() public view returns(uint)',
+                'function getUri(uint _id) public view returns(string)',
+                'function buy(address from, address to, uint[] ids) public',
+                'function doSafeBuy(address from, address to, uint[] ids) public',
+                'function buyBatch(address[] froms, address to, uint[][] idss) public',
+                'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public'
+            ],
+            tokenStandard: '1155'
           }
         ]
       }

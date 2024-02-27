@@ -12,8 +12,8 @@ class NFTcontroller {
         logger.info('NFTcontroller.getAllNfts. userId =', req.query.userId)
         const userId = req.query.userId
         try {
-            const payload = await nftService.getAllNFTsByUserId(userId)
-            sendSuccess(res, messageHelper.getMessage('nft_get_all_success', userId), {nfts: payload})
+            const payload = await nftService.queryNFTs(userId)
+            sendSuccess(res, messageHelper.getMessage('nft_get_all_success', userId), payload)
         } catch (e) {
             next(e)
         }
@@ -29,7 +29,7 @@ class NFTcontroller {
         logger.info('NFTcontroller.getNftById. id=', req.params.id)
         const id = req.params.id
         try {
-            const payload = await nftService.getFullNFTById(id)
+            const payload = await nftService.getNFTById(id)
             sendSuccess(res, messageHelper.getMessage('nft_by_id_success', id), {nft: payload})
         } catch (e) {
             next(e)
