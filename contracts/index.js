@@ -9,7 +9,7 @@ const createChains = (env) => {
     let chains = new Map()
     const cfgs = config.chains[env]
     if (!cfgs) {
-        logger.error('Can not find configuration by env', env, '. Please check the correctness of config.chains in config.global.js')
+        logger.error('Can not find config.chains by env', env, '. Please check the correctness of config.chains in config.common.js')
         process.exit()
     }
     cfgs.filter((cfg) => cfg.enabled).forEach((cfg, index) => {

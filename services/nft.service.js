@@ -7,6 +7,7 @@ const {ethers} = require('ethers')
 
 class NftService {
     #getChain(chainId) {
+        logger.debug('chainId = ', chainId, 'typeof chainId = ', typeof chainId)
         const chain = chains.get(chainId)
         if (!chain) {
             const errMsg = messageHelper.getMessage('config_chain_not_found', chainId)
@@ -16,14 +17,12 @@ class NftService {
         return chain
     }
 
-    #getContractInstance(chainId, address) {
-        logger.debug('chainId = ', chainId, 'typeof chainId = ', typeof chainId)
+    #getContractInstance(chain, address) {
         logger.debug('address = ', address, 'typeof address = ', typeof address)
         try {
-            const chain = this.#getChain(chainId)
             const contractInstance = chain.getContractInstance(address)
             if(!contractInstance) {
-                const errMsg = messageHelper.getMessage('config_contractInst_not_found', chainId, address)
+                const errMsg = messageHelper.getMessage('config_contractInst_not_found', chain.chainId, address)
                 logger.error(errMsg)
                 throw new NftError({message: errMsg, code: 400})
             }
@@ -33,27 +32,10 @@ class NftService {
         } 
     }
 
-    async #getTokensFromChains() {
-        let tokens = []
-        for (const [chainId, chain] of chains) {
-            const instances = chain.getAllContractInstances()
-            for (const [address, instance] of instances) {
-                try {
-                    const tokenIds = await instance.getAllTokenIds()  // todo-check if tokenIds is empty
-                    tokens.push({chainId: chainId, address: address, tokenIds: tokenIds})
-                } catch(e) {
-                    logger.error(messageHelper.getMessage('contract_tokenIds_failed', chainId, address, e))
-                    // we suppress the error to make loop continue 
-                } 
-            }
-        }
-        return tokens
-    }
-
     async #addExtraInfo(nft) {
         const chain = this.#getChain(nft.chainId)
-        const owner = await this.#getNftOwner(nft.chainId, nft.address, nft.tokenId)
-        const uri = await this.#getNftUri(nft.chainId, nft.address, nft.tokenId)
+        const owner = await this.#getNftOwner(chain, nft.address, nft.tokenId)
+        const uri = await this.#getNftUri(chain, nft.address, nft.tokenId)
         const chainName = chain.chainName
         const tokenStandard = chain.getContractInstance(nft.address)?.tokenStandard
 
@@ -66,33 +48,33 @@ class NftService {
         return jsonNFT
     }
 
-    async #getNftOwner(chainId, address, tokenId) {
+    async #getNftOwner(chain, address, tokenId) {
         try {
-            const contractInstance = this.#getContractInstance(chainId, address)
+            const contractInstance = this.#getContractInstance(chain, address)
             const owner = await contractInstance.getOwnerOfToken(tokenId)
             logger.debug('The owner of tokenId ', tokenId, ' is :', owner)
             if (owner === ethers.ZeroAddress) {
-                throw new NftError({key: 'contract_token_not_found', params:[tokenId, chainId, address], code:404})
+                throw new NftError({key: 'contract_token_not_found', params:[tokenId, chain.chainId, address], code:404})
             }
             return owner
         } catch (e) {
-            const errMsg = messageHelper.getMessage('nft_failed_get_owner', tokenId, chainId, address, e)
+            const errMsg = messageHelper.getMessage('nft_failed_get_owner', tokenId, chain.chainId, address, e)
             logger.error(errMsg)
             throw new NftError({message: errMsg, code: 400})
         }
     }
 
-    async #getNftUri(chainId, address, tokenId) {
+    async #getNftUri(chain, address, tokenId) {
         try {
-            const contractInstance = this.#getContractInstance(chainId, address)
+            const contractInstance = this.#getContractInstance(chain, address)
             const uri = await contractInstance.getUri(tokenId)
             logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
             if (!uri) {
-                throw new NftError({key: 'contract_invalid_uri', params:[tokenId, chainId, address], code:400})
+                throw new NftError({key: 'contract_invalid_uri', params:[tokenId, chain.chainId, address], code:400})
             }
             return uri
         } catch (e) {
-            const errMsg = messageHelper.getMessage('nft_failed_get_uri', tokenId, chainId, address, e)
+            const errMsg = messageHelper.getMessage('nft_failed_get_uri', tokenId, chain.chainId, address, e)
             logger.error(errMsg)
             throw new NftError({message: errMsg, code: 400})
         }
@@ -158,7 +140,7 @@ class NftService {
                     const fullNft = await this.#addExtraInfo(nft)
                     res.push(fullNft)
                 } catch (e) {
-                    logger.error(e)
+                    logger.error(messageHelper.getMessage('nft_get_full_failed', nft._id, e))
                 }
             }
         }

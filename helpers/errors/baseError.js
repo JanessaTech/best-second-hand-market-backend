@@ -33,6 +33,6 @@ module.exports = class BaseError extends Error {
         this.errors = props.errors
         this.params = props.params || []
         this.code = props.code || 400
-        this.message = this.message || props.message || messageHelper.getMessage(this.key, ...this.params)
+        this.message = props.message || messageHelper.getMessage(this.key, ...this.params)
     }
 }

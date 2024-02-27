@@ -29,6 +29,7 @@ module.exports = {
     nft_failed_get_owner: 'Failed to get NFT owner by token id {0} for the combination of chainId {1} and address {2} due to {3}',
     nft_failed_get_uri: 'Failed to get NFT uri by token id {0} for the combination of chainId {1} and address {2} due to {3}',
     nft_get_all_success: 'Get all nfts by userId {0} successfully',
+    nft_get_full_failed: 'Failed to get full nft with id(_id) {0} due to {1}',
 
     //config
     config_chain_not_found: 'The chain with chainId {0} is not found. Please check the correctness of config.chains in config.common.js',
@@ -36,7 +37,6 @@ module.exports = {
 
     //contracts
     contract_get_tokenIds: 'Get tokenIds by the combination of chainId {0} and address {1}',
-    contract_tokenIds_failed: 'Failed to get tokenIds by the combination of chainId {0} and address {1} due to {2}',
     contract_token_not_found: 'Token {0} is not found in the contract with chainId {1} and address {2}',
     contract_invalid_uri: 'Invalid uri for token {0} in the contract with chainId {1} and address {2}',
     
