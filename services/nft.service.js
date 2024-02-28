@@ -130,14 +130,19 @@ class NftService {
         for (const [chainId, chain] of chains.entries()) {
             if (chain.getAllContractInstances()) {
                 for(const [address, instance] of chain.getAllContractInstances()) {
-                    const tokenIds = await instance.getAllTokenIds()
-                    if (tokenIds && tokenIds.length > 0) {
-                        merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
+                    try {
+                        const tokenIds = await instance.getAllTokenIds()
+                        if (tokenIds && tokenIds.length > 0) {
+                            merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
+                        }
+                    }catch (e) {
+                        logger.error(messageHelper.getMessage('contract_read_failed', e))
                     }
+                    
                 }
             }
         }
-        const filter = {$or: merged}
+        const filter = merged.length > 0 ? {$or: merged} : {_id: -1} // we return empty if all of chains are not readable
         logger.debug('filter = ', filter)
         return filter
     }
@@ -159,7 +164,7 @@ class NftService {
                     const fullNft = await this.#addExtraInfo(nft)  //todo- should get extra info from cache saying redis instead
                     nfts.push(fullNft)
                 } catch (e) {
-                    logger.error(messageHelper.getMessage('nft_get_full_failed', nft._id, e)) // the code should hit here. If that happened, pls fix it to make it not happen again
+                    logger.error(messageHelper.getMessage('nft_get_full_failed', nft._id, e)) // the code should not hit here. If that happened, pls fix it to make it not happen again
                 }
             }
         }

@@ -39,6 +39,7 @@ module.exports = {
     contract_get_tokenIds: 'Get tokenIds by the combination of chainId {0} and address {1}',
     contract_token_not_found: 'Token {0} is not found in the contract with chainId {1} and address {2}',
     contract_invalid_uri: 'Invalid uri for token {0} in the contract with chainId {1} and address {2}',
+    contract_read_failed: 'Failed to read contract due to {0}',
     
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',
