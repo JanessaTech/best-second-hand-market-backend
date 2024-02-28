@@ -6,6 +6,7 @@ const nftService = require('../../services/nft.service')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const { when } = require('jest-when')
 const {ethers} = require('ethers')
+const {convertToURL} = require('../../helpers/utils')
 
 const id = 1
 const chainId = 2
@@ -13,6 +14,7 @@ const address = 'some-address'
 const tokenId = 3
 const nft = {id: id, chainId: chainId, address: address, tokenId: tokenId, toJSON: () => { return { id: id, chainId: chainId, address: address, tokenId: tokenId}}}
 const user = {toJSON: () => {return {}}}
+jest.mock('../../helpers/utils', () => ({ convertToURL: jest.fn() }))
 
 beforeAll(() => {
     nftDao.findById = jest.fn()
@@ -117,6 +119,7 @@ describe('NftService', () => {
             chain.getContractInstance = jest.fn()
             contractInstance.getOwnerOfToken = jest.fn()
             contractInstance.getUri = jest.fn()
+            
            
             when(nftDao.findById).calledWith(1).mockResolvedValue(nft)
             when(chains.get).calledWith(chainId).mockReturnValue(chain)
@@ -124,6 +127,7 @@ describe('NftService', () => {
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue('some-owner-address')
             when(userDao.findByAddress).calledWith('some-owner-address').mockResolvedValue(user)
             when(contractInstance.getUri).calledWith(tokenId).mockResolvedValue('some-uri')
+            convertToURL.mockReturnValue('some-url')
 
             const res = await nftService.getNFTById(1)
 
@@ -134,6 +138,7 @@ describe('NftService', () => {
                 tokenId: tokenId,
                 owner: {},
                 uri: 'some-uri',
+                url: 'some-url',
                 chainName: 'some-chainName',
                 tokenStandard: 'some-tokenStandard'
             })

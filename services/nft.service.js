@@ -5,6 +5,7 @@ const userDao = require('../dao/user')
 const {chains} = require('../contracts')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {ethers} = require('ethers')
+const {convertToURL} = require('../helpers/utils')
 
 class NftService {
     #getChain(chainId) {
@@ -55,6 +56,7 @@ class NftService {
         let jsonNFT = nft.toJSON()
         jsonNFT.owner = owner
         jsonNFT.uri = uri
+        jsonNFT.url = convertToURL(uri)
         jsonNFT.chainName = chainName
         jsonNFT.tokenStandard = tokenStandard
         
