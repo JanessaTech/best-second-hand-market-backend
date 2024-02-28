@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 const Counter = require('./counter.model')
+const {toJSON} = require('./plugins/')
 
 const userSchema = new Schema({
     _id: { type: Number,  min: 1 },
@@ -40,6 +41,8 @@ const userSchema = new Schema({
  * - validations
  * - virtuals
  */
+userSchema.plugin(toJSON)
+
 userSchema.pre('save', async function (next) {
     if (!this.isNew) {
       next();

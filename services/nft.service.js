@@ -1,6 +1,7 @@
 const logger = require("../helpers/logger");
 const {NftError} = require('../routes/nft/NftErrors')
 const nftDao = require('../dao/nft')
+const userDao = require('../dao/user')
 const {chains} = require('../contracts')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {ethers} = require('ethers')
@@ -32,9 +33,21 @@ class NftService {
         } 
     }
 
+    async #getOwner(chain, nft) {
+        const owner = await this.#getNftOwner(chain, nft.address, nft.tokenId)
+        const user = await userDao.findByAddress(owner)
+        if (!user) {
+            const errMsg = messageHelper.getMessage('user_not_found_address', owner)
+            logger.error(errMsg) // code shouldn't hit here. Fix it if that happened
+            throw new NftError({message: errMsg, code: 400})
+
+        }
+        return user.toJSON()
+    }
+
     async #addExtraInfo(nft) {
         const chain = this.#getChain(nft.chainId)
-        const owner = await this.#getNftOwner(chain, nft.address, nft.tokenId)
+        const owner = await this.#getOwner(chain, nft)
         const uri = await this.#getNftUri(chain, nft.address, nft.tokenId)
         const chainName = chain.chainName
         const tokenStandard = chain.getContractInstance(nft.address)?.tokenStandard

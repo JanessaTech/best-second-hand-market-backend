@@ -31,7 +31,7 @@ config.chains = {
             tokenStandard: '1155'
           },
           {
-            address: '0x8438Ad1C834623CfF278AB6829a248E37C2D7E3f', 
+            address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512', 
             abi: [
                 'function symbol() public view returns (string)',
                 'function ownerOfToken(uint _tokenId) public view returns (address)',
