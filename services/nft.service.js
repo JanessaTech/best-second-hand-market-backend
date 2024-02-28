@@ -95,6 +95,28 @@ class NftService {
         }
     }
 
+    async #getFilterByChains() {
+        let merged = []
+        for (const [chainId, chain] of chains.entries()) {
+            if (chain.getAllContractInstances()) {
+                for(const [address, instance] of chain.getAllContractInstances()) {
+                    try {
+                        const tokenIds = await instance.getAllTokenIds()
+                        if (tokenIds && tokenIds.length > 0) {
+                            merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
+                        }
+                    }catch (e) {
+                        logger.error(messageHelper.getMessage('contract_read_failed', e))
+                    }
+                    
+                }
+            }
+        }
+        const filter = merged.length > 0 ? {$or: merged} : {_id: -1} // we return empty if all of chains are not readable
+        logger.debug('filter = ', filter)
+        return filter
+    }
+
     async mint(nft) {
         logger.info('NftService.mint')
         try {
@@ -140,35 +162,13 @@ class NftService {
         }
     }
 
-    async #getFilterByChains() {
-        let merged = []
-        for (const [chainId, chain] of chains.entries()) {
-            if (chain.getAllContractInstances()) {
-                for(const [address, instance] of chain.getAllContractInstances()) {
-                    try {
-                        const tokenIds = await instance.getAllTokenIds()
-                        if (tokenIds && tokenIds.length > 0) {
-                            merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
-                        }
-                    }catch (e) {
-                        logger.error(messageHelper.getMessage('contract_read_failed', e))
-                    }
-                    
-                }
-            }
-        }
-        const filter = merged.length > 0 ? {$or: merged} : {_id: -1} // we return empty if all of chains are not readable
-        logger.debug('filter = ', filter)
-        return filter
-    }
-
     /**
      * The method will have performance issue. using redis? to enhance it?
      * @param {*} userId 
      * @returns 
      */
     async queryNFTs(userId, page, limit, sortBy) {
-        logger.info('NftService.getAllNFTsByUserId. userId=', userId)
+        logger.info('NftService.queryNFTs. userId=', userId)
         const filter = await this.#getFilterByChains()
         const options = {page: page, limit: limit, sortBy: sortBy}
         let nfts = []
@@ -185,7 +185,13 @@ class NftService {
         }
         logger.info(`${resultByFilter.totalResults} nfts are returned`)
         return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
-    } 
+    }
+
+    async queryNftsForUser(userId, page, limit, sortBy) {
+        logger.info('NftService.queryNftsForUser userId=', userId)
+        
+
+    }
 }
 
 const nftService = new NftService()

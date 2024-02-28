@@ -4,50 +4,6 @@ const nftService = require('../services/nft.service')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 
 class NFTcontroller {
-    /**
-     * Get the list of nfts by conditions
-     * The method is used when wallet is not connected
-     */
-    async getAllNfts(req, res, next) {
-        logger.info('NFTcontroller.getAllNfts. userId =', req.query.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
-        const userId = req.query.userId
-        const page = req.query.page
-        const limit = req.query.limit
-        const sortBy = req.query.sortBy
-        try {
-            const payload = await nftService.queryNFTs(userId, page, limit, sortBy)
-            sendSuccess(res, messageHelper.getMessage('nft_get_all_success', userId), payload)
-        } catch (e) {
-            next(e)
-        }
-    }
-
-    /**
-     * Get a nft by id
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    async getNftById(req, res, next) {
-        logger.info('NFTcontroller.getNftById. id=', req.params.id)
-        const id = req.params.id
-        try {
-            const payload = await nftService.getNFTById(id)
-            sendSuccess(res, messageHelper.getMessage('nft_by_id_success', id), {nft: payload})
-        } catch (e) {
-            next(e)
-        }
-    }
-
-    /**
-     * Query the list of nfts for an user based on conditions
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    async getMyNfts(req, res, next) {
-
-    }
 
     /**
      * Mint a nft
@@ -95,6 +51,62 @@ class NFTcontroller {
             next(e)
         }
     }
+
+    /**
+     * Get a nft by id
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+    async getNftById(req, res, next) {
+        logger.info('NFTcontroller.getNftById. id=', req.params.id)
+        const id = req.params.id
+        try {
+            const payload = await nftService.getNFTById(id)
+            sendSuccess(res, messageHelper.getMessage('nft_by_id_success', id), {nft: payload})
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    /**
+     * Get the list of nfts by conditions
+     * The method is used when wallet is not connected
+     */
+    async queryNFTs(req, res, next) {
+        logger.info('NFTcontroller.queryNFTs. userId =', req.query.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
+        const userId = req.query.userId
+        const page = req.query.page
+        const limit = req.query.limit
+        const sortBy = req.query.sortBy
+        try {
+            const payload = await nftService.queryNFTs(userId, page, limit, sortBy)
+            sendSuccess(res, messageHelper.getMessage('nft_query_all_success', userId), payload)
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    /**
+     * Query the list of nfts for an user based on conditions
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+    async queryNftsForUser(req, res, next) {
+        logger.info('NFTcontroller.queryNftsForUser userId =', req.query.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
+        const userId = req.params.userId
+        const page = req.query.page
+        const limit = req.query.limit
+        const sortBy = req.query.sortBy
+        try {
+            const payload = await nftService.queryNftsForUser(userId, page, limit, sortBy)
+            sendSuccess(res, messageHelper.getMessage('nft_query_for_user_success', userId), payload)
+        }catch(e) {
+            next(e)
+        }
+    }
+     
 }
 
 const controller = new NFTcontroller()
