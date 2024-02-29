@@ -40,7 +40,7 @@ describe('NftService', () => {
         test('expects NftError when chainId in the NFT is invalid', async () => {    
                    
             when(nftDao.findById).calledWith(1).mockResolvedValue(nft)
-            when(chainParser.getChain).calledWith(chainId).mockReturnValue(new ConfigChainError())
+            when(chainParser.getChain).calledWith(chainId).mockImplementation(() => {throw new ConfigChainError()})
 
             await expect(nftService.getNFTById(1))
             .rejects
@@ -51,7 +51,7 @@ describe('NftService', () => {
            
             when(nftDao.findById).calledWith(1).mockResolvedValue(nft)
             when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
-            when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(new ConfigChainError())
+            when(chainParser.getContractInstance).calledWith(chain, address).mockImplementation(() => {throw new ConfigChainError()})
 
             await expect(nftService.getNFTById(1))
             .rejects
