@@ -1,8 +1,8 @@
 const config = require('../configuration')
 const logger = require('../../helpers/logger')
 const {ethers} = require('ethers')
-const Chain = require('../../contracts/chain')
-const Contract = require('../../contracts/contract')
+const Chain = require('./chain')
+const Contract = require('./contract')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const {ConfigChainError} = require('./ConfigErrors')
 

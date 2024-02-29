@@ -1,6 +1,6 @@
-const logger = require('../helpers/logger')
+const logger = require('../../helpers/logger')
 const {ethers} = require('ethers')
-const messageHelper = require('../helpers/internationaliztion/messageHelper')
+const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 
 module.exports = class Contract {
     #chainId
