@@ -1,7 +1,9 @@
 const nftDao = require('../../dao/nft')
 const userDao = require('../../dao/user')
 const {NftError} = require('../../routes/nft/NftErrors')
+const {ConfigChainError} = require('../../config/configParsers/ConfigErrors')
 const {chains} = require('../../contracts')
+const {chainParser} = require('../../config/configParsers')
 const nftService = require('../../services/nft.service')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const { when } = require('jest-when')
@@ -19,70 +21,68 @@ jest.mock('../../helpers/utils', () => ({ convertToURL: jest.fn() }))
 beforeAll(() => {
     nftDao.findById = jest.fn()
     userDao.findByAddress = jest.fn()
+    chainParser.getChain = jest.fn()
+    chainParser.getContractInstance = jest.fn()
+    chainParser.getTokenStandard = jest.fn()
     chains.get = jest.fn()
     messageHelper.getMessage = jest.fn() 
 })
 
 describe('NftService', () => {
     describe('getNFTById', () => {
-        test('expects UserError when the NFT is not found', async () => {
+        test('expects NftError when the NFT is not found', async () => {
             when(nftDao.findById).calledWith(1).mockRejectedValue(new NftError())
 
             await expect(nftService.getNFTById(1))
             .rejects
             .toBeInstanceOf(NftError)
         })
-        test('expects UserError when chainId in the NFT is invalid', async () => {    
+        test('expects NftError when chainId in the NFT is invalid', async () => {    
                    
             when(nftDao.findById).calledWith(1).mockResolvedValue(nft)
-            when(chains.get).calledWith(chainId).mockReturnValue(undefined)
-            when(messageHelper.getMessage).calledWith('config_chain_not_found', chainId).mockReturnValue('some-message')
+            when(chainParser.getChain).calledWith(chainId).mockReturnValue(new ConfigChainError())
 
             await expect(nftService.getNFTById(1))
             .rejects
             .toBeInstanceOf(NftError)
-            expect(messageHelper.getMessage).toHaveBeenCalledWith('config_chain_not_found', chainId)
         })
-        test('expects UserError when address in the NFT is invalid', async () => {
+        test('expects NftError when address in the NFT is invalid', async () => {
             const chain = {chainId: chainId}
-            chain.getContractInstance = jest.fn()
            
             when(nftDao.findById).calledWith(1).mockResolvedValue(nft)
-            when(chains.get).calledWith(chainId).mockReturnValue(chain)
-            when(chain.getContractInstance).calledWith(address).mockReturnValue(undefined)
-            when(messageHelper.getMessage).calledWith('config_contractInst_not_found', chainId, address).mockReturnValue('some-message')
+            when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
+            when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(new ConfigChainError())
 
             await expect(nftService.getNFTById(1))
             .rejects
             .toBeInstanceOf(NftError)
-            expect(messageHelper.getMessage).toHaveBeenCalledWith('config_contractInst_not_found', chainId, address)
+            expect(chainParser.getContractInstance).toHaveBeenCalledWith(chain, address)
         })
-        test('expects UserError when tokenId in the NFT is invalid', async () => {
+        test('expects NftError when tokenId in the NFT is invalid', async () => {
             const chain = {chainId: chainId}
             const contractInstance = {}
-            chain.getContractInstance = jest.fn()
             contractInstance.getOwnerOfToken = jest.fn()
            
             when(nftDao.findById).calledWith(1).mockResolvedValue(nft)
-            when(chains.get).calledWith(chainId).mockReturnValue(chain)
-            when(chain.getContractInstance).calledWith(address).mockReturnValue(contractInstance)
+            when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
+            when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(contractInstance)
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue(ethers.ZeroAddress)
             when(messageHelper.getMessage).calledWith('nft_failed_get_owner', tokenId, chainId, address, expect.anything(Error)).mockReturnValue('some-message')
 
             await expect(nftService.getNFTById(1))
             .rejects
             .toBeInstanceOf(NftError)
-            expect(messageHelper.getMessage).toHaveLastReturnedWith('some-message')
+            expect(messageHelper.getMessage).toHaveBeenCalledWith('nft_failed_get_owner', tokenId, chainId, address, expect.anything(Error))
         })
-        test('expects UserError when the user is not found by the address of nft owner', async () => {
+        test('expects NftError when the user is not found by the address of nft owner', async () => {
             const chain = {chainId: chainId}
             const contractInstance = {}
             chain.getContractInstance = jest.fn()
             contractInstance.getOwnerOfToken = jest.fn()
            
             when(nftDao.findById).calledWith(1).mockResolvedValue(nft)
-            when(chains.get).calledWith(chainId).mockReturnValue(chain)
-            when(chain.getContractInstance).calledWith(address).mockReturnValue(contractInstance)
+            when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
+            when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(contractInstance)
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue(address)
             when(userDao.findByAddress).calledWith(address).mockResolvedValue(undefined)
             when(messageHelper.getMessage).calledWith('user_not_found_address', address).mockReturnValue('some message')
@@ -93,7 +93,7 @@ describe('NftService', () => {
             expect(messageHelper.getMessage).toHaveBeenCalledWith('user_not_found_address',address)
         })
    
-        test('expects UserError when uri of the NFT is invalid', async () => {
+        test('expects NftError when uri of the NFT is invalid', async () => {
             const chain = {chainId: chainId}
             const contractInstance = {}
             chain.getContractInstance = jest.fn()
@@ -101,8 +101,8 @@ describe('NftService', () => {
             contractInstance.getUri = jest.fn()
            
             when(nftDao.findById).calledWith(1).mockResolvedValue(nft)
-            when(chains.get).calledWith(chainId).mockReturnValue(chain)
-            when(chain.getContractInstance).calledWith(address).mockReturnValue(contractInstance)
+            when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
+            when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(contractInstance)
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue('some-owner-address')
             when(userDao.findByAddress).calledWith('some-owner-address').mockResolvedValue(user)
             when(contractInstance.getUri).calledWith(tokenId).mockResolvedValue('')
@@ -111,7 +111,7 @@ describe('NftService', () => {
             await expect(nftService.getNFTById(1))
             .rejects
             .toBeInstanceOf(NftError)
-            expect(messageHelper.getMessage).toHaveLastReturnedWith('some-message')
+            expect(messageHelper.getMessage).toHaveBeenCalledWith('nft_failed_get_uri', tokenId, chainId, address, expect.anything(Error))
         })
         test('should return a full nft successfully', async () => {
             const chain = {chainId: chainId, chainName: 'some-chainName' }
@@ -120,13 +120,13 @@ describe('NftService', () => {
             contractInstance.getOwnerOfToken = jest.fn()
             contractInstance.getUri = jest.fn()
             
-           
             when(nftDao.findById).calledWith(1).mockResolvedValue(nft)
-            when(chains.get).calledWith(chainId).mockReturnValue(chain)
-            when(chain.getContractInstance).calledWith(address).mockReturnValue(contractInstance)
+            when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
+            when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(contractInstance)
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue('some-owner-address')
             when(userDao.findByAddress).calledWith('some-owner-address').mockResolvedValue(user)
             when(contractInstance.getUri).calledWith(tokenId).mockResolvedValue('some-uri')
+            when(chain.getContractInstance).calledWith(address).mockReturnValue(contractInstance)
             convertToURL.mockReturnValue('some-url')
 
             const res = await nftService.getNFTById(1)

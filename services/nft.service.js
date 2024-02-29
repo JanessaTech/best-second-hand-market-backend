@@ -8,17 +8,6 @@ const {convertToURL} = require('../helpers/utils')
 const {chainParser} = require('../config/configParsers')
 
 class NftService {
-    async #getOwner(chain, nft) {
-        const owner = await this.#getNftOwner(chain, nft.address, nft.tokenId)
-        const user = await userDao.findByAddress(owner)
-        if (!user) {
-            const errMsg = messageHelper.getMessage('user_not_found_address', owner)
-            logger.error(errMsg) // code shouldn't hit here. Fix it if that happened
-            throw new NftError({message: errMsg, code: 400})
-
-        }
-        return user.toJSON()
-    }
 
     async #addExtraInfo(nft) {
         const chain = chainParser.getChain(nft.chainId)
@@ -35,6 +24,18 @@ class NftService {
         jsonNFT.tokenStandard = tokenStandard
         
         return jsonNFT
+    }
+
+    async #getOwner(chain, nft) {
+        const owner = await this.#getNftOwner(chain, nft.address, nft.tokenId)
+        const user = await userDao.findByAddress(owner)
+        if (!user) {
+            const errMsg = messageHelper.getMessage('user_not_found_address', owner)
+            logger.error(errMsg) // code shouldn't hit here. Fix it if that happened
+            throw new NftError({message: errMsg, code: 400})
+
+        }
+        return user.toJSON()
     }
 
     async #getNftOwner(chain, address, tokenId) {
@@ -110,7 +111,7 @@ class NftService {
             return fullNFT
         } catch (e) {
             logger.debug('Failed to get a full nft by id ', id)
-            throw e
+            throw new NftError({key: 'nft_get_full_failed', params:[id, e]})
         }
     }
 
@@ -145,7 +146,6 @@ class NftService {
         if (!user) {
             throw new NftError({key: 'nft_not_found', params:[userId], code: 404})
         }
-        //const filter = await this.#getFilterByChains(user.address)
         const filter = await chainParser.getFilterByChains(user.address)
         const options = {page: page, limit: limit, sortBy: sortBy}
         let nfts = []

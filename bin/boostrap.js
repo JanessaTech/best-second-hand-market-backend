@@ -8,7 +8,6 @@ require('../config/configParsers')  // parse configuration
 const app = require('../app') // set routers and error handing
 const config = require('../config/configuration')
 require('../db')
-//require('../contracts')
 
 let port = config.port
 logger.info(`Server Port : ${port}`)
