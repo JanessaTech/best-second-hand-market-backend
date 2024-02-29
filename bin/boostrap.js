@@ -1,15 +1,16 @@
 const http = require('http')
 require('dotenv').config()
+const banner = require('../helpers/banner')
+const logger = require('../helpers/logger')
+
 require('../config/configValidator')  // validate configuration
+require('../config/configParsers')  // parse configuration
 const app = require('../app') // set routers and error handing
 const config = require('../config/configuration')
-const logger = require('../helpers/logger')
-const banner = require('../helpers/banner')
 require('../db')
-require('../contracts')
+//require('../contracts')
 
 let port = config.port
-logger.info(banner)
 logger.info(`Server Port : ${port}`)
 logger.info(`Environment type: ${config.env}`)
 // Create a web server
@@ -36,4 +37,5 @@ const start = (port) => {
 }
 
 start(port)
+logger.info(banner)
 

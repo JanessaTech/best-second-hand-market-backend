@@ -20,7 +20,7 @@ class ConfigChainParser {
             logger.error('Can not find config.chains by env', env, '. Please check the correctness of config.chains in config.common.js')
             process.exit()
         }
-        logger.info('Create chains for env', env)
+        logger.info('Parse config.chains for env', env)
         let chains = new Map()
         cfgs.filter((cfg) => cfg.enabled).forEach((cfg, index) => {
             logger.debug("cfg at index", index)
@@ -105,6 +105,28 @@ class ConfigChainParser {
             throw new ConfigChainError({message: errMsg, code: 400})
         }
         return tokenStandard
+    }
+
+    async getFilterByChains(owner) {
+        let merged = []
+        for (const [chainId, chain] of this.#chains.entries()) {
+            if (chain.getAllContractInstances()) {
+                for(const [address, instance] of chain.getAllContractInstances()) {
+                    try {
+                        const tokenIds = owner ? await instance.tokensOfAddress(owner) : await instance.getAllTokenIds()
+                        if (tokenIds && tokenIds.length > 0) {
+                            merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
+                        }
+                    }catch (e) {
+                        logger.error(messageHelper.getMessage('contract_read_failed', e))
+                    }
+                    
+                }
+            }
+        }
+        const filter = merged.length > 0 ? {$or: merged} : {_id: -1} // we return empty if all of chains are not readable/don't have tokenIds
+        logger.debug('filter = ', filter)
+        return filter
     }
 }
 

@@ -2,38 +2,12 @@ const logger = require("../helpers/logger");
 const {NftError} = require('../routes/nft/NftErrors')
 const nftDao = require('../dao/nft')
 const userDao = require('../dao/user')
-const {chains} = require('../contracts')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {ethers} = require('ethers')
 const {convertToURL} = require('../helpers/utils')
+const {chainParser} = require('../config/configParsers')
 
 class NftService {
-    #getChain(chainId) {
-        logger.debug('chainId = ', chainId, 'typeof chainId = ', typeof chainId)
-        const chain = chains.get(chainId)
-        if (!chain) {
-            const errMsg = messageHelper.getMessage('config_chain_not_found', chainId)
-            logger.error(errMsg)
-            throw new NftError({message: errMsg, code: 400})
-        }
-        return chain
-    }
-
-    #getContractInstance(chain, address) {
-        logger.debug('address = ', address, 'typeof address = ', typeof address)
-        try {
-            const contractInstance = chain.getContractInstance(address)
-            if(!contractInstance) {
-                const errMsg = messageHelper.getMessage('config_contractInst_not_found', chain.chainId, address)
-                logger.error(errMsg)
-                throw new NftError({message: errMsg, code: 400})
-            }
-            return contractInstance
-        } catch (e) {
-            throw e
-        } 
-    }
-
     async #getOwner(chain, nft) {
         const owner = await this.#getNftOwner(chain, nft.address, nft.tokenId)
         const user = await userDao.findByAddress(owner)
@@ -47,7 +21,7 @@ class NftService {
     }
 
     async #addExtraInfo(nft) {
-        const chain = this.#getChain(nft.chainId)
+        const chain = chainParser.getChain(nft.chainId)
         const owner = await this.#getOwner(chain, nft)
         const uri = await this.#getNftUri(chain, nft.address, nft.tokenId)
         const chainName = chain.chainName
@@ -65,7 +39,7 @@ class NftService {
 
     async #getNftOwner(chain, address, tokenId) {
         try {
-            const contractInstance = this.#getContractInstance(chain, address)
+            const contractInstance = chainParser.getContractInstance(chain, address)
             const owner = await contractInstance.getOwnerOfToken(tokenId)
             logger.debug('The owner of tokenId ', tokenId, ' is :', owner)
             if (owner === ethers.ZeroAddress) {
@@ -81,7 +55,7 @@ class NftService {
 
     async #getNftUri(chain, address, tokenId) {
         try {
-            const contractInstance = this.#getContractInstance(chain, address)
+            const contractInstance = chainParser.getContractInstance(chain, address)
             const uri = await contractInstance.getUri(tokenId)
             logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
             if (!uri) {
@@ -93,28 +67,6 @@ class NftService {
             logger.error(errMsg)
             throw new NftError({message: errMsg, code: 400})
         }
-    }
-
-    async #getFilterByChains(owner) {
-        let merged = []
-        for (const [chainId, chain] of chains.entries()) {
-            if (chain.getAllContractInstances()) {
-                for(const [address, instance] of chain.getAllContractInstances()) {
-                    try {
-                        const tokenIds = owner ? await instance.tokensOfAddress(owner) : await instance.getAllTokenIds()
-                        if (tokenIds && tokenIds.length > 0) {
-                            merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
-                        }
-                    }catch (e) {
-                        logger.error(messageHelper.getMessage('contract_read_failed', e))
-                    }
-                    
-                }
-            }
-        }
-        const filter = merged.length > 0 ? {$or: merged} : {_id: -1} // we return empty if all of chains are not readable/don't have tokenIds
-        logger.debug('filter = ', filter)
-        return filter
     }
 
     async mint(nft) {
@@ -169,7 +121,7 @@ class NftService {
      */
     async queryNFTs(userId, page, limit, sortBy) {
         logger.info('NftService.queryNFTs. userId=', userId)
-        const filter = await this.#getFilterByChains()
+        const filter = await chainParser.getFilterByChains()
         const options = {page: page, limit: limit, sortBy: sortBy}
         let nfts = []
         const resultByFilter = await nftDao.findBy(filter, options)
@@ -193,7 +145,8 @@ class NftService {
         if (!user) {
             throw new NftError({key: 'nft_not_found', params:[userId], code: 404})
         }
-        const filter = await this.#getFilterByChains(user.address)
+        //const filter = await this.#getFilterByChains(user.address)
+        const filter = await chainParser.getFilterByChains(user.address)
         const options = {page: page, limit: limit, sortBy: sortBy}
         let nfts = []
         const resultByFilter = await nftDao.findBy(filter, options)
