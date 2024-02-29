@@ -60,6 +60,13 @@ module.exports = class Contract {
         return tokenIds.map((t) => Number(t))
     }
 
+    async tokensOfAddress(address) {
+        logger.debug(messageHelper.getMessage('contract_get_tokenIds_byAddress', address, this.#chainId, this.#address))
+        const tokenIds = await this.#instance.tokensOfAddress(address)
+        logger.debug('tokenIds:', tokenIds)
+        return tokenIds.map((t) => Number(t))
+    }
+
     toString() {
         return `chainId = ${this.#chainId} \n address = ${this.#address}\n tokenStandard = ${this.#tokenStandard}\n abi = ${this.#abi}`
     }

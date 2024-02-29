@@ -1,4 +1,4 @@
-const config = require('../config')
+const config = require('../config/configuration')
 const logger = require('../helpers/logger')
 
 const convertToURL = (ipfs) => {

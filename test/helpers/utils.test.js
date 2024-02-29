@@ -1,5 +1,5 @@
 const {convertToURL} = require('../../helpers/utils')
-const config = require('../../config')
+const config = require('../../config/configuration')
 
 describe('utils', () => {
     test('convertToURL', () => {

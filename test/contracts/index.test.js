@@ -1,8 +1,8 @@
 const {chains} = require('../../contracts')
-const config  = require('../../config')
+const config  = require('../../config/configuration')
 
 describe('createChains', () => {
-    // you need to set process.env.NODE_ENV = 'test' in .jest/setEnvVars.js
+    // you need to set process.env.NODE_ENV = 'dev' in .jest/setEnvVars.js
     test('check if chains on local are created successfully', () => {
         if (config.env === 'local') {
             const cfgs = config.chains[config.env]

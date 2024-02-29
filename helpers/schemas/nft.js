@@ -1,5 +1,5 @@
 const yup = require('yup')
-const config = require('../../config')
+const config = require('../../config/configuration')
 
 const schemas = {
     mint: yup.object({

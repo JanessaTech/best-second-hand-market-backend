@@ -95,13 +95,13 @@ class NftService {
         }
     }
 
-    async #getFilterByChains() {
+    async #getFilterByChains(owner) {
         let merged = []
         for (const [chainId, chain] of chains.entries()) {
             if (chain.getAllContractInstances()) {
                 for(const [address, instance] of chain.getAllContractInstances()) {
                     try {
-                        const tokenIds = await instance.getAllTokenIds()
+                        const tokenIds = owner ? await instance.tokensOfAddress(owner) : await instance.getAllTokenIds()
                         if (tokenIds && tokenIds.length > 0) {
                             merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
                         }
@@ -112,7 +112,7 @@ class NftService {
                 }
             }
         }
-        const filter = merged.length > 0 ? {$or: merged} : {_id: -1} // we return empty if all of chains are not readable
+        const filter = merged.length > 0 ? {$or: merged} : {_id: -1} // we return empty if all of chains are not readable/don't have tokenIds
         logger.debug('filter = ', filter)
         return filter
     }
@@ -189,8 +189,26 @@ class NftService {
 
     async queryNftsForUser(userId, page, limit, sortBy) {
         logger.info('NftService.queryNftsForUser userId=', userId)
-        
-
+        const user = await userDao.findOneBy({_id: userId})
+        if (!user) {
+            throw new NftError({key: 'nft_not_found', params:[userId], code: 404})
+        }
+        const filter = await this.#getFilterByChains(user.address)
+        const options = {page: page, limit: limit, sortBy: sortBy}
+        let nfts = []
+        const resultByFilter = await nftDao.findBy(filter, options)
+        if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
+            for (const nft of resultByFilter.results) {
+                try {
+                    const fullNft = await this.#addExtraInfo(nft)  //todo- should get extra info from cache saying redis instead
+                    nfts.push(fullNft)
+                } catch (e) {
+                    logger.error(messageHelper.getMessage('nft_get_full_failed', nft._id, e)) // the code should not hit here. If that happened, pls fix it to make it not happen again
+                }
+            }
+        }
+        logger.info(`${resultByFilter.totalResults} nfts are returned`)
+        return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
     }
 }
 

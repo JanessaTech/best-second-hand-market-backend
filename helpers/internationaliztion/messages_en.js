@@ -35,12 +35,14 @@ module.exports = {
     //config
     config_chain_not_found: 'The chain with chainId {0} is not found. Please check the correctness of config.chains in config.common.js',
     config_contractInst_not_found: 'The corresponding contract instance is not found by chainId {0} and address {1}. Please check the correctness of config.chains in config.common.js',
+    config_tokenStandard_not_found: 'The tokenStandard is not found by chainId {0} and address {1}. Please check the correctness of config.chains in config.common.js',
 
     //contracts
-    contract_get_tokenIds: 'Get tokenIds by the combination of chainId {0} and address {1}',
-    contract_token_not_found: 'Token {0} is not found in the contract with chainId {1} and address {2}',
-    contract_invalid_uri: 'Invalid uri for token {0} in the contract with chainId {1} and address {2}',
+    contract_get_tokenIds: 'Get getAllTokenIds under the combination of chainId {0} and address {1}',
+    contract_token_not_found: 'Token {0} is not found in the contract under the combination of chainId {1} and address {2}',
+    contract_invalid_uri: 'Invalid uri for token {0} in the contract under the combination of chainId {1} and address {2}',
     contract_read_failed: 'Failed to read contract due to {0}',
+    contract_get_tokenIds_byAddress: 'Get tokenIds for owner {0} under the combination of chainId {1} and address {2}',
     
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

@@ -1,7 +1,8 @@
 const http = require('http')
 require('dotenv').config()
-const app = require('../app')
-const config = require('../config')
+require('../config/configValidator')  // validate configuration
+const app = require('../app') // set routers and error handing
+const config = require('../config/configuration')
 const logger = require('../helpers/logger')
 const banner = require('../helpers/banner')
 require('../db')

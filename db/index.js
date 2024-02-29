@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const logger = require('../helpers/logger')
-const config = require('../config')
+const config = require('../config/configuration')
 
 mongoose.connect(`mongodb://${config.database.host}/${config.database.dataBaseName}`)
 let db = mongoose.connection
