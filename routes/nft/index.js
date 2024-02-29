@@ -7,9 +7,10 @@ const nftSchema = require('../../helpers/schemas/nft')
 
 router.post('/mint', validate(nftSchema.mint), controller.mint)
 router.post('/update', validate(nftSchema.update), controller.update)
+router.get('/:id', validate(nftSchema.findNFTById), controller.findNFTById)
 router.get('/', validate(nftSchema.queryNFTs) , controller.queryNFTs)
-router.get('/users/:userId', validate(nftSchema.queryNftsForUser), controller.queryNftsForUser)
-router.get('/:id', validate(nftSchema.getNftById), controller.getNftById)
+router.get('/users/:userId', validate(nftSchema.queryNFTsForUser), controller.queryNFTsForUser)
+
 
 
 initUserErrorHandlers(router)

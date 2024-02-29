@@ -9,6 +9,100 @@ const {chainParser} = require('../config/configParsers')
 
 class NftService {
 
+    async mint(nft) {
+        logger.info('NftService.mint')
+        try {
+            const byTokenId = await nftDao.findOneByFilter({chainId:nft.chainId, address: nft.address, tokenId:nft.tokenId})
+            if (byTokenId) {
+                throw new NftError({key: 'nft_mint_duplication', params:[nft.chainId, nft.address, nft.tokenId], code: 400})
+            }
+            const created = await nftDao.create(nft)
+            return created.toJSON()
+        } catch (e) {
+            logger.debug('Failed to save nft history ', nft)
+            throw e
+        }
+    }
+
+    async update(update) {
+        logger.info('NftService.update')
+        try {
+            const nft = await nftDao.findByIdAndUpdate(update)
+            if (!nft) {
+                throw new NftError({key: 'nft_not_found', params:[update._id], code:404})
+            }
+            return nft.toJSON()
+        } catch (e) {
+            logger.debug('Failed to update the nft record by _id = ', update._id)
+            throw e
+        }
+    }
+
+    async findNFTById(id) {
+        logger.info('NftService.findNFTById. id=', id)
+        try {
+            const nft = await nftDao.findOneByFilter({_id: id})
+            if (!nft) {
+                throw new NftError({key: 'nft_not_found', params:[id], code:404})
+            }
+
+            const fullNFT = await this.#addExtraInfo(nft)
+            return fullNFT
+        } catch (e) {
+            logger.debug('Failed to find a full nft by id ', id)
+            throw new NftError({key: 'nft_find_fullby_id_failed', params:[id, e]})
+        }
+    }
+
+    /**
+     * The method will have performance issue. using redis? to enhance it?
+     * @param {*} userId 
+     * @returns 
+     */
+    async queryNFTs(userId, page, limit, sortBy) {
+        logger.info('NftService.queryNFTs. userId=', userId)
+        const filter = await chainParser.getFilterByChains()
+        const options = {page: page, limit: limit, sortBy: sortBy}
+        let nfts = []
+        const resultByFilter = await nftDao.findBy(filter, options)
+        if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
+            for (const nft of resultByFilter.results) {
+                try {
+                    const fullNft = await this.#addExtraInfo(nft)  //todo- should get extra info from cache saying redis instead
+                    nfts.push(fullNft)
+                } catch (e) {
+                    logger.error(messageHelper.getMessage('nft_find_fullby_id_failed', nft._id, e)) // the code should not hit here. If that happened, pls fix it to make it not happen again
+                }
+            }
+        }
+        logger.info(`${resultByFilter.totalResults} nfts are returned`)
+        return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
+    }
+
+    async queryNFTsForUser(userId, page, limit, sortBy) {
+        logger.info('NftService.queryNFTsForUser userId=', userId)
+        const user = await userDao.findOneBy({_id: userId})
+        if (!user) {
+            throw new NftError({key: 'nft_not_found', params:[userId], code: 404})
+        }
+        const filter = await chainParser.getFilterByChains(user.address)
+        const options = {page: page, limit: limit, sortBy: sortBy}
+        let nfts = []
+        const resultByFilter = await nftDao.findBy(filter, options)
+        if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
+            for (const nft of resultByFilter.results) {
+                try {
+                    const fullNft = await this.#addExtraInfo(nft)  //todo- should get extra info from cache saying redis instead
+                    nfts.push(fullNft)
+                } catch (e) {
+                    logger.error(messageHelper.getMessage('nft_find_fullby_id_failed', nft._id, e)) // the code should not hit here. If that happened, pls fix it to make it not happen again
+                }
+            }
+        }
+        logger.info(`${resultByFilter.totalResults} nfts are returned`)
+        return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
+    }
+
     async #addExtraInfo(nft) {
         const chain = chainParser.getChain(nft.chainId)
         const owner = await this.#getOwner(chain, nft)
@@ -68,100 +162,6 @@ class NftService {
             logger.error(errMsg)
             throw new NftError({message: errMsg, code: 400})
         }
-    }
-
-    async mint(nft) {
-        logger.info('NftService.mint')
-        try {
-            const byTokenId = await nftDao.findByChainIdAddressTokenId(nft.chainId, nft.address, nft.tokenId)
-            if (byTokenId) {
-                throw new NftError({key: 'nft_mint_duplication', params:[nft.chainId, nft.address, nft.tokenId], code: 400})
-            }
-            const created = await nftDao.create(nft)
-            return created.toJSON()
-        } catch (e) {
-            logger.debug('Failed to save nft history ', nft)
-            throw e
-        }
-    }
-
-    async update(update) {
-        logger.info('NftService.update')
-        try {
-            const nft = await nftDao.findByIdAndUpdate(update)
-            if (!nft) {
-                throw new NftError({key: 'nft_not_found', params:[update._id], code:404})
-            }
-            return nft.toJSON()
-        } catch (e) {
-            logger.debug('Failed to update the nft record by _id = ', update._id)
-            throw e
-        }
-    }
-
-    async getNFTById(id) {
-        logger.info('NftService.getFullNFTById. id=', id)
-        try {
-            const nft = await nftDao.findById(id)
-            if (!nft) {
-                throw new NftError({key: 'nft_not_found', params:[id], code:404})
-            }
-
-            const fullNFT = await this.#addExtraInfo(nft)
-            return fullNFT
-        } catch (e) {
-            logger.debug('Failed to get a full nft by id ', id)
-            throw new NftError({key: 'nft_get_full_failed', params:[id, e]})
-        }
-    }
-
-    /**
-     * The method will have performance issue. using redis? to enhance it?
-     * @param {*} userId 
-     * @returns 
-     */
-    async queryNFTs(userId, page, limit, sortBy) {
-        logger.info('NftService.queryNFTs. userId=', userId)
-        const filter = await chainParser.getFilterByChains()
-        const options = {page: page, limit: limit, sortBy: sortBy}
-        let nfts = []
-        const resultByFilter = await nftDao.findBy(filter, options)
-        if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
-            for (const nft of resultByFilter.results) {
-                try {
-                    const fullNft = await this.#addExtraInfo(nft)  //todo- should get extra info from cache saying redis instead
-                    nfts.push(fullNft)
-                } catch (e) {
-                    logger.error(messageHelper.getMessage('nft_get_full_failed', nft._id, e)) // the code should not hit here. If that happened, pls fix it to make it not happen again
-                }
-            }
-        }
-        logger.info(`${resultByFilter.totalResults} nfts are returned`)
-        return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
-    }
-
-    async queryNftsForUser(userId, page, limit, sortBy) {
-        logger.info('NftService.queryNftsForUser userId=', userId)
-        const user = await userDao.findOneBy({_id: userId})
-        if (!user) {
-            throw new NftError({key: 'nft_not_found', params:[userId], code: 404})
-        }
-        const filter = await chainParser.getFilterByChains(user.address)
-        const options = {page: page, limit: limit, sortBy: sortBy}
-        let nfts = []
-        const resultByFilter = await nftDao.findBy(filter, options)
-        if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
-            for (const nft of resultByFilter.results) {
-                try {
-                    const fullNft = await this.#addExtraInfo(nft)  //todo- should get extra info from cache saying redis instead
-                    nfts.push(fullNft)
-                } catch (e) {
-                    logger.error(messageHelper.getMessage('nft_get_full_failed', nft._id, e)) // the code should not hit here. If that happened, pls fix it to make it not happen again
-                }
-            }
-        }
-        logger.info(`${resultByFilter.totalResults} nfts are returned`)
-        return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
     }
 }
 

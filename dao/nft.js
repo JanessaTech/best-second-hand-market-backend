@@ -24,13 +24,8 @@ class NftDAO {
         }
     }
 
-    async findByChainIdAddressTokenId(chainId, address, tokenId) {
-        const nft = await NFT.findOne({chainId:chainId, address: address, tokenId: tokenId})
-        return nft
-    }
-
-    async findById(id) {
-        const nft = await NFT.findOne({_id: id})
+    async findOneByFilter(filter) {
+        const nft = await NFT.findOne({filter})
         return nft
     }
 

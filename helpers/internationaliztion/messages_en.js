@@ -29,7 +29,7 @@ module.exports = {
     nft_failed_get_owner: 'Failed to get NFT owner by token id {0} for the combination of chainId {1} and address {2} due to {3}',
     nft_failed_get_uri: 'Failed to get NFT uri by token id {0} for the combination of chainId {1} and address {2} due to {3}',
     nft_query_all_success: 'Query all nfts by userId {0} successfully',
-    nft_get_full_failed: 'Failed to get full nft with id(_id) {0} due to {1}',
+    nft_find_fullby_id_failed: 'Failed to find full nft with id(_id) {0} due to {1}',
     nft_query_for_user_success: 'Query nfts under the user with userId being {0} successfully',
 
     //config

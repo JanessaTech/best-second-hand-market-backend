@@ -58,11 +58,11 @@ class NFTcontroller {
      * @param {*} res 
      * @param {*} next 
      */
-    async getNftById(req, res, next) {
-        logger.info('NFTcontroller.getNftById. id=', req.params.id)
+    async findNFTById(req, res, next) {
+        logger.info('NFTcontroller.findNFTById. id=', req.params.id)
         const id = req.params.id
         try {
-            const payload = await nftService.getNFTById(id)
+            const payload = await nftService.findNFTById(id)
             sendSuccess(res, messageHelper.getMessage('nft_by_id_success', id), {nft: payload})
         } catch (e) {
             next(e)
@@ -93,14 +93,14 @@ class NFTcontroller {
      * @param {*} res 
      * @param {*} next 
      */
-    async queryNftsForUser(req, res, next) {
-        logger.info('NFTcontroller.queryNftsForUser userId =', req.query.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
+    async queryNFTsForUser(req, res, next) {
+        logger.info('NFTcontroller.queryNFTsForUser userId =', req.query.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
         const userId = req.params.userId
         const page = req.query.page
         const limit = req.query.limit
         const sortBy = req.query.sortBy
         try {
-            const payload = await nftService.queryNftsForUser(userId, page, limit, sortBy)
+            const payload = await nftService.queryNFTsForUser(userId, page, limit, sortBy)
             sendSuccess(res, messageHelper.getMessage('nft_query_for_user_success', userId), payload)
         }catch(e) {
             next(e)

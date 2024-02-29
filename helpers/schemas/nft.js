@@ -21,7 +21,7 @@ const schemas = {
             status: yup.mixed().oneOf(config.NFTSTATUS).optional(),
         })
     }),
-    queryNftsForUser: yup.object({
+    queryNFTsForUser: yup.object({
         params: yup.object({
             userId: yup.number().typeError('userId should be an integer equal to or greater than 1!').min(1, 'userId should be equal to or greater than 1!').integer('Please enter a valid integer for userId!').required('userId is required'),
             page: yup.number().min(1, 'page should be equal to or greater than 1!').integer('Please enter a valid integer for page!').optional(),
@@ -29,7 +29,7 @@ const schemas = {
             sortBy: yup.string().optional()
         })
     }),
-    getNftById: yup.object({
+    findNFTById: yup.object({
         params: yup.object({
             id: yup.number().typeError('id should be an integer equal to or greater than 1!').min(1, 'id should be equal to or greater than 1!').integer('Please enter a valid integer for id!').required('id is required')
         }) 
