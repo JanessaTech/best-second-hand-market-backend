@@ -5,7 +5,7 @@ const initCartErrorHandlers = require('./cartErrorHandlers')
 const {validate} = require('../../middlewares')
 const cartSchema = require('../../helpers/schemas/cart')
 
-router.post('/', validate(cartSchema.add), controller.add)
+router.post('/', validate(cartSchema.add), controller.add) 
 router.delete('/:id', validate(cartSchema.remove), controller.remove)
 router.get('/:userId', validate(cartSchema.queryByUser), controller.queryByUser)
 

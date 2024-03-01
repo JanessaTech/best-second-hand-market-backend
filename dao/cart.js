@@ -6,11 +6,11 @@ const messageHelper = require('../helpers/internationaliztion/messageHelper')
 class CartDAO {
     async add(cart) {
         try {
-            const cart = new Cart({
+            const cartDao = new Cart({
                 userId: cart.userId,
                 nftId: cart.nftId
             })
-            const savedCart = await cart.save()
+            const savedCart = await cartDao.save()
             logger.debug('CartDAO.add. a new cart item is added successfully.', savedCart)
             return savedCart
         } catch (err) {
@@ -27,6 +27,11 @@ class CartDAO {
             logger.debug(errMsg)
             throw new CartError({message: errMsg, code: 400})
         }
+    }
+
+    async queryBy(filter) {
+        const carts = await Cart.find(filter)
+        return carts
     }
 
     async queryByPagination(filter, options) {

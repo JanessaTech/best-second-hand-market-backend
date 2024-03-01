@@ -47,6 +47,11 @@ class NftDAO {
         return nft
     }
 
+    async queryAllByFilter(filter) {
+        const nfts = await NFT.find(filter)
+        return nfts
+    }
+
     async queryByPagination(filter, options) {
         const nfts = await NFT.paginate(filter, options)
         return nfts

@@ -107,7 +107,7 @@ class ConfigChainParser {
         return tokenStandard
     }
 
-    async getFilterByChains(owner) {
+    async getFilterByChains(owner = undefined, nftIds = undefined) {
         let merged = []
         for (const [chainId, chain] of this.#chains.entries()) {
             if (chain.getAllContractInstances()) {
@@ -115,7 +115,12 @@ class ConfigChainParser {
                     try {
                         const tokenIds = owner ? await instance.tokensOfAddress(owner) : await instance.getAllTokenIds()
                         if (tokenIds && tokenIds.length > 0) {
-                            merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
+                            if (nftIds && nftIds.length > 0) {
+                                merged.push({$and : [{_id: {$in: nftIds}}, {chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
+                            } else {
+                                merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
+                            }
+                            
                         }
                     }catch (e) {
                         logger.error(messageHelper.getMessage('contract_read_failed', e))

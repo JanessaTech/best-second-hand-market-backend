@@ -15,7 +15,7 @@ class CartController {
         try {
             const userId = req.body.userId
             const nftId = req.body.nftId
-            const payload = cartService.add(userId, nftId)
+            const payload = await cartService.add(userId, nftId)
             sendSuccess(res, messageHelper.getMessage('cart_add_success', userId, nftId), {cart: payload})
         } catch(e) {
             next(e)
@@ -46,14 +46,14 @@ class CartController {
      * @param {*} next 
      */
     async queryByUser(req, res, next) {
-        logger.info('CartController.queryByUser. userId = ', req.body.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
+        logger.info('CartController.queryByUser. userId = ', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
         try {
-            const userId = req.body.userId
+            const userId = req.params.userId
             const page = req.query.page
             const limit = req.query.limit
             const sortBy = req.query.sortBy
-            const payload = cartService.queryByUser(userId, page, limit, sortBy)
-            sendSuccess(res, messageHelper.getMessage('cart_query_user', userId), {cartIds: payload})
+            const payload = await cartService.queryByUser(userId, page, limit, sortBy)
+            sendSuccess(res, messageHelper.getMessage('cart_query_user', userId), {nftIds: payload})
         } catch (e) {
             next(e)
         }

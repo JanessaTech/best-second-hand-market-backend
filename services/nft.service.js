@@ -103,6 +103,22 @@ class NftService {
         return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
     }
 
+    async queryNFTsByIds(nftIds) {
+        logger.info('NftService.queryNFTsByIds. nftIds = ', nftIds)
+        const filter = await chainParser.getFilterByChains(undefined, nftIds)
+        const rawNfts = await nftDao.queryAllByFilter(filter)
+        let nfts = []
+        for(const rawNft of rawNfts) {
+            try {
+                const fullNft = await this.#addExtraInfo(rawNft)
+                nfts.push(fullNft)
+            } catch (e) {
+                logger.error(messageHelper.getMessage('nft_find_fullby_id_failed', rawNft._id, e)) // the code should not hit here. If that happened, fix it to make it not happen again
+            }
+        }
+        return nfts
+    }
+
     async #addExtraInfo(nft) {
         const chain = chainParser.getChain(nft.chainId)
         const owner = await this.#getOwner(chain, nft)

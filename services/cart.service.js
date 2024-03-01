@@ -1,6 +1,9 @@
 const logger = require("../helpers/logger")
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const cartDao = require('../dao/cart')
+const nftDao = require('../dao/nft')
+const {chainParser} = require('../config/configParsers')
+const nftService = require('../services/nft.service')
 
 class CartService {
     async add(userId, nftId) {
@@ -24,18 +27,16 @@ class CartService {
         }
     }
 
-    async queryByUser(userId, page, limit, sortBy) {
+    async queryByUser(userId) {
         logger.info('CartService.queryByUser. userId = ', userId)
         const filter = {userId: userId}
-        const options = {page: page, limit: limit, sortBy: sortBy}
-        let cartIds = []
-        const resultByFilter = await cartDao.queryByPagination(filter, options)
-        if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
-            for (const cartItem of resultByFilter.results) {
-                cartIds.push(cartItem.nftId)
-            }
+        let nftIds = []
+        const cartItems = await cartDao.queryBy(filter)
+        for (const cartItem of cartItems) {
+            nftIds.push(cartItem.nftId)
         }
-        return cartIds
+        const nfts = await nftService.queryNFTsByIds(nftIds)
+        return nfts
     }
 }
 
