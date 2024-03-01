@@ -19,7 +19,7 @@ jest.mock('../../helpers/utils', () => ({ convertToURL: jest.fn() }))
 
 beforeAll(() => {
     nftDao.findOneByFilter = jest.fn()
-    userDao.findByAddress = jest.fn()
+    userDao.findOneBy = jest.fn()
     chainParser.getChain = jest.fn()
     chainParser.getContractInstance = jest.fn()
     chainParser.getTokenStandard = jest.fn()
@@ -82,7 +82,7 @@ describe('NftService', () => {
             when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
             when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(contractInstance)
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue(address)
-            when(userDao.findByAddress).calledWith(address).mockResolvedValue(undefined)
+            when(userDao.findOneBy).calledWith({address: address}).mockResolvedValue(undefined)
             when(messageHelper.getMessage).calledWith('user_not_found_address', address).mockReturnValue('some message')
 
             await expect(nftService.findNFTById(1))
@@ -102,7 +102,7 @@ describe('NftService', () => {
             when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
             when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(contractInstance)
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue('some-owner-address')
-            when(userDao.findByAddress).calledWith('some-owner-address').mockResolvedValue(user)
+            when(userDao.findOneBy).calledWith({address:'some-owner-address'}).mockResolvedValue(user)
             when(contractInstance.getUri).calledWith(tokenId).mockResolvedValue('')
             when(messageHelper.getMessage).calledWith('nft_failed_get_uri', tokenId, chainId, address, expect.anything(Error)).mockReturnValue('some-message')
 
@@ -122,7 +122,7 @@ describe('NftService', () => {
             when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
             when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(contractInstance)
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue('some-owner-address')
-            when(userDao.findByAddress).calledWith('some-owner-address').mockResolvedValue(user)
+            when(userDao.findOneBy).calledWith({address:'some-owner-address'}).mockResolvedValue(user)
             when(contractInstance.getUri).calledWith(tokenId).mockResolvedValue('some-uri')
             when(chain.getContractInstance).calledWith(address).mockReturnValue(contractInstance)
             convertToURL.mockReturnValue('some-url')

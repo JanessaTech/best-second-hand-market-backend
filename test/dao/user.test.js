@@ -25,44 +25,32 @@ describe('UserDAO', () => {
         })
     })
 
-    describe('findByName', () => {
-        test('should return an user by name if the user exists', async () => {
+    describe('findOneBy', () => {
+        test('should return an user if the user exists', async () => {
             const name = 'some-name'
             const savedUser = {name: name, id:1}
             //User.findOne = jest.fn(async (name) => savedUser)
             User.findOne = jest.fn()
             when(User.findOne).calledWith({name: name}).mockResolvedValue(savedUser)
 
-            const res = await userDao.findByName(name)
+            const res = await userDao.findOneBy({name: name})
 
             expect(res).toEqual(savedUser)
             expect(User.findOne).toHaveBeenCalledWith({name: name})
         })
     })
 
-    describe('findByAddress', () => {
+    describe('findOneBy', () => {
         test('should return an user by address if the user exists', async () => {
             const address = 'some-address'
             const savedUser = {address: address, id:1}
             User.findOne = jest.fn()
             when(User.findOne).calledWith({address: address}).mockResolvedValue(savedUser)
 
-            const res = await userDao.findByAddress(address)
+            const res = await userDao.findOneBy({address: address})
 
             expect(res).toEqual(savedUser)
             expect(User.findOne).toHaveBeenCalledWith({address: address})
-        })
-    })
-
-    describe('findByAddressAndUpdateLoginTime', () => {
-        test('should return an user with the updated loginTime by address', async () => {
-            const address = 'some-address'
-            const updatedUser = {address: address, loginTime: new Date()}
-            User.findOneAndUpdate = jest.fn( async () => updatedUser)
-
-            const res = await userDao.findByAddressAndUpdateLoginTime(address)
-            expect(res).toEqual(updatedUser)
-            expect(User.findOneAndUpdate).toHaveBeenCalled()
         })
     })
 })

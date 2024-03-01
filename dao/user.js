@@ -19,11 +19,22 @@ class UserDAO {
         } 
     }
 
+    async findOneAndUpdate(filter, update) {
+        try {
+            const user = await User.findOneAndUpdate(filter, update, {new: true})
+            return user
+        } catch (err) {
+            logger.debug('Failed to update due to ', err)
+            throw e
+        }
+    }
+
     async findOneBy(filter) {
         const user = await User.findOne(filter)
         return user
     }
 
+    /*
     async findByName(name) {
         const user = await User.findOne({name: name})
         return user 
@@ -32,8 +43,10 @@ class UserDAO {
     async findByAddress(address) {
         const user = await User.findOne({address: address})
         return user 
-    }
+    }*/
 
+
+    /*
     async findByAddressAndUpdateLoginTime(address) {
         const filter = {address: address}
         const update = {loginTime: new Date()}
@@ -56,7 +69,7 @@ class UserDAO {
             logger.debug('Failed to update logoutTime due to ', err)
             throw e
         }
-    }
+    }*/
 }
 
 const userDao = new UserDAO()

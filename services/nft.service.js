@@ -122,7 +122,7 @@ class NftService {
 
     async #getOwner(chain, nft) {
         const owner = await this.#getNftOwner(chain, nft.address, nft.tokenId)
-        const user = await userDao.findByAddress(owner)
+        const user = await userDao.findOneBy({address: owner})
         if (!user) {
             const errMsg = messageHelper.getMessage('user_not_found_address', owner)
             logger.error(errMsg) // code shouldn't hit here. Fix it if that happened

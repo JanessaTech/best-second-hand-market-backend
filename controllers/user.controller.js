@@ -48,12 +48,12 @@ class UserController {
      * @param {*} res  : The response sent back to frontend. The format is the same as register
      * @param {*} next : The object used by routes to control the workflow of req&res&exception handling
      */
-    async getUserByAddress(req, res, next) {
-        logger.info('UserController.getUserByAddress. address = ', req.params?.address)
+    async findUserByAddress(req, res, next) {
+        logger.info('UserController.findUserByAddress. address = ', req.params?.address)
         try {
             const address = req.params.address
-            const payload = await userService.getUserByAddress(address)
-            sendSuccess(res, messageHelper.getMessage('user_get_by_address', address), {user: payload})
+            const payload = await userService.findUserByAddress(address)
+            sendSuccess(res, messageHelper.getMessage('user_find_by_address', address), {user: payload})
         } catch(e) {
             next(e)
         }

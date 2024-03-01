@@ -8,7 +8,7 @@ const schemas = {
             intro: yup.string().max(200, 'intro should be less than 200 characters').optional()
         })
     }),
-    getUserByAddress: yup.object({
+    findUserByAddress: yup.object({
         params: yup.object({
             address : yup.string().required('address is required').matches(/^0x[a-fA-F0-9]{40}$/, 'address is invalid cryptocurrency wallet address')
         })

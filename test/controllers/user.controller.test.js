@@ -9,7 +9,7 @@ let req, res, next
 
 beforeAll(() => {
     userService.register = jest.fn()
-    userService.getUserByAddress = jest.fn()
+    userService.findUserByAddress = jest.fn()
     userService.loginByAddress = jest.fn()
     messageHelper.getMessage = jest.fn()
 })
@@ -63,27 +63,27 @@ describe('UserController', () => {
         })    
     })
 
-    describe('getUserByAddress', () => {
-        test('should should go to the error handing chain when userService.getUserByAddress returns empty', async () => {
+    describe('findUserByAddress', () => {
+        test('should should go to the error handing chain when userService.findUserByAddress returns empty', async () => {
             req.params = {address: 'some-address'}
-            when(userService.getUserByAddress).calledWith(req.params.address).mockRejectedValue(new UserError())
+            when(userService.findUserByAddress).calledWith(req.params.address).mockRejectedValue(new UserError())
             
-            await userController.getUserByAddress(req, res, next)
+            await userController.findUserByAddress(req, res, next)
 
-            await expect(userService.getUserByAddress(req.params.address)).rejects.toBeInstanceOf(UserError)
+            await expect(userService.findUserByAddress(req.params.address)).rejects.toBeInstanceOf(UserError)
             expect(next).toHaveBeenCalled()
         })
 
-        test('should get the user by the address successfully', async () => {
+        test('should find the user by the address successfully', async () => {
             req.params = {address: 'some-address'}
             const payload = {name: 'some-name'}
-            when(userService.getUserByAddress).calledWith(req.params.address).mockResolvedValue(payload)
-            when(messageHelper.getMessage).calledWith('user_get_by_address', req.params.address).mockReturnValue('some-message')
+            when(userService.findUserByAddress).calledWith(req.params.address).mockResolvedValue(payload)
+            when(messageHelper.getMessage).calledWith('user_find_by_address', req.params.address).mockReturnValue('some-message')
             
-            await userController.getUserByAddress(req, res, next)
+            await userController.findUserByAddress(req, res, next)
 
-            await expect(userService.getUserByAddress(req.params.address)).resolves.toEqual(payload)
-            expect(messageHelper.getMessage('user_get_by_address', req.params.address)).toEqual('some-message')
+            await expect(userService.findUserByAddress(req.params.address)).resolves.toEqual(payload)
+            expect(messageHelper.getMessage('user_find_by_address', req.params.address)).toEqual('some-message')
             expect(res.status).toHaveBeenCalledWith(200)
             expect(res.json).toHaveBeenCalledWith({
                 success: true,

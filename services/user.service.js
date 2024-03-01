@@ -6,11 +6,11 @@ class UserService {
     async register(user) {
         logger.info('UserService.register...')
         try {
-            const byName = await userDao.findByName(user.name)
+            const byName = await userDao.findOneBy({name: user.name})
             if (byName) {
                 throw new UserError({key: 'user_register_duplication_name', params:[user.name], code: 400})
             }
-            const byAddress = await userDao.findByAddress(user.address)
+            const byAddress = await userDao.findOneBy({address: user.address})
             if (byAddress) {
                 throw new UserError({key: 'user_register_duplication_address', params:[user.address], code: 400})
             }
@@ -21,16 +21,16 @@ class UserService {
         }
     }
 
-    async getUserByAddress(address) {
-        logger.info('UserService.getUserByAddress')
+    async findUserByAddress(address) {
+        logger.info('UserService.findUserByAddress')
         try {
-            const user = await userDao.findByAddress(address)
+            const user = await userDao.findOneBy({address: address})
             if (!user) {
                 throw new UserError({key: 'user_not_found_address', params:[address], code: 404})
             }
             return user
         } catch (e) {
-            logger.debug('Failed to get user by address ', address)
+            logger.debug('Failed to find user by address ', address)
             throw e
         }
     }
@@ -38,7 +38,7 @@ class UserService {
     async loginByAddress(address) {
         logger.info('UserService.login')
         try {
-            const user = await userDao.findByAddressAndUpdateLoginTime(address)
+            const user = await userDao.findOneAndUpdate({address: address}, {loginTime: new Date()})
             if (!user) {
                 throw new UserError({key: 'user_not_found_address', params:[address], code: 404})
             }
@@ -51,7 +51,7 @@ class UserService {
 
     async logoutByAddress(address) {
         try {
-            const user = await userDao.findByAddressAndUpdateLogoutTime(address)
+            const user = await userDao.findOneAndUpdate({address: address}, {logoutTime: new Date()})
             if (!user) {
                 throw new UserError({key: 'user_not_found_address', params:[address], code: 404})
             }
