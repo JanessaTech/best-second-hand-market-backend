@@ -24,16 +24,6 @@ class NftDAO {
         }
     }
 
-    async findOneByFilter(filter) {
-        const nft = await NFT.findOne({filter})
-        return nft
-    }
-
-    async findBy(filter, options) {
-        const nfts = await NFT.paginate(filter, options)
-        return nfts
-    }
-
     async findByIdAndUpdate(update) {
         const filter = {_id: update._id}
         var _update = {}
@@ -51,6 +41,18 @@ class NftDAO {
             throw e
         }
     }
+
+    async findOneByFilter(filter) {
+        const nft = await NFT.findOne(filter)
+        return nft
+    }
+
+    async queryByPagination(filter, options) {
+        const nfts = await NFT.paginate(filter, options)
+        return nfts
+    }
+
+    
 }
 
 const nftDao = new NftDAO()

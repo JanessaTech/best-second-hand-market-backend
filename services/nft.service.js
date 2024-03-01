@@ -64,7 +64,7 @@ class NftService {
         const filter = await chainParser.getFilterByChains()
         const options = {page: page, limit: limit, sortBy: sortBy}
         let nfts = []
-        const resultByFilter = await nftDao.findBy(filter, options)
+        const resultByFilter = await nftDao.queryByPagination(filter, options)
         if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
             for (const nft of resultByFilter.results) {
                 try {
@@ -88,7 +88,7 @@ class NftService {
         const filter = await chainParser.getFilterByChains(user.address)
         const options = {page: page, limit: limit, sortBy: sortBy}
         let nfts = []
-        const resultByFilter = await nftDao.findBy(filter, options)
+        const resultByFilter = await nftDao.queryByPagination(filter, options)
         if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
             for (const nft of resultByFilter.results) {
                 try {
