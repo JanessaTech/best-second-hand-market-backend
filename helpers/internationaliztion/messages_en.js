@@ -48,6 +48,8 @@ module.exports = {
     cart_add_success: 'Add nftId {0} for userId {1} successfully',
     cart_remove_success: 'Remove cart item with id {0} successfully',
     cart_query_user: 'Query items in cart for user {0} successfully',
+    cart_add_validiation_failed: 'Failed to add a new cart item for userId {0} and nftId {1} due to {2}',
+    cart_delete_failed: 'Failed to delete cart item by id {0} due to {1}',
 
 
     //todo

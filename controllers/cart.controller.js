@@ -53,7 +53,7 @@ class CartController {
             const limit = req.query.limit
             const sortBy = req.query.sortBy
             const payload = cartService.queryByUser(userId, page, limit, sortBy)
-            sendSuccess(res, messageHelper.getMessage('cart_query_user', userId), {carts: payload})
+            sendSuccess(res, messageHelper.getMessage('cart_query_user', userId), {cartIds: payload})
         } catch (e) {
             next(e)
         }
