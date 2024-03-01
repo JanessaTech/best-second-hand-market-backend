@@ -8,11 +8,25 @@ const cartSchema = new Schema({
     _id: { type: Number,  min: 1 },
     userId: {
         type: Number,
+        min: [1, "userId should be equal or greater than 1"],
+        validate: {
+            validator: function (v) {
+                return v >= 1 && Number.isInteger(v);
+            },
+            message: (props) => `${props.value} should be a positive integer!`,
+        },
         ref: 'User',
         required: [true, 'userId is required'],
     },
     nftId: {
         type: Number,
+        min: [1, "nftId should be equal or greater than 1"],
+        validate: {
+            validator: function (v) {
+                return v >= 1 && Number.isInteger(v);
+            },
+            message: (props) => `${props.value} should be a positive integer!`,
+        },
         required: [true, 'nftId is required'],
     }
 }, 
