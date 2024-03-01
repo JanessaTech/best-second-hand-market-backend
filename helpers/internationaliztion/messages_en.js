@@ -44,6 +44,12 @@ module.exports = {
     contract_read_failed: 'Failed to read contract due to {0}',
     contract_get_tokenIds_byAddress: 'Get tokenIds for owner {0} under the combination of chainId {1} and address {2}',
     
+    //cart
+    cart_add_success: 'Add nftId {0} for userId {1} successfully',
+    cart_remove_success: 'Remove cart item with id {0} successfully',
+    cart_query_user: 'Query items in cart for user {0} successfully',
+
+
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',
     todo_getAll: 'Get all todos for user {0} successfully',

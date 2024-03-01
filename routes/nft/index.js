@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const controller = require('../../controllers/nft.controller')
-const initUserErrorHandlers = require('./nftErrorHandlers')
+const initNftErrorHandlers = require('./nftErrorHandlers')
 const {validate} = require('../../middlewares')
 const nftSchema = require('../../helpers/schemas/nft')
 
@@ -12,8 +12,7 @@ router.get('/', validate(nftSchema.queryNFTs) , controller.queryNFTs)
 router.get('/users/:userId', validate(nftSchema.queryNFTsForUser), controller.queryNFTsForUser)
 
 
-
-initUserErrorHandlers(router)
+initNftErrorHandlers(router)
 module.exports = router
 
 
