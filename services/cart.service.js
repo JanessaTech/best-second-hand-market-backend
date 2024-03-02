@@ -1,9 +1,5 @@
 const logger = require("../helpers/logger")
-const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const cartDao = require('../dao/cart')
-const nftDao = require('../dao/nft')
-const {chainParser} = require('../config/configParsers')
-const nftService = require('../services/nft.service')
 
 class CartService {
     async add(userId, nftId) {
@@ -35,8 +31,7 @@ class CartService {
         for (const cartItem of cartItems) {
             nftIds.push(cartItem.nftId)
         }
-        const nfts = await nftService.queryNFTsByIds(nftIds)
-        return nfts
+        return nftIds
     }
 }
 
