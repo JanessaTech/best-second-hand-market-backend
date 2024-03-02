@@ -1,7 +1,9 @@
 const logger = require('../helpers/logger')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 const cartService = require('../services/cart.service')
+const nftService = require('../services/nft.service')
 const {sendSuccess} = require('../helpers/reponseHandler')
+const {CartError} = require('../routes/cart/CartErrors')
 
 class CartController {
     /**
@@ -46,16 +48,15 @@ class CartController {
      * @param {*} next 
      */
     async queryByUser(req, res, next) {
-        logger.info('CartController.queryByUser. userId = ', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
+        logger.info('CartController.queryByUser. userId = ', req.params.userId)
+        const userId = req.params.userId
         try {
-            const userId = req.params.userId
-            const page = req.query.page
-            const limit = req.query.limit
-            const sortBy = req.query.sortBy
-            const payload = await cartService.queryByUser(userId, page, limit, sortBy)
-            sendSuccess(res, messageHelper.getMessage('cart_query_user', userId), {nftIds: payload})
+            const nftIds = await cartService.queryByUser(userId)
+            const payload = await nftService.queryNFTsByIds(nftIds)
+            sendSuccess(res, messageHelper.getMessage('cart_query_user', userId), {nfts: payload})
         } catch (e) {
-            next(e)
+            const err = new CartError({key: 'cart_query_user_failed', params: [userId, e]})
+            next(err)
         }
     }
 }

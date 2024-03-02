@@ -3,7 +3,7 @@ const router = express.Router()
 const controller = require('../../controllers/user.controller')
 const initUserErrorHandlers = require('./userErrorHandlers')
 const {validate} = require('../../middlewares')
-const userSchema = require('../../helpers/schemas/user')
+const {userSchema} = require('../schemas')
 
 router.post('/register',  validate(userSchema.register), controller.register)
 router.get('/:address', validate(userSchema.findUserByAddress), controller.findUserByAddress)

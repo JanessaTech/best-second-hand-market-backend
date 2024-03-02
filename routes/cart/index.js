@@ -3,7 +3,7 @@ const router = express.Router()
 const controller = require('../../controllers/cart.controller')
 const initCartErrorHandlers = require('./cartErrorHandlers')
 const {validate} = require('../../middlewares')
-const cartSchema = require('../../helpers/schemas/cart')
+const {cartSchema} = require('../schemas')
 
 router.post('/', validate(cartSchema.add), controller.add) 
 router.delete('/:id', validate(cartSchema.remove), controller.remove)

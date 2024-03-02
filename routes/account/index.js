@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const controller = require('../../controllers/account.controller')
-const {accountSchema} = require('../../helpers/schemas')
+const {accountSchema} = require('../schemas')
 const accountService = require('../../services/account.service')
 const {validate, authenticate, authorize} = require('../../middlewares')
 const initAccountErrorHandlers = require('./accountErrorHandlers')
