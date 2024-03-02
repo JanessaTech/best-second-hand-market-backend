@@ -61,13 +61,21 @@ class NFTcontroller {
      * @param {*} next 
      */
     async findNFTById(req, res, next) {
-        logger.info('NFTcontroller.findNFTById. id=', req.params.id)
-        const id = req.params.id
+        logger.info('NFTcontroller.findNFTById. id=', req.params.id, 'userId =', req.query.userId)
+        const id = Number(req.params.id)
+        const userId = req.query.userId
         try {
             const payload = await nftService.findNFTById(id)
+            const nftIdsInCart = userId ? await cartService.queryByUser(userId): []
+            payload.inCart = userId ? nftIdsInCart.includes(id) : undefined
             sendSuccess(res, messageHelper.getMessage('nft_by_id_success', id), {nft: payload})
         } catch (e) {
-            next(e)
+            if (!e instanceof NftError) {
+                const err = new NftError({key:'nft_by_id_failed', params: [id, userId, e]})
+                next(err)
+            } else {
+                next(e)
+            } 
         }
     }
 
@@ -85,14 +93,18 @@ class NFTcontroller {
             const nftsWithPagination = await nftService.queryNFTs(userId, page, limit, sortBy)
             const nftIdsInCart = userId ? await cartService.queryByUser(userId): []
             const nftsWithCartInfo = nftsWithPagination.nfts.map((nft) => {
-                nft.inCart = nftIdsInCart.includes(nft.id)
+                nft.inCart = userId ? nftIdsInCart.includes(nft.id) : undefined
                 return nft
             })
             const payload = {...nftsWithPagination, nfts: nftsWithCartInfo}
             sendSuccess(res, messageHelper.getMessage('nft_query_all_success', userId), payload)
         } catch (e) {
-            const err = new NftError({key:'nft_query_all_failed', params: [userId, e]})
-            next(e)
+            if (!e instanceof NftError) {
+                const err = new NftError({key:'nft_query_all_failed', params: [userId, e]})
+                next(err)
+            } else {
+                next(e)
+            } 
         }
     }
 

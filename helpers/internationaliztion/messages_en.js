@@ -26,6 +26,7 @@ module.exports = {
     nft_update_success: 'The nft with id(_id) {0} is updated successfully',
     nft_not_found: 'The nft with id(_id) {0} is not found',
     nft_by_id_success: 'The nft with id(_id) {0} is found',
+    nft_by_id_failed: 'Failed to find the nft with id(_id) {0} (userId = {1}) due to {2}',
     nft_failed_get_owner: 'Failed to get NFT owner by token id {0} for the combination of chainId {1} and address {2} due to {3}',
     nft_failed_get_uri: 'Failed to get NFT uri by token id {0} for the combination of chainId {1} and address {2} due to {3}',
     nft_query_all_success: 'Query all nfts by userId {0} successfully',
