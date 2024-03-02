@@ -53,7 +53,7 @@ class CartController {
         try {
             const nftIds = await cartService.queryByUser(userId)
             const payload = await nftService.queryNFTsByIds(nftIds)
-            sendSuccess(res, messageHelper.getMessage('cart_query_user', userId), {nfts: payload})
+            sendSuccess(res, messageHelper.getMessage('cart_query_user', userId), {nfts: payload.filter((nft) => nft.owner.id != userId)}) // the nfts belonging to the user with userId are filtered out
         } catch (e) {
             const err = new CartError({key: 'cart_query_user_failed', params: [userId, e]})
             next(err)
