@@ -66,14 +66,7 @@ class NftService {
         let nfts = []
         const resultByFilter = await nftDao.queryByPagination(filter, options)
         if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
-            for (const nft of resultByFilter.results) {
-                try {
-                    const fullNft = await this.#addExtraInfo(nft)  //todo- should get extra info from cache saying redis instead
-                    nfts.push(fullNft)
-                } catch (e) {
-                    logger.error(messageHelper.getMessage('nft_find_fullby_id_failed', nft._id, e)) // the code should not hit here. If that happened, pls fix it to make it not happen again
-                }
-            }
+            nfts = await this.#addExtraInfoToRawNFTs(resultByFilter.results)
         }
         logger.info(`${resultByFilter.totalResults} nfts are returned`)
         return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
@@ -90,14 +83,7 @@ class NftService {
         let nfts = []
         const resultByFilter = await nftDao.queryByPagination(filter, options)
         if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
-            for (const nft of resultByFilter.results) {
-                try {
-                    const fullNft = await this.#addExtraInfo(nft)  //todo- should get extra info from cache saying redis instead
-                    nfts.push(fullNft)
-                } catch (e) {
-                    logger.error(messageHelper.getMessage('nft_find_fullby_id_failed', nft._id, e)) // the code should not hit here. If that happened, pls fix it to make it not happen again
-                }
-            }
+            nfts = await this.#addExtraInfoToRawNFTs(resultByFilter.results)
         }
         logger.info(`${resultByFilter.totalResults} nfts are returned`)
         return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
@@ -107,6 +93,12 @@ class NftService {
         logger.info('NftService.queryNFTsByIds. nftIds = ', nftIds)
         const filter = await chainParser.getFilterByChains(undefined, nftIds)
         const rawNfts = await nftDao.queryAllByFilter(filter)
+
+        let nfts = await this.#addExtraInfoToRawNFTs(rawNfts)
+        return nfts
+    }
+
+    async #addExtraInfoToRawNFTs(rawNfts) {
         let nfts = []
         for(const rawNft of rawNfts) {
             try {

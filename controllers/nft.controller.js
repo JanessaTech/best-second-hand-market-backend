@@ -1,6 +1,8 @@
 const logger = require('../helpers/logger')
 const {sendSuccess} = require('../helpers/reponseHandler')
 const nftService = require('../services/nft.service')
+const cartService = require('../services/cart.service')
+const {NftError} = require('../routes/nft/NftErrors')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 
 class NFTcontroller {
@@ -80,9 +82,16 @@ class NFTcontroller {
         const limit = req.query.limit
         const sortBy = req.query.sortBy
         try {
-            const payload = await nftService.queryNFTs(userId, page, limit, sortBy)
+            const nftsWithPagination = await nftService.queryNFTs(userId, page, limit, sortBy)
+            const nftIdsInCart = userId ? await cartService.queryByUser(userId): []
+            const nftsWithCartInfo = nftsWithPagination.nfts.map((nft) => {
+                nft.inCart = nftIdsInCart.includes(nft.id)
+                return nft
+            })
+            const payload = {...nftsWithPagination, nfts: nftsWithCartInfo}
             sendSuccess(res, messageHelper.getMessage('nft_query_all_success', userId), payload)
         } catch (e) {
+            const err = new NftError({key:'nft_query_all_failed', params: [userId, e]})
             next(e)
         }
     }
