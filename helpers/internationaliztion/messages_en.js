@@ -53,6 +53,8 @@ module.exports = {
     cart_query_user_failed: 'Failed to query the list of nft ids for user {0} due to {1}',
     cart_add_validiation_failed: 'Failed to add a new cart item for userId {0} and nftId {1} due to {2}',
     cart_delete_failed: 'Failed to delete cart item by id {0} due to {1}',
+    cart_isInCart_success: 'Get inCart status successfully for userId {0} and nftId {1}',
+    cart_isInCart_failed:'Failed to get inCart status for userId {0} and nftId {1} due to {2}',
 
 
     //todo

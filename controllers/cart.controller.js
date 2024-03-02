@@ -42,6 +42,26 @@ class CartController {
     }
 
     /**
+     * Check if a nft is put into the cart for an user
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     */
+    async isInCart(req, res, next) {
+        logger.info('CartController.isInCart. userId =', req.query.userId, 'nftId =', req.query.nftId)
+        const userId = Number(req.query.userId)
+        const nftId = Number(req.query.nftId)
+        try {
+            const nftIds = await cartService.queryByUser(userId)
+            const isInCart = nftIds.includes(nftId)
+            sendSuccess(res, messageHelper.getMessage('cart_isInCart_success', userId, nftId), {inCart: isInCart})
+        } catch (e) {
+            const err = new CartError({key: 'cart_isInCart_failed', params: [userId, nftId, e]})
+            next(err)
+        }
+    }
+
+    /**
      * Get the list of nfts in cart for a user
      * @param {*} req 
      * @param {*} res 
