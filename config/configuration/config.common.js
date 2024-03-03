@@ -1,6 +1,8 @@
 // This file will be shared by frontend
 const config = {}
-
+config.limits = {
+  cartlimit: 20
+}
 config.CATEGORIES = ['pets', 'clothes', 'cosmetics', 'outfits', 'car', 'devices', 'books']
 config.NFTSTATUS = ['on', 'off']
 config.chains = { 

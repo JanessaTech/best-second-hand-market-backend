@@ -10,7 +10,7 @@ config.database = {
     host: '127.0.0.1'
 }
 config.limits = {
-    cartlimit: 2
+    cartlimit: 20
 }
 
 module.exports = config
