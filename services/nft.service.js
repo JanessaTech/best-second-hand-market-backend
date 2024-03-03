@@ -21,9 +21,9 @@ class NftService {
             const created = await nftDao.create(nft)
             return created.toJSON()
         } catch (e) {
-            logger.debug('Failed to save nft history ', nft)
+            logger.error('Failed to save nft history ', nft)
             if (!(e instanceof NftError)) {
-                const err = new NftError({key: '', params: [e]})
+                const err = new NftError({key: 'nft_mint_failed', params: [e]})
             } else {
                 throw e
             } 
@@ -39,7 +39,7 @@ class NftService {
             }
             return nft.toJSON()
         } catch (e) {
-            logger.debug('Failed to update the nft record by _id = ', update._id)
+            logger.error('Failed to update the nft record by _id = ', update._id)
             throw e
         }
     }
@@ -55,7 +55,7 @@ class NftService {
             const fullNFT = await this.#addExtraInfo(nft)
             return fullNFT
         } catch (e) {
-            logger.debug('Failed to find a full nft by id ', id)
+            logger.error('Failed to find a full nft by id ', id)
             throw new NftError({key: 'nft_find_fullby_id_failed', params:[id, e]})
         }
     }

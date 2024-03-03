@@ -9,7 +9,7 @@ class CartService {
             const savedCart = await cartDao.add(cart)
             return savedCart
         } catch (e) {
-            logger.debug('Failed to add a new item to cart. userId =', userId, ' nftId =', nftId)
+            logger.error('Failed to add a new item to cart. userId =', userId, ' nftId =', nftId)
             throw e
         }
     }

@@ -16,7 +16,7 @@ class UserService {
             }
             return await userDao.create(user)
         } catch(e) {
-            logger.debug('Failed to register the user', user)
+            logger.error('Failed to register the user', user)
             throw e
         }
     }
@@ -30,7 +30,7 @@ class UserService {
             }
             return user
         } catch (e) {
-            logger.debug('Failed to find user by address ', address)
+            logger.error('Failed to find user by address ', address)
             throw e
         }
     }
@@ -44,7 +44,7 @@ class UserService {
             }
             return user
         } catch(e) {
-            logger.debug('Failed to login by address =', address)
+            logger.error('Failed to login by address =', address)
             throw e
         }
     }
@@ -57,7 +57,7 @@ class UserService {
             }
             return user
         } catch(e) {
-            logger.debug('Failed to logout by address =', address)
+            logger.error('Failed to logout by address =', address)
             throw e
         }
     }

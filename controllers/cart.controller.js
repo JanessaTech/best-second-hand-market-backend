@@ -45,7 +45,7 @@ class CartController {
     }
 
     /**
-     * Remove a list of nfts from cart for a user
+     * Remove a nft from cart for a user
      * @param {*} req 
      * @param {*} res 
      * @param {*} next 
