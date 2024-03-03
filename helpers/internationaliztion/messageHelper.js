@@ -7,7 +7,7 @@ module.exports = {
 
         for(let i = 0; i < params.length; i++) {
             const ph = `{${i}}`
-            message = message.replace(ph, params[i])
+            message = message.replaceAll(ph, params[i])
         }
         return message
     }

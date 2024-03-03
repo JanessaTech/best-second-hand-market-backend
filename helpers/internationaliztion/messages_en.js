@@ -21,6 +21,7 @@ module.exports = {
 
     //nft
     nft_mint_success: 'Nft with tokenId {0} is minted successfully',
+    nft_mint_failed: 'Failed to mint a new nft due to {0}',
     nft_mint_duplication: 'The nft with chainId {0} address {1} and tokenId {2} is already saved',
     nft_save_validation_failed: 'Failed to save a new nft record for the combination of chainId {0} address {1} and tokenId {2} due to validation failure',
     nft_update_success: 'The nft with id(_id) {0} is updated successfully',
@@ -48,6 +49,7 @@ module.exports = {
     
     //cart
     cart_add_success: 'Add nftId {0} for userId {1} successfully',
+    cart_add_failed: 'Failed to add a new cart item(userId={0}, nftId={1}) due to {2}',
     cart_remove_success: 'Remove cart item with id {0} successfully',
     cart_query_user: 'Query the list of nft ids for user {0} successfully',
     cart_query_user_failed: 'Failed to query the list of nft ids for user {0} due to {1}',
@@ -55,7 +57,10 @@ module.exports = {
     cart_delete_failed: 'Failed to delete cart item by id {0} due to {1}',
     cart_isInCart_success: 'Get inCart status successfully for userId {0} and nftId {1}',
     cart_isInCart_failed:'Failed to get inCart status for userId {0} and nftId {1} due to {2}',
-
+    cart_add_own_failed: 'You are not allowed to add a new cart item(userId={0}, nftId={1}) into cart because the nft(nftId={1}) already belongs to the nft owner(userId={0})',
+    cart_already_added_failed: 'The nft(nftId={0}) is already in the user(userId={1})\'s cart',
+    cart_nft_status_off: 'The nft(nftId={0}) with status being off is not allowed to be added into cart',
+    cart_limit_reached: 'Failed to add nft(nftId={0}) to user(userId={1}). The user\'s cart has reached the limit({2})',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

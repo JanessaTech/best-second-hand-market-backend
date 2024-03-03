@@ -4,6 +4,7 @@ const cartService = require('../services/cart.service')
 const nftService = require('../services/nft.service')
 const {sendSuccess} = require('../helpers/reponseHandler')
 const {CartError} = require('../routes/cart/CartErrors')
+const config = require('../config/configuration')
 
 class CartController {
     /**
@@ -14,13 +15,32 @@ class CartController {
      */
     async add(req, res, next) {
         logger.info('CartController.add. userId =', req.body.userId, ' nftId =', req.body.nftId)
+        const userId = Number(req.body.userId)
+        const nftId = Number(req.body.nftId)
         try {
-            const userId = req.body.userId
-            const nftId = req.body.nftId
+            const nft = await nftService.findNFTById(nftId)
+            const nftIds = await cartService.queryByUser(userId)
+            if (nft.owner.id === userId) {
+                throw new CartError({key: 'cart_add_own_failed', params: [nftId, userId]})
+            }
+            if (nftIds.includes(nftId)) {
+                throw new CartError({key: 'cart_already_added_failed', params: [nftId, userId]})
+            }
+            if (nftIds && nftIds.length >= config.limits.cartlimit) {
+                throw new CartError({key: 'cart_limit_reached', params: [nftId, userId, config.limits.cartlimit]})
+            }
+            if (nft.status === 'off') {
+                throw new CartError({key: 'cart_nft_status_off', params: [nftId]})
+            }
             const payload = await cartService.add(userId, nftId)
             sendSuccess(res, messageHelper.getMessage('cart_add_success', userId, nftId), {cart: payload})
         } catch(e) {
-            next(e)
+            if (!(e instanceof CartError)) {
+                const err = new CartError({key: 'cart_add_failed', params:[userId, nftId, e]})
+                next(err)
+            } else {
+                next(e)
+            }  
         }
     }
 
@@ -46,6 +66,7 @@ class CartController {
      * 
      * @param {*} req 
      * @param {*} res 
+     * @param {*} next 
      */
     async isInCart(req, res, next) {
         logger.info('CartController.isInCart. userId =', req.query.userId, 'nftId =', req.query.nftId)
@@ -56,8 +77,12 @@ class CartController {
             const isInCart = nftIds.includes(nftId)
             sendSuccess(res, messageHelper.getMessage('cart_isInCart_success', userId, nftId), {inCart: isInCart})
         } catch (e) {
-            const err = new CartError({key: 'cart_isInCart_failed', params: [userId, nftId, e]})
-            next(err)
+            if (!(e instanceof CartError)) {
+                const err = new CartError({key: 'cart_isInCart_failed', params: [userId, nftId, e]})
+                next(err)
+            } else {
+                next(e)
+            }
         }
     }
 
@@ -75,8 +100,12 @@ class CartController {
             const payload = await nftService.queryNFTsByIds(nftIds)
             sendSuccess(res, messageHelper.getMessage('cart_query_user', userId), {nfts: payload.filter((nft) => nft.owner.id != userId)}) // the nfts belonging to the user with userId are filtered out
         } catch (e) {
-            const err = new CartError({key: 'cart_query_user_failed', params: [userId, e]})
-            next(err)
+            if (!e instanceof CartError) {
+                const err = new CartError({key: 'cart_query_user_failed', params: [userId, e]})
+                next(err)
+            } else {
+                next(e)
+            }
         }
     }
 }

@@ -115,8 +115,8 @@ class ConfigChainParser {
                     try {
                         const tokenIds = owner ? await instance.tokensOfAddress(owner) : await instance.getAllTokenIds()
                         if (tokenIds && tokenIds.length > 0) {
-                            if (nftIds && nftIds.length > 0) {
-                                merged.push({$and : [{_id: {$in: nftIds}}, {chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
+                            if (nftIds) {
+                                merged.push({$and : [{_id: {$in: nftIds.length === 0 ? [-1] : nftIds}}, {chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
                             } else {
                                 merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
                             }

@@ -15,16 +15,17 @@ class NFTcontroller {
      */
     async mint(req, res, next) {
         logger.info('NFTcontroller.mint')
+        const {tokenId, title, category, chainId, address, description, status, price} = req.body
         try {
             const nft = {
-                tokenId : req.body.tokenId,
-                title : req.body.title,
-                category: req.body.category,
-                chainId: req.body.chainId,
-                address: req.body.address,
-                description: req.body.description,
-                status: req.body.status,
-                price: req.body.price
+                tokenId : tokenId,
+                title : title,
+                category: category,
+                chainId: chainId,
+                address: address,
+                description: description,
+                status: status,
+                price: price
             }
             const payload = await nftService.mint(nft)
             sendSuccess(res, messageHelper.getMessage('nft_mint_success', payload.tokenId), {nft: payload})
@@ -70,7 +71,7 @@ class NFTcontroller {
             payload.inCart = userId ? nftIdsInCart.includes(id) : undefined
             sendSuccess(res, messageHelper.getMessage('nft_by_id_success', id), {nft: payload})
         } catch (e) {
-            if (!e instanceof NftError) {
+            if (!(e instanceof NftError)) {
                 const err = new NftError({key:'nft_by_id_failed', params: [id, userId, e]})
                 next(err)
             } else {
@@ -99,7 +100,7 @@ class NFTcontroller {
             const payload = {...nftsWithPagination, nfts: nftsWithCartInfo}
             sendSuccess(res, messageHelper.getMessage('nft_query_all_success', userId), payload)
         } catch (e) {
-            if (!e instanceof NftError) {
+            if (!(e instanceof NftError)) {
                 const err = new NftError({key:'nft_query_all_failed', params: [userId, e]})
                 next(err)
             } else {

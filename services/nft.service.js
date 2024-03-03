@@ -16,11 +16,17 @@ class NftService {
             if (byTokenId) {
                 throw new NftError({key: 'nft_mint_duplication', params:[nft.chainId, nft.address, nft.tokenId], code: 400})
             }
+            const chain = chainParser.getChain(nft.chainId)
+            await this.#getOwner(chain, nft)  // check if the owner of the token is a registered user
             const created = await nftDao.create(nft)
             return created.toJSON()
         } catch (e) {
             logger.debug('Failed to save nft history ', nft)
-            throw e
+            if (!(e instanceof NftError)) {
+                const err = new NftError({key: '', params: [e]})
+            } else {
+                throw e
+            } 
         }
     }
 
