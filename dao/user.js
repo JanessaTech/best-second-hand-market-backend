@@ -14,7 +14,7 @@ class UserDAO {
             logger.debug('UserDAO.create. A new user is saved successfully', savedUser)
             return savedUser
         } catch (err) {
-            logger.debug('Failed to save user due to ', err)
+            logger.error('Failed to save user due to ', err)
             throw new UserError({key: 'user_register_validiation_failed', params:[user.name], errors: err.errors ? err.errors : err.message, code: 400})
         } 
     }
@@ -24,7 +24,7 @@ class UserDAO {
             const user = await User.findOneAndUpdate(filter, update, {new: true})
             return user
         } catch (err) {
-            logger.debug('Failed to update due to ', err)
+            logger.error('Failed to update due to ', err)
             throw e
         }
     }

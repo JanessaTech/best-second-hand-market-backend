@@ -28,10 +28,6 @@ const likeSchema = new Schema({
             message: (props) => `${props.value} should be a positive integer!`,
         },
         required: [true, 'nftId is required'],
-    }, 
-    count: {
-        type: Number,
-        default: 0
     }
 }, 
 { 

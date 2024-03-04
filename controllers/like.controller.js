@@ -71,7 +71,7 @@ class LikeController {
      */
     async countLike(req, res, next) {
         logger.info('LikeController.countLike. nftId =', req.params.nftId)
-        const nftId = req.body.nftId
+        const nftId = req.params.nftId
         try {
             const count = await likeService.countLike(nftId)
             sendSuccess(res, messageHelper.getMessage('like_count_success',nftId), {nftId: count})

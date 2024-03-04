@@ -14,7 +14,7 @@ class CartDAO {
             logger.debug('CartDAO.add. a new cart item is added successfully.', savedCart)
             return savedCart
         } catch (err) {
-            logger.debug('Failed to save cart item due to ', err)
+            logger.error('Failed to save cart item due to ', err)
             throw new CartError({key: 'cart_add_validiation_failed', params:[cart.userId, cart.nftId, err], errors: err.errors ? err.errors : err.message, code: 400})
         }
     }
@@ -24,7 +24,7 @@ class CartDAO {
             await Cart.findByIdAndDelete({_id: id})
         } catch (err) {
             const errMsg = messageHelper.getMessage('cart_delete_failed', id, err)
-            logger.debug(errMsg)
+            logger.error(errMsg)
             throw new CartError({message: errMsg, code: 400})
         }
     }

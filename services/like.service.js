@@ -7,22 +7,18 @@ class LikeService {
     async increase(userId, nftId) {
         logger.info('LikeService.increase')
         try {
-            await likeDao.findOneAndUpdate(userId, nftId, true)
+            await likeDao.findOneAndUpdate(userId, nftId)
         } catch(e) {
-            const errMsg = messageHelper.getMessage('like_increase_failed', userId, nftId, e)
-            logger.error(errMsg)
-            throw new LikeError({message: errMsg, code: 400})
+            throw e
         }
     }
 
     async decease(userId, nftId) {
         logger.info('LikeService.decease')
         try {
-            await likeDao.findOneAndUpdate(userId, nftId, true)
+            await likeDao.delete(userId, nftId)
         } catch(e) {
-            const errMsg = messageHelper.getMessage('like_decease_failed', userId, nftId, e)
-            logger.error(errMsg)
-            throw new LikeError({message: errMsg, code: 400})
+            throw e
         }
     }
 
@@ -30,7 +26,7 @@ class LikeService {
         logger.info('LikeService.isLike')
         try {
             const like = await likeDao.findOne({userId: userId, nftId: nftId})
-            const isLike = like ? !!like.count : false
+            const isLike = like ? true : false
             return isLike
         } catch (e) {
             const errMsg = messageHelper.getMessage('like_check_isLike_failed', userId, nftId, e) 
@@ -42,7 +38,8 @@ class LikeService {
     async countLike(nftId) {
         logger.info('LikeService.countLike')
         try {
-            const like = await likeDao.countLike({nftId: nftId, count: 1})
+            const count = await likeDao.countLike({nftId: nftId})
+            return count
         } catch (e) {
             const errMsg = messageHelper.getMessage('like_check_countLike_failed', userId, nftId, e) 
             logger.error(errMsg)

@@ -19,7 +19,7 @@ class NftDAO {
             logger.debug('NftDAO.create. A new nft record is saved successfully', savedNft)
             return savedNft
         } catch (err) {
-            logger.debug('Failed to save user due to ', err)
+            logger.error('Failed to save user due to ', err)
             throw new NftError({key: 'nft_save_validation_failed', params: [nft.address, nft.address, nft.tokenId], errors: err.errors ? err.errors : err.message, code: 400})
         }
     }
@@ -37,7 +37,7 @@ class NftDAO {
             const nft = await NFT.findOneAndUpdate(filter, _update, {new: true})
             return nft
         } catch (err) {
-            logger.debug('Failed to update nft due to ', err)
+            logger.error('Failed to update nft due to ', err)
             throw e
         }
     }

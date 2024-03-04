@@ -66,10 +66,11 @@ module.exports = {
     like_increase_success:'Increase like by one for nftId {0} by userId {1} successfully',
     like_decrease_success:'Decrease like by one for nftId {0} by userId {1} successfully',
     like_count_success:'Return count for nftId {0} successfully',
-    like_increase_failed: 'Failed to increase like for userId {0} and nftId {1} due to {2}',
-    like_decease_failed: 'Failed to decease like for userId {0} and nftId {1} due to {2}',
     like_check_isLike_failed: 'Failed to check isLike for userId {0} and nftId {1} due to {2}',
     like_check_countLike_failed: 'Failed to checkcountLike for userId {0} and nftId {1} due to {2}',
+    like_check_isLike: 'check if nftId {0} is liked by userId {1} successfully',
+    like_findOneAndUpdate_validiation_failed: 'Failed to findOneAndUpdate a like item for userId {0} and nftId {1} due to {2}',
+    like_delete_failed: 'Failed to delete a like item for userId {0} and nftId {1} due to {2}',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

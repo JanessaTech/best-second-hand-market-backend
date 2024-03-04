@@ -1,14 +1,27 @@
 const logger = require('../helpers/logger')
 const {Like} = require('../models')
+const {LikeError} = require('../routes/like/LikeErrors')
+const messageHelper = require('../helpers/internationaliztion/messageHelper')
 
 class LikeDAO {
-    async findOneAndUpdate(userId, nftId, isInc ) {
+    async findOneAndUpdate(userId, nftId) {
         try {
-            await Like.findOneAndUpdate({userId: userId, nftId: nftId}, {$inc : {'count' : isInc ? 1 : -1}},{ new: true, upsert: true })
-            logger.debug('LikeDAO. findOneAndUpdate successfully. userId=', userId, 'nftId=', nftId, 'isInc=', isInc)
-        } catch (e) {
-            throw e
-        } 
+            await Like.findOneAndUpdate({userId: userId, nftId: nftId}, {userId: userId, nftId: nftId}, {upsert: true })
+            logger.debug('LikeDAO.findOneAndUpdate. a like item is findOneAndUpdated successfully. userId =', userId, ' nftId =', nftId)
+        } catch (err) {
+            logger.error('Failed to findOneAndUpdate a new like item due to ', err)
+            throw new LikeError({key: 'like_findOneAndUpdate_validiation_failed', params:[userId, nftId, err], errors: err.errors ? err.errors : err.message, code: 400})
+        }
+    }
+
+    async delete(userId, nftId) {
+        try {
+            await Like.findOneAndDelete({userId: userId, nftId: nftId})
+        }catch(err) {
+            const errMsg = messageHelper.getMessage('like_delete_failed', userId, nftId, err)
+            logger.error(errMsg)
+            throw new LikeError({message: errMsg, code: 400})
+        }
     }
 
     async findOne(filter) {
