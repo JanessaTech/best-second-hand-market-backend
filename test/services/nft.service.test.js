@@ -19,6 +19,7 @@ jest.mock('../../helpers/utils', () => ({ convertToURL: jest.fn() }))
 
 beforeAll(() => {
     nftDao.findOneByFilter = jest.fn()
+    nftDao.findOneByFilterWithUpdatedView = jest.fn()
     userDao.findOneBy = jest.fn()
     chainParser.getChain = jest.fn()
     chainParser.getContractInstance = jest.fn()
@@ -29,7 +30,7 @@ beforeAll(() => {
 describe('NftService', () => {
     describe('findNFTById', () => {
         test('expects NftError when the NFT is not found', async () => {
-            when(nftDao.findOneByFilter).calledWith({_id: id}).mockRejectedValue(new NftError())
+            when(nftDao.findOneByFilterWithUpdatedView).calledWith({_id: id}).mockRejectedValue(new NftError())
 
             await expect(nftService.findNFTById(1))
             .rejects
@@ -37,7 +38,7 @@ describe('NftService', () => {
         })
         test('expects NftError when chainId in the NFT is invalid', async () => {    
                    
-            when(nftDao.findOneByFilter).calledWith({_id: id}).mockResolvedValue(nft)
+            when(nftDao.findOneByFilterWithUpdatedView).calledWith({_id: id}).mockResolvedValue(nft)
             when(chainParser.getChain).calledWith(chainId).mockImplementation(() => {throw new ConfigChainError()})
 
             await expect(nftService.findNFTById(1))
@@ -47,7 +48,7 @@ describe('NftService', () => {
         test('expects NftError when address in the NFT is invalid', async () => {
             const chain = {chainId: chainId}
            
-            when(nftDao.findOneByFilter).calledWith({_id: id}).mockResolvedValue(nft)
+            when(nftDao.findOneByFilterWithUpdatedView).calledWith({_id: id}).mockResolvedValue(nft)
             when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
             when(chainParser.getContractInstance).calledWith(chain, address).mockImplementation(() => {throw new ConfigChainError()})
 
@@ -61,7 +62,7 @@ describe('NftService', () => {
             const contractInstance = {}
             contractInstance.getOwnerOfToken = jest.fn()
            
-            when(nftDao.findOneByFilter).calledWith({_id: id}).mockResolvedValue(nft)
+            when(nftDao.findOneByFilterWithUpdatedView).calledWith({_id: id}).mockResolvedValue(nft)
             when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
             when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(contractInstance)
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue(ethers.ZeroAddress)
@@ -78,7 +79,7 @@ describe('NftService', () => {
             chain.getContractInstance = jest.fn()
             contractInstance.getOwnerOfToken = jest.fn()
            
-            when(nftDao.findOneByFilter).calledWith({_id: id}).mockResolvedValue(nft)
+            when(nftDao.findOneByFilterWithUpdatedView).calledWith({_id: id}).mockResolvedValue(nft)
             when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
             when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(contractInstance)
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue(address)
@@ -98,7 +99,7 @@ describe('NftService', () => {
             contractInstance.getOwnerOfToken = jest.fn()
             contractInstance.getUri = jest.fn()
            
-            when(nftDao.findOneByFilter).calledWith({_id: id}).mockResolvedValue(nft)
+            when(nftDao.findOneByFilterWithUpdatedView).calledWith({_id: id}).mockResolvedValue(nft)
             when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
             when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(contractInstance)
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue('some-owner-address')
@@ -118,7 +119,7 @@ describe('NftService', () => {
             contractInstance.getOwnerOfToken = jest.fn()
             contractInstance.getUri = jest.fn()
             
-            when(nftDao.findOneByFilter).calledWith({_id: id}).mockResolvedValue(nft)
+            when(nftDao.findOneByFilterWithUpdatedView).calledWith({_id: id}).mockResolvedValue(nft)
             when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
             when(chainParser.getContractInstance).calledWith(chain, address).mockReturnValue(contractInstance)
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue('some-owner-address')
