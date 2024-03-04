@@ -12,12 +12,12 @@ class NftService {
     async mint(nft) {
         logger.info('NftService.mint')
         try {
+            const chain = chainParser.getChain(nft.chainId)
+            await this.#getOwner(chain, nft)  // check if the owner of the token is a registered user
             const byTokenId = await nftDao.findOneByFilter({chainId:nft.chainId, address: nft.address, tokenId:nft.tokenId})
             if (byTokenId) {
                 throw new NftError({key: 'nft_mint_duplication', params:[nft.chainId, nft.address, nft.tokenId], code: 400})
             }
-            const chain = chainParser.getChain(nft.chainId)
-            await this.#getOwner(chain, nft)  // check if the owner of the token is a registered user
             const created = await nftDao.create(nft)
             return created.toJSON()
         } catch (e) {
@@ -47,7 +47,7 @@ class NftService {
     async findNFTById(id) {
         logger.info('NftService.findNFTById. id=', id)
         try {
-            const nft = await nftDao.findOneByFilter({_id: id})
+            const nft = await nftDao.findOneByFilterWithUpdatedView({_id: id})
             if (!nft) {
                 throw new NftError({key: 'nft_not_found', params:[id], code:404})
             }

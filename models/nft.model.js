@@ -68,6 +68,10 @@ const nftSchema = new Schema({
         type: Number,
         default: 0,
         min: [0, 'price can not be a negative number'],
+    },
+    view: {
+        type: Number,
+        default: 0,
     }
 }, 
 { 

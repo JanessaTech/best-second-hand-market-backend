@@ -47,6 +47,11 @@ class NftDAO {
         return nft
     }
 
+    async findOneByFilterWithUpdatedView(filter) {
+        const nft = await NFT.findOneAndUpdate(filter, { $inc: { view: 1 } },{ new: true})
+        return nft
+    }
+
     async queryAllByFilter(filter) {
         const nfts = await NFT.find(filter)
         return nfts
