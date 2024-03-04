@@ -6,5 +6,6 @@ module.exports = {
     todoSchema: require('./todo'),
     nftSchema: require('./nft'),
     cartSchema : require('./cart'),
-    likeSchema: require('./like')
+    likeSchema: require('./like'),
+    commentSchema: require('./comment')
 }
