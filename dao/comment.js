@@ -25,7 +25,7 @@ class CommentDAO {
         try {
             await Comment.findByIdAndDelete({_id: id})
         } catch (e) {
-            const errMsg = messageHelper.getMessage('comment_delete_failed', id, err)
+            const errMsg = messageHelper.getMessage('comment_delete_failed', id, e)
             logger.error(errMsg)
             throw new CommentError({message: errMsg, code: 400})
         }

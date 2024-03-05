@@ -3,6 +3,7 @@ const { Schema } = mongoose
 const Counter = require('./counter.model')
 const {toJSON, paginate} = require('./plugins/')
 require('./user.model')
+const logger = require('../helpers/logger')
 
 commentSchema = new Schema({
     _id: { type: Number,  min: 1 },
@@ -65,7 +66,20 @@ commentSchema.pre('save', async function (next) {
       } catch(err) {
         next(err)
       }   
-});
+})
+
+commentSchema.pre('findOneAndDelete', async function(next) {
+    logger.debug('findOneAndDelete is triggered. this.getQuery()._id=', this.getQuery()._id)
+    const toDelete = await this.model.findOne(this.getQuery())
+    try {
+        const result = await this.model.deleteMany({'parentId': toDelete._id})
+        logger.debug(`Deleted ${result?.deletedCount} comments where parentId = ${toDelete._id}`)
+        next()
+    } catch(err) {
+        next(err)
+    }
+})
+
 
 const comment = mongoose.model('comment', commentSchema)
 

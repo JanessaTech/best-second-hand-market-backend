@@ -28,9 +28,7 @@ const paginate = (schema, options) => {
                 popOptions.populate = {path: subPath, select: subSelect}
               }
               logger.debug('paginate.populate. path =', path, ',select =', select, ',subPopulate =', subPopulate)
-              docsPromise = docsPromise.populate(
-                popOptions
-              );
+              docsPromise = docsPromise.populate(popOptions);
             });
         }
     

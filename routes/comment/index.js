@@ -6,7 +6,7 @@ const {validate} = require('../../middlewares')
 const {commentSchema} = require('../schemas')
 
 router.post('/', validate(commentSchema.addComment), controller.addComment)
-router.delete('/:id', validate(commentSchema.deleteComment, controller.deleteComment))
+router.delete('/:id', validate(commentSchema.deleteComment), controller.deleteComment)
 router.get('/:nftId', validate(commentSchema.queryCommentsByNftId), controller.queryCommentsByNftId)
 
 initCommentErrorHandlers(router)

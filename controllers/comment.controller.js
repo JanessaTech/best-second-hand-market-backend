@@ -56,7 +56,6 @@ class CommentController {
         } catch(e) {
             next(e)
         }
-
     }
 }
 

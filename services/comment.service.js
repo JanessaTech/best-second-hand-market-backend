@@ -2,6 +2,7 @@ const logger = require("../helpers/logger")
 const comentDao = require('../dao/comment')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {CommentError} = require('../routes/comment/CommentErrors')
+const commentDao = require("../dao/comment")
 
 class CommentService {
     async addComment(nftId, parentId, userId, content) {
@@ -17,7 +18,12 @@ class CommentService {
     }
 
     async deleteComment(id) {
-
+        logger.info('CommentService.deleteComment. id=', id)
+        try {
+            await commentDao.delete(id)
+        } catch (e) {
+            throw e
+        }
     }
 
     async queryCommentsByNftId(nftId, page, limit, sortBy) {
@@ -25,7 +31,6 @@ class CommentService {
         try {
             const filter = {nftId: nftId}
             const options = {page: page, limit: limit, sortBy: sortBy}
-            const comments = []
             const resultByFilter = await comentDao.queryByPagination(filter, options)
             return {comments: resultByFilter.results, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
         } catch (e) {
