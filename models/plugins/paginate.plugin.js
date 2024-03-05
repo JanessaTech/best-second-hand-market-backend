@@ -32,12 +32,6 @@ const paginate = (schema, options) => {
                 popOptions
               );
             });
-            /*docsPromise = docsPromise.populate(
-              {path: 'userId', select: 'id name createdAt'}
-            );
-            docsPromise = docsPromise.populate(
-              {path: 'replies', select: 'id userId',  populate: { path: 'userId', select: 'id name createdAt'}}
-            );*/
         }
     
         docsPromise = docsPromise.exec();
