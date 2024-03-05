@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 const Counter = require('./counter.model')
-const {toJSON} = require('./plugins/')
+const {toJSON, paginate} = require('./plugins/')
 require('./user.model')
 
-const likeSchema = new Schema({
+const orderSchema = new Schema({
     _id: { type: Number,  min: 1 },
     userId: {
         type: Number,
@@ -28,23 +28,42 @@ const likeSchema = new Schema({
             message: (props) => `${props.value} should be a positive integer!`,
         },
         required: [true, 'nftId is required'],
-    }
-}, 
+    },
+    price: {
+        type: Number,
+        default: 0,
+        min: [0, 'price can not be a negative number'],
+    },
+    address: {
+        type: String,
+        trim: true,
+        validate: {
+            validator: function(v) {
+                var re = /^0x[a-fA-F0-9]{40}$/;
+                return re.test(v)
+            },
+            message: props => `${props.value} is invalid cryptocurrency contract address`
+        },
+        required: [true, 'address is invalid'],
+    },
+},
 { 
     timestamps: true 
 })
 
-likeSchema.plugin(toJSON)
-likeSchema.index({userId: 1, nftId: 1},{unique: true})
+orderSchema.plugin(toJSON)
+orderSchema.plugin(paginate)
 
-likeSchema.pre('save', async function (next) {
+orderSchema.index({userId: 1, nftId: 1},{unique: true})
+
+orderSchema.pre('save', async function (next) {
     if (!this.isNew) {
         next();
         return;
       }
       
       try {
-        const seq = await Counter.increment('likeId')
+        const seq = await Counter.increment('orderId')
         this._id = seq
         next()
       } catch(err) {
@@ -52,6 +71,7 @@ likeSchema.pre('save', async function (next) {
       }   
 });
 
-const like = mongoose.model('like', likeSchema)
+const order = mongoose.model('order', orderSchema)
 
-module.exports = like
+module.exports = order
+

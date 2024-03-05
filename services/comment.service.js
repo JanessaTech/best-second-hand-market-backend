@@ -5,8 +5,8 @@ const {CommentError} = require('../routes/comment/CommentErrors')
 const commentDao = require("../dao/comment")
 
 class CommentService {
-    async addComment(nftId, parentId, userId, content) {
-        logger.info('CommentService.addComment')
+    async add(nftId, parentId, userId, content) {
+        logger.info('CommentService.add')
         const comment = {nftId: nftId, parentId: parentId, userId: userId, content: content}
         try {
             const savedComment = await comentDao.add(comment)
@@ -17,8 +17,8 @@ class CommentService {
         } 
     }
 
-    async deleteComment(id) {
-        logger.info('CommentService.deleteComment. id=', id)
+    async delete(id) {
+        logger.info('CommentService.delete. id=', id)
         try {
             await commentDao.delete(id)
         } catch (e) {

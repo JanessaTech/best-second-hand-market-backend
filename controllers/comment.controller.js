@@ -20,7 +20,7 @@ class CommentController {
 
         try {
             if (nftId && parentId) throw new CommentError({key: 'comment_nftId_or_parentId'})  // to-do: validate by schema
-            const payload  = await commentService.addComment(nftId, parentId, userId, content)
+            const payload  = await commentService.add(nftId, parentId, userId, content)
             sendSuccess(res, messageHelper.getMessage('comment_add_success', nftId, parentId, userId), {comment: payload})
         } catch (e) {
             next(e)
@@ -31,7 +31,7 @@ class CommentController {
         logger.info('CommentController.deleteComment. id=', req.params.id)
         const id = req.params.id
         try {
-            await commentService.deleteComment(id)
+            await commentService.delete(id)
             sendSuccess(res, messageHelper.getMessage('comment_delete_success', id))
         } catch (e) {
             next(e)

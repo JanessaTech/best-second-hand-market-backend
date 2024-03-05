@@ -7,5 +7,6 @@ module.exports = {
     nftSchema: require('./nft'),
     cartSchema : require('./cart'),
     likeSchema: require('./like'),
-    commentSchema: require('./comment')
+    commentSchema: require('./comment'),
+    orderSchema: require('./order')
 }

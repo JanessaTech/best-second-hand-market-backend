@@ -81,6 +81,9 @@ module.exports = {
     comment_add_validiation_failed: 'Failed to add a new comment for nftId {0} parentId {1} and userId {2} due to {3}',
     comment_query_comments_failed: 'Failed to query comments by nftId {0}',
 
+    order_add_success: 'Added a new order for userId {0} nftId {1} and from {2}', 
+    order_addInBatch_success: 'Added in batch of orders for userId {0} nftIds {1} and froms {2}', 
+
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',
     todo_getAll: 'Get all todos for user {0} successfully',
