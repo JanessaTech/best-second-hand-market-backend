@@ -72,6 +72,15 @@ module.exports = {
     like_findOneAndUpdate_validiation_failed: 'Failed to findOneAndUpdate a like item for userId {0} and nftId {1} due to {2}',
     like_delete_failed: 'Failed to delete a like item for userId {0} and nftId {1} due to {2}',
 
+    comment_nftId_or_parentId: 'You must provide either nftId or parentId, both are not allowed',
+    comment_add_success: 'Add a new comment successfully for nftId {0} parentId {1} and userId {2}',
+    comment_delete_success: 'Delete comment by id(_id) {0} successfully',
+    comment_delete_failed: 'Failed to delete comment by id(_id) {0}',
+    comment_query_comments_success: 'Query comments by nftId {0} successfully',
+    comment_add_comment_failed: 'Failed to add a new comment for nftId {0} parentId {1} and userId {2} due to {3}',
+    comment_add_validiation_failed: 'Failed to add a new comment for nftId {0} parentId {1} and userId {2} due to {3}',
+    comment_query_comments_failed: 'Failed to query comments by nftId {0}',
+
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',
     todo_getAll: 'Get all todos for user {0} successfully',

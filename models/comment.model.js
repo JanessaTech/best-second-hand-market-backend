@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 const Counter = require('./counter.model')
 const {toJSON, paginate} = require('./plugins/')
+require('./user.model')
 
 commentSchema = new Schema({
     _id: { type: Number,  min: 1 },
@@ -36,18 +37,19 @@ commentSchema = new Schema({
         ref: 'User',
         required: [true, 'userId is required'],
     } 
+}, 
+{ 
+    timestamps: true 
 })
 
 commentSchema.plugin(toJSON)
 commentSchema.plugin(paginate)
 
-commentSchema.virtuals('replies', {
+commentSchema.virtual('replies', {
     ref: 'comment',
     localField: '_id',
     foreignField: 'parentId',
 })
-
-commentSchema.index({userId: 1, nftId: 1},{unique: true})
 
 commentSchema.pre('save', async function (next) {
     if (!this.isNew) {

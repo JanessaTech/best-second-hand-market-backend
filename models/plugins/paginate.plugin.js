@@ -2,7 +2,7 @@ const logger = require('../../helpers/logger')
 
 const paginate = (schema, options) => {
     schema.statics.paginate = async function (filter, options) {
-        let sort = {_id: 1}
+        let sort = {createdAt: -1}
         const sortingCriteria = {}
         if (options.sortBy) {
           options.sortBy.split(',').forEach((sort) => {
@@ -19,17 +19,15 @@ const paginate = (schema, options) => {
         const countPromise = this.countDocuments(filter).exec();
         let docsPromise = this.find(filter).sort(sort).skip(skip).limit(limit);
     
-        /*
         if (options.populate) {
             options.populate.split(',').forEach((populateOption) => {
+              const [path, select] = populateOption.split(':')
+              logger.debug('paginate.populate. path =', path, 'select =', select)
               docsPromise = docsPromise.populate(
-                populateOption
-                  .split('.')
-                  .reverse()
-                  .reduce((a, b) => ({ path: b, populate: a }))
+                {path: path, select: select}
               );
             });
-        }*/
+        }
     
         docsPromise = docsPromise.exec();
         return Promise.all([countPromise, docsPromise]).then((values) => {

@@ -25,6 +25,11 @@ const schemas = {
     queryCommentsByNftId:yup.object({
         params: yup.object({
             nftId: yup.number().typeError('nftId should be an integer equal to or greater than 1!').min(1, 'nftId should be equal to or greater than 1!').integer('Please enter a valid integer for nftId!').required('nftId is required')
+        }),
+        query: yup.object({
+            page: yup.number().min(1, 'page should be equal to or greater than 1!').integer('Please enter a valid integer for page!').optional(),
+            limit: yup.number().min(1, 'limit should be equal to or greater than 1!').max(100, 'limit can not be greater than 100').integer('Please enter a valid integer for page!').optional(),
+            sortBy: yup.string().optional()
         })
     })
 }
