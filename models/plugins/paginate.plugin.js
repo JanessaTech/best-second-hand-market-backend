@@ -21,12 +21,23 @@ const paginate = (schema, options) => {
     
         if (options.populate) {
             options.populate.split(',').forEach((populateOption) => {
-              const [path, select] = populateOption.split(':')
-              logger.debug('paginate.populate. path =', path, 'select =', select)
+              const [path, select, subPopulate] = populateOption.split(':')
+              const popOptions = {path: path, select: select}
+              if (subPopulate) {
+                const [subPath, subSelect] = subPopulate.split('|')
+                popOptions.populate = {path: subPath, select: subSelect}
+              }
+              logger.debug('paginate.populate. path =', path, ',select =', select, ',subPopulate =', subPopulate)
               docsPromise = docsPromise.populate(
-                {path: path, select: select}
+                popOptions
               );
             });
+            /*docsPromise = docsPromise.populate(
+              {path: 'userId', select: 'id name createdAt'}
+            );
+            docsPromise = docsPromise.populate(
+              {path: 'replies', select: 'id userId',  populate: { path: 'userId', select: 'id name createdAt'}}
+            );*/
         }
     
         docsPromise = docsPromise.exec();

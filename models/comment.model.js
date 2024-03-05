@@ -39,7 +39,8 @@ commentSchema = new Schema({
     } 
 }, 
 { 
-    timestamps: true 
+    timestamps: true ,
+    toJSON: { virtuals: true },
 })
 
 commentSchema.plugin(toJSON)
