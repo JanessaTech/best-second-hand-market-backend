@@ -24,7 +24,7 @@ class LikeDAO {
         }
     }
 
-    async findOne(filter) {
+    async findOneByFilter(filter) {
         const like = await Like.findOne(filter)
         return like
     }

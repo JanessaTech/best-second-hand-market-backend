@@ -25,7 +25,7 @@ describe('UserDAO', () => {
         })
     })
 
-    describe('findOneBy', () => {
+    describe('findOneByFilter', () => {
         test('should return an user if the user exists', async () => {
             const name = 'some-name'
             const savedUser = {name: name, id:1}
@@ -33,21 +33,18 @@ describe('UserDAO', () => {
             User.findOne = jest.fn()
             when(User.findOne).calledWith({name: name}).mockResolvedValue(savedUser)
 
-            const res = await userDao.findOneBy({name: name})
+            const res = await userDao.findOneByFilter({name: name})
 
             expect(res).toEqual(savedUser)
             expect(User.findOne).toHaveBeenCalledWith({name: name})
         })
-    })
-
-    describe('findOneBy', () => {
         test('should return an user by address if the user exists', async () => {
             const address = 'some-address'
             const savedUser = {address: address, id:1}
             User.findOne = jest.fn()
             when(User.findOne).calledWith({address: address}).mockResolvedValue(savedUser)
 
-            const res = await userDao.findOneBy({address: address})
+            const res = await userDao.findOneByFilter({address: address})
 
             expect(res).toEqual(savedUser)
             expect(User.findOne).toHaveBeenCalledWith({address: address})

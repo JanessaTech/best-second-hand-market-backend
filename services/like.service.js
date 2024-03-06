@@ -25,7 +25,7 @@ class LikeService {
     async isLike(userId, nftId) {
         logger.info('LikeService.isLike')
         try {
-            const like = await likeDao.findOne({userId: userId, nftId: nftId})
+            const like = await likeDao.findOneByFilter({userId: userId, nftId: nftId})
             const isLike = like ? true : false
             return isLike
         } catch (e) {

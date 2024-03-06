@@ -6,11 +6,11 @@ class UserService {
     async register(user) {
         logger.info('UserService.register...')
         try {
-            const byName = await userDao.findOneBy({name: user.name})
+            const byName = await userDao.findOneByFilter({name: user.name})
             if (byName) {
                 throw new UserError({key: 'user_register_duplication_name', params:[user.name], code: 400})
             }
-            const byAddress = await userDao.findOneBy({address: user.address})
+            const byAddress = await userDao.findOneByFilter({address: user.address})
             if (byAddress) {
                 throw new UserError({key: 'user_register_duplication_address', params:[user.address], code: 400})
             }
@@ -24,7 +24,7 @@ class UserService {
     async findUserByAddress(address) {
         logger.info('UserService.findUserByAddress')
         try {
-            const user = await userDao.findOneBy({address: address})
+            const user = await userDao.findOneByFilter({address: address})
             if (!user) {
                 throw new UserError({key: 'user_not_found_address', params:[address], code: 404})
             }

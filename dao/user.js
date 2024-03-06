@@ -29,7 +29,7 @@ class UserDAO {
         }
     }
 
-    async findOneBy(filter) {
+    async findOneByFilter(filter) {
         const user = await User.findOne(filter)
         return user
     }
