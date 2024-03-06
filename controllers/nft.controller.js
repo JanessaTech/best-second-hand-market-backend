@@ -66,7 +66,7 @@ class NFTcontroller {
         const id = Number(req.params.id)
         const userId = req.query.userId
         try {
-            const payload = await nftService.findNFTById(id)
+            const payload = await nftService.findNFTById(id, true)
             const nftIdsInCart = userId ? await cartService.queryByUser(userId): []
             payload.inCart = userId ? nftIdsInCart.includes(id) : undefined
             sendSuccess(res, messageHelper.getMessage('nft_by_id_success', id), {nft: payload})

@@ -5,8 +5,8 @@ const initOrderErrorHandlers = require('./orderErrorHandlers')
 const {validate} = require('../../middlewares')
 const {orderSchema} = require('../schemas')
 
-router.post('/', validate(orderSchema.add), controller.add)
-router.post('/addInBatch', validate(likeSchema.addInBatch), controller.addInBatch)
+router.post('/', validate(orderSchema.create), controller.create)
+router.post('/addInBatch', validate(orderSchema.createInBatch), controller.createInBatch)
 
 initOrderErrorHandlers(router)
 module.exports = router

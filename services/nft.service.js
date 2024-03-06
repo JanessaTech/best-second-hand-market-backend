@@ -24,6 +24,7 @@ class NftService {
             logger.error('Failed to save nft history ', nft)
             if (!(e instanceof NftError)) {
                 const err = new NftError({key: 'nft_mint_failed', params: [e]})
+                throw err
             } else {
                 throw e
             } 
@@ -44,10 +45,10 @@ class NftService {
         }
     }
 
-    async findNFTById(id) {
+    async findNFTById(id, updateView = undefined) {
         logger.info('NftService.findNFTById. id=', id)
         try {
-            const nft = await nftDao.findOneByFilterWithUpdatedView({_id: id})
+            const nft = updateView ? await nftDao.findOneByFilterWithUpdatedView({_id: id}) : await nftDao.findOneByFilter({_id: id})
             if (!nft) {
                 throw new NftError({key: 'nft_not_found', params:[id], code:404})
             }
@@ -136,7 +137,7 @@ class NftService {
 
     async #getOwner(chain, nft) {
         const owner = await this.#getNftOwner(chain, nft.address, nft.tokenId)
-        const user = await userDao.findOneBy({address: owner})
+        const user = await userDao.findOneByFilter({address: owner})
         if (!user) {
             const errMsg = messageHelper.getMessage('user_not_found_address', owner)
             logger.error(errMsg) // code shouldn't hit here. Fix it if that happened

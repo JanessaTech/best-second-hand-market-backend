@@ -20,8 +20,8 @@ class CommentController {
 
         try {
             if (nftId && parentId) throw new CommentError({key: 'comment_nftId_or_parentId'})  // to-do: validate by schema
-            const payload  = await commentService.add(nftId, parentId, userId, content)
-            sendSuccess(res, messageHelper.getMessage('comment_add_success', nftId, parentId, userId), {comment: payload})
+            const payload  = await commentService.create(nftId, parentId, userId, content)
+            sendSuccess(res, messageHelper.getMessage('comment_create_success', nftId, parentId, userId), {comment: payload})
         } catch (e) {
             next(e)
         }

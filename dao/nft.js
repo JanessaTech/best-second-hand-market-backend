@@ -52,6 +52,11 @@ class NftDAO {
         return nft
     }
 
+    async findOneAndUpdate(filter, update) {
+        const oldNft = await NFT.findOneAndUpdate(filter, update)
+        return oldNft
+    }
+
     async queryAllByFilter(filter) {
         const nfts = await NFT.find(filter)
         return nfts

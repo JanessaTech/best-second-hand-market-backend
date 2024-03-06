@@ -2,6 +2,8 @@ const logger = require('../helpers/logger')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 const {sendSuccess} = require('../helpers/reponseHandler')
 const orderService = require('../services/order.service')
+const nftService = require('../services/nft.service')
+const {OrderError} = require('../routes/order/OrderErrors')
 
 class OrderController {
     /**
@@ -10,16 +12,24 @@ class OrderController {
      * @param {*} res 
      * @param {*} next 
      */
-    async add(req, res, next) {
-        logger.info('OrderController.add. userId=', req.body.userId, 'nftId=',req.body.nftId, 'from =',req.body.from)
+    async create(req, res, next) {
+        logger.info('OrderController.create. userId=', req.body.userId, 'nftId=',req.body.nftId, 'from =',req.body.from)
         const userId = req.body.userId
         const nftId = req.body.nftId
         const from = req.body.from
         try {
-            const payload = await orderService.add(userId, nftId, from)
-            sendSuccess(res, messageHelper.getMessage('order_add_success', userId, nftId, from), {order: payload})
+            
+            const order = await orderService.create(userId, nftId, from)
+            const nft = await nftService.findNFTById(nftId)
+            const payload = {...nft, ...order.toJSON()}
+            sendSuccess(res, messageHelper.getMessage('order_create_success', userId, nftId, from), {order: payload})
         } catch(e) {
-            next(e)
+            if (!(e instanceof OrderError)) {
+                const err =  new OrderError({key: 'order_create_failed', params:[userId, nftId, from, e]})
+                next(err)
+            } else {
+                next(e)
+            }   
         }
     }
     
@@ -29,14 +39,14 @@ class OrderController {
      * @param {*} res 
      * @param {*} next 
      */
-    async addInBatch(req, res, next) {
-        logger.info('OrderController.addInBatch. userId=', req.body.userId, 'nftIds=',req.body.nftIds, 'froms =',req.body.froms)
+    async createInBatch(req, res, next) {
+        logger.info('OrderController.createInBatch. userId=', req.body.userId, 'nftIds=',req.body.nftIds, 'froms =',req.body.froms)
         const userId = req.body.userId
         const nftIds = req.body.nftIds
         const froms = req.body.froms
         try {
             const payload = await orderService.addInBatch()
-            sendSuccess(res, messageHelper.getMessage('order_addInBatch_success', userId, nftIds, froms), {prders: payload})
+            sendSuccess(res, messageHelper.getMessage('order_createInBatch_success', userId, nftIds, froms), {prders: payload})
         } catch(e) {
             next(e)
         }

@@ -34,7 +34,7 @@ const orderSchema = new Schema({
         default: 0,
         min: [0, 'price can not be a negative number'],
     },
-    address: {
+    from: {
         type: String,
         trim: true,
         validate: {
@@ -42,9 +42,9 @@ const orderSchema = new Schema({
                 var re = /^0x[a-fA-F0-9]{40}$/;
                 return re.test(v)
             },
-            message: props => `${props.value} is invalid cryptocurrency contract address`
+            message: props => `${props.value} is invalid cryptocurrency address`
         },
-        required: [true, 'address is invalid'],
+        required: [true, 'from is invalid'],
     },
 },
 { 

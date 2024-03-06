@@ -4,7 +4,7 @@ const {Comment} = require('../models')
 const {CommentError} = require('../routes/comment/CommentErrors')
 
 class CommentDAO {
-    async add(comment) {
+    async create(comment) {
         try {
             const commentDao = new Comment({
                 nftId: comment?.nftId,
@@ -13,11 +13,11 @@ class CommentDAO {
                 content : comment.content
             })
             let savedComment = await commentDao.save().then((saved) => saved.populate('userId'))
-            logger.debug('CommentDAO.add. a new comment is added successfully.', savedComment)
+            logger.debug('CommentDAO.create. a new comment is created successfully.', savedComment)
             return savedComment
         } catch (err) {
-            logger.error('Failed to add a new comment due to ', err)
-            throw new CommentError({key: 'comment_add_validiation_failed', params:[comment?.nftId, comment?.parentId, comment.userId,  err], errors: err.errors ? err.errors : err.message, code: 400})
+            logger.error('Failed to create a new comment due to ', err)
+            throw new CommentError({key: 'comment_create_validiation_failed', params:[comment?.nftId, comment?.parentId, comment.userId,  err], errors: err.errors ? err.errors : err.message, code: 400})
         }
     }
 

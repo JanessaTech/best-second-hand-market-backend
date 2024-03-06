@@ -5,15 +5,15 @@ const {CommentError} = require('../routes/comment/CommentErrors')
 const commentDao = require("../dao/comment")
 
 class CommentService {
-    async add(nftId, parentId, userId, content) {
-        logger.info('CommentService.add')
+    async create(nftId, parentId, userId, content) {
+        logger.info('CommentService.create')
         const comment = {nftId: nftId, parentId: parentId, userId: userId, content: content}
         try {
-            const savedComment = await comentDao.add(comment)
+            const savedComment = await comentDao.create(comment)
             return savedComment
         } catch (e) {
-            logger.error('Failed to add a new comment ', comment)
-            throw new CommentError({key: 'comment_add_comment_failed', params: [nftId, parentId, userId, e]})
+            logger.error('Failed to create a new comment ', comment)
+            throw new CommentError({key: 'comment_create_failed', params: [nftId, parentId, userId, e]})
         } 
     }
 

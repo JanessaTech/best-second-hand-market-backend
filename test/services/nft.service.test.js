@@ -32,7 +32,7 @@ describe('NftService', () => {
         test('expects NftError when the NFT is not found', async () => {
             when(nftDao.findOneByFilterWithUpdatedView).calledWith({_id: id}).mockRejectedValue(new NftError())
 
-            await expect(nftService.findNFTById(1))
+            await expect(nftService.findNFTById(1, true))
             .rejects
             .toBeInstanceOf(NftError)
         })
@@ -41,7 +41,7 @@ describe('NftService', () => {
             when(nftDao.findOneByFilterWithUpdatedView).calledWith({_id: id}).mockResolvedValue(nft)
             when(chainParser.getChain).calledWith(chainId).mockImplementation(() => {throw new ConfigChainError()})
 
-            await expect(nftService.findNFTById(1))
+            await expect(nftService.findNFTById(1, true))
             .rejects
             .toBeInstanceOf(NftError)
         })
@@ -52,7 +52,7 @@ describe('NftService', () => {
             when(chainParser.getChain).calledWith(chainId).mockReturnValue(chain)
             when(chainParser.getContractInstance).calledWith(chain, address).mockImplementation(() => {throw new ConfigChainError()})
 
-            await expect(nftService.findNFTById(1))
+            await expect(nftService.findNFTById(1, true))
             .rejects
             .toBeInstanceOf(NftError)
             expect(chainParser.getContractInstance).toHaveBeenCalledWith(chain, address)
@@ -68,7 +68,7 @@ describe('NftService', () => {
             when(contractInstance.getOwnerOfToken).calledWith(tokenId).mockResolvedValue(ethers.ZeroAddress)
             when(messageHelper.getMessage).calledWith('nft_failed_get_owner', tokenId, chainId, address, expect.anything(Error)).mockReturnValue('some-message')
 
-            await expect(nftService.findNFTById(1))
+            await expect(nftService.findNFTById(1, true))
             .rejects
             .toBeInstanceOf(NftError)
             expect(messageHelper.getMessage).toHaveBeenCalledWith('nft_failed_get_owner', tokenId, chainId, address, expect.anything(Error))
@@ -86,7 +86,7 @@ describe('NftService', () => {
             when(userDao.findOneBy).calledWith({address: address}).mockResolvedValue(undefined)
             when(messageHelper.getMessage).calledWith('user_not_found_address', address).mockReturnValue('some message')
 
-            await expect(nftService.findNFTById(1))
+            await expect(nftService.findNFTById(1, true))
             .rejects
             .toBeInstanceOf(NftError)
             expect(messageHelper.getMessage).toHaveBeenCalledWith('user_not_found_address',address)
@@ -107,7 +107,7 @@ describe('NftService', () => {
             when(contractInstance.getUri).calledWith(tokenId).mockResolvedValue('')
             when(messageHelper.getMessage).calledWith('nft_failed_get_uri', tokenId, chainId, address, expect.anything(Error)).mockReturnValue('some-message')
 
-            await expect(nftService.findNFTById(1))
+            await expect(nftService.findNFTById(1, true))
             .rejects
             .toBeInstanceOf(NftError)
             expect(messageHelper.getMessage).toHaveBeenCalledWith('nft_failed_get_uri', tokenId, chainId, address, expect.anything(Error))
@@ -128,7 +128,7 @@ describe('NftService', () => {
             when(chain.getContractInstance).calledWith(address).mockReturnValue(contractInstance)
             convertToURL.mockReturnValue('some-url')
 
-            const res = await nftService.findNFTById(1)
+            const res = await nftService.findNFTById(1, true)
 
             expect(res).toEqual({
                 id: id, 
