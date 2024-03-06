@@ -42,6 +42,16 @@ class NftDAO {
         }
     }
 
+    async updateMany(filter, update, option = {upsert: false}) {
+        try {
+            const result  = await NFT.updateMany(filter, update, option)
+            return result
+        } catch (err) {
+            logger.error('Failed to updateMany due to', err)
+            throw new NftError({key: 'nft_updateMany_failed', params:[JSON.stringify(filter), JSON.stringify(update), JSON.stringify(option), err]})
+        }
+    }
+
     async findOneByFilter(filter) {
         const nft = await NFT.findOne(filter)
         return nft

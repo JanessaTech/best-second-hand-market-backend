@@ -34,6 +34,7 @@ module.exports = {
     nft_query_all_failed: 'Failed to query all nfts with userId = {0} due to {1}',
     nft_find_fullby_id_failed: 'Failed to find full nft with id(_id) {0} due to {1}',
     nft_query_for_user_success: 'Query nfts under the user with userId being {0} successfully',
+    nft_updateMany_failed: 'Failed to execute updateMany due to {0}. filter={1}, update={2}, option={3}',
 
     //config
     config_chain_not_found: 'The chain with chainId {0} is not found. Please check the correctness of config.chains in config.common.js',
@@ -82,12 +83,13 @@ module.exports = {
     comment_query_comments_failed: 'Failed to query comments by nftId {0}',
 
     order_create_success: 'Created a new order for userId {0} nftId {1} and from {2}', 
-    order_createInBatch_success: 'Created in batch of orders for userId {0} nftIds {1} and froms {2}', 
+    order_createInBatch_success: 'Created orders in batch for userId {0} nftIds {1} and froms {2}', 
     order_create_invalid_nft: 'Failed to create a new order due to invalid nft(nftId={0})',
     order_create_invalid_user: 'Failed to create a new order due to invalid user(userId={0})',
     order_create_failed: 'Failed to create a new order for userId {0} nftId {1} and from {2} due to {3}',
     order_create_validiation_failed: 'Failed to create a new order for userId {0} nftId {1} and from {2} due to {3}',
     order_query_success: 'Query orders for user(userId={0}) successfully',
+    order_createInBatch_failed:'Failed to create orders in batch for userId {0} nftIds {1} and froms {2} due to {3}', 
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

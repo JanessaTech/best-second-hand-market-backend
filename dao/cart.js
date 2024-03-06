@@ -29,7 +29,7 @@ class CartDAO {
         }
     }
 
-    async queryBy(filter) {
+    async queryAllByFilter(filter) {
         const carts = await Cart.find(filter)
         return carts
     }

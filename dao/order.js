@@ -22,13 +22,27 @@ class OrderDAO {
 
     }
 
-    async createInBatch() {
-        
+    async createInBatch(userId, nftIds, froms) {
+        const orders = []
+        for (let i = 0; i < nftIds.length; i++) {
+            orders.push({userId: userId, nftId: nftIds[i], from: froms[i]})
+        }
+        try {
+            const res = await Order.insertMany(orders, { ordered: false, rawResult: false})
+            return res
+        } catch (err) {
+            throw err
+        }
     }
 
     async findOneByFilter(filter) {
         const order = await Order.findOne(filter)
         return order
+    }
+
+    async queryAllByFilter(filter) {
+        const orders = await Order.find(filter)
+        return orders
     }
 
     async queryByPagination(filter, options) {

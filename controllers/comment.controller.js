@@ -11,8 +11,8 @@ class CommentController {
      * @param {*} res 
      * @param {*} next 
      */
-    async addComment(req, res, next) {
-        logger.info('CommentController.addComment. nftId =', req.body.nftId, ' parentId =', req.body.parentId, ' userId = ', req.body.userId)
+    async create(req, res, next) {
+        logger.info('CommentController.create. nftId =', req.body.nftId, ' parentId =', req.body.parentId, ' userId = ', req.body.userId)
         const nftId = req.body.nftId
         const parentId = req.body.parentId
         const userId = req.body.userId
@@ -27,8 +27,8 @@ class CommentController {
         }
     }
 
-    async deleteComment(req, res, next) {
-        logger.info('CommentController.deleteComment. id=', req.params.id)
+    async delete(req, res, next) {
+        logger.info('CommentController.delete. id=', req.params.id)
         const id = req.params.id
         try {
             await commentService.delete(id)

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
+const logger = require('../helpers/logger')
 const Counter = require('./counter.model')
 const {toJSON, paginate} = require('./plugins/')
 require('./user.model')
@@ -69,7 +70,22 @@ orderSchema.pre('save', async function (next) {
       } catch(err) {
         next(err)
       }   
-});
+})
+orderSchema.pre('insertMany', async function (next, docs) {
+    logger.debug('orderSchema. insertMany is triggered')
+    if (Array.isArray(docs) && docs.length) {
+       
+        try {
+            for (const doc of docs) {
+                const seq = await Counter.increment('orderId')
+                doc._id = seq
+            }
+        } catch (err) {
+            next(err)
+        }
+    }
+    next()
+})
 
 const order = mongoose.model('order', orderSchema)
 

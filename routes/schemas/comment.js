@@ -1,7 +1,7 @@
 const yup = require('yup')
 
 const schemas = {
-    addComment: yup.object({
+    create: yup.object({
         body: yup.object().shape({
             nftId: yup.number().when('parentId', {
                 is: (parentId) => !parentId,
@@ -17,7 +17,7 @@ const schemas = {
             userId: yup.number().typeError('userId should be an integer equal to or greater than 1!').min(1, 'userId should be equal to or greater than 1!').integer('Please enter a valid integer for userId!').required('userId is required')
         }, ['parentId', 'nftId'])
     }),
-    deleteComment: yup.object({
+    delete: yup.object({
         params: yup.object({
             id: yup.number().typeError('id should be an integer equal to or greater than 1!').min(1, 'id should be equal to or greater than 1!').integer('Please enter a valid integer for id!').required('id is required')
         })

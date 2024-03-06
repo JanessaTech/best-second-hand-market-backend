@@ -27,7 +27,7 @@ class CartService {
         logger.info('CartService.queryByUser. userId = ', userId)
         const filter = {userId: userId}
         let nftIds = []
-        const cartItems = await cartDao.queryBy(filter)
+        const cartItems = await cartDao.queryAllByFilter(filter)
         for (const cartItem of cartItems) {
             nftIds.push(cartItem.nftId)
         }
