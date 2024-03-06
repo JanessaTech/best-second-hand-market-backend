@@ -1,5 +1,4 @@
 const logger = require('../helpers/logger')
-const messageHelper = require('../helpers/internationaliztion/messageHelper')
 const {Order} = require('../models')
 const {OrderError} = require('../routes/order/OrderErrors')
 
@@ -23,9 +22,19 @@ class OrderDAO {
 
     }
 
+    async createInBatch() {
+        
+    }
+
     async findOneByFilter(filter) {
         const order = await Order.findOne(filter)
         return order
+    }
+
+    async queryByPagination(filter, options) {
+        //options.populate = 'userId:id name,replies:id userId:userId|id name createdAt'
+        const orders = await Order.paginate(filter, options)
+        return orders
     }
 }
 

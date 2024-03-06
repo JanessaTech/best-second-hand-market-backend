@@ -7,7 +7,7 @@ const messageHelper = require("../helpers/internationaliztion/messageHelper")
 
 class OrderService {
     async create(userId, nftId, from) {
-        logger.info('OrderService.add')
+        logger.info('OrderService.create')
         try {
             const findByUserId = await userDao.findOneByFilter({_id: userId})
             if (!findByUserId) {
@@ -31,8 +31,17 @@ class OrderService {
         }
     }
 
-    async addInBatch() {
+    async createInBatch(userId, nftIds, froms) {
+        logger.info('OrderService.createInBatch')
 
+
+    }
+
+    async queryOrdersByUserId(userId, page, limit, sortBy) {
+        logger.info('OrderService.queryOrdersByUserId')
+        const filter = {userId: userId}
+        const options = {page: page, limit: limit, sortBy: sortBy}
+        
     }
 }
 

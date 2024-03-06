@@ -87,6 +87,7 @@ module.exports = {
     order_create_invalid_user: 'Failed to create a new order due to invalid user(userId={0})',
     order_create_failed: 'Failed to create a new order for userId {0} nftId {1} and from {2} due to {3}',
     order_create_validiation_failed: 'Failed to create a new order for userId {0} nftId {1} and from {2} due to {3}',
+    order_query_success: 'Query orders for user(userId={0}) successfully',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

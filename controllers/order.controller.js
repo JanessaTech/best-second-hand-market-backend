@@ -42,11 +42,26 @@ class OrderController {
     async createInBatch(req, res, next) {
         logger.info('OrderController.createInBatch. userId=', req.body.userId, 'nftIds=',req.body.nftIds, 'froms =',req.body.froms)
         const userId = req.body.userId
-        const nftIds = req.body.nftIds
+        const nftIds = req.body.nftIds.map((nftId) => Number(nftId))
         const froms = req.body.froms
         try {
-            const payload = await orderService.addInBatch()
-            sendSuccess(res, messageHelper.getMessage('order_createInBatch_success', userId, nftIds, froms), {prders: payload})
+            const payload = await orderService.createInBatch(userId, nftIds, froms)
+            sendSuccess(res, messageHelper.getMessage('order_createInBatch_success', userId, nftIds, froms), {orders: payload})
+        } catch(e) {
+            next(e)
+        }
+    }
+
+    async queryOrdersByUserId(req, res, next) {
+        logger.info('OrderController.createInBatch. userId=', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
+        const userId = req.params.userId
+        const page = req.query.page
+        const limit = req.query.limit
+        const sortBy = req.query.sortBy
+
+        try {
+            const payload = await orderService.queryOrdersByUserId(userId, page, limit, sortBy)
+            sendSuccess(res, messageHelper.getMessage('order_query_success',userId), payload)
         } catch(e) {
             next(e)
         }
