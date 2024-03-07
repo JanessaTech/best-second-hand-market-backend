@@ -2,7 +2,6 @@ const logger = require('../helpers/logger')
 const {Order} = require('../models')
 const {OrderError} = require('../routes/order/OrderErrors')
 
-
 class OrderDAO {
     async create(userId, nftId, from, price) {
         try {
@@ -17,15 +16,15 @@ class OrderDAO {
             return savedOrder
         } catch (err) {
             logger.error('Failed to create a new order due to ', err)
-            throw new OrderError({key: 'order_create_validiation_failed', params:[userId, nftId, from,  err], errors: err.errors ? err.errors : err.message, code: 400})
+            throw new OrderError({key: 'order_create_validiation_failed', params:[userId, nftId, from, err], errors: err.errors ? err.errors : err.message, code: 400})
         }
 
     }
 
-    async createInBatch(userId, nftIds, froms) {
+    async createInBatch(userId, nftIds, froms, prices) {
         const orders = []
         for (let i = 0; i < nftIds.length; i++) {
-            orders.push({userId: userId, nftId: nftIds[i], from: froms[i]})
+            orders.push({userId: userId, nftId: nftIds[i], from: froms[i], price: prices[i]})
         }
         try {
             const res = await Order.insertMany(orders, { ordered: false, rawResult: false})

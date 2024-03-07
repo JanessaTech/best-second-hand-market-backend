@@ -38,19 +38,27 @@ class OrderService {
             if (!findByUserId) {
                 throw new OrderError({key: 'order_create_invalid_user', params: [userId]})
             }
-            await nftDao.updateMany({_id: {$in: nftIds}}, {$set: {status: 'off', price: 0}})
-            const existingNfts = await nftDao.queryAllByFilter({_id: {$in: nftIds}})
-            const existingNftsIds = existingNfts.map((nft) => nft._id)
-            logger.debug('OrderService.createInBatch. existingNftsIds = ', existingNftsIds)
-            const filteredNftIds = nftIds.filter((nftId) => {
-                if (!existingNftsIds.includes(nftId)) {
+            const updatedNFTs = await nftDao.queryAllByFilter({_id: {$in: nftIds}})  // get the list nfts to be updated
+            await nftDao.updateMany({_id: {$in: nftIds}}, {$set: {status: 'off', price: 0}}) // update status and price
+            const updatedNFTIds = updatedNFTs.map((nft) => nft._id)
+            const prices = updatedNFTs.map((nft) => nft.price)
+            logger.debug('OrderService.createInBatch. updatedNFTIds = ', updatedNFTIds)
+            logger.debug('OrderService.createInBatch. prices = ', prices)
+            const filteredFroms = []
+            const filteredNftIds = nftIds.filter((nftId, index) => {
+                if (!updatedNFTIds.includes(nftId)) {
                     logger.warn('OrderService.createInBatch. Nft with _id =', nftId + ' is excluded when creating orders in batch')
                     return false
                 }
+                filteredFroms.push(froms[index])
                 return true
             })
+
+            if (filteredNftIds.length != filteredFroms.length || filteredNftIds.length != prices.length || filteredFroms.length != prices.length) {
+                throw new OrderError({key: 'order_createInBatch_filter_error'})
+            }
             logger.debug('[OrderService.createInBatch] filteredNftIds = ', filteredNftIds)
-            const savedOrders = await orderDao.createInBatch(userId, filteredNftIds, froms)
+            const savedOrders = await orderDao.createInBatch(userId, filteredNftIds, filteredFroms, prices)
             return savedOrders
 
         } catch(e) {

@@ -81,9 +81,9 @@ class NftService {
 
     async queryNFTsForUser(userId, page, limit, sortBy) {
         logger.info('NftService.queryNFTsForUser userId=', userId)
-        const user = await userDao.findOneBy({_id: userId})
+        const user = await userDao.findOneByFilter({_id: userId})
         if (!user) {
-            throw new NftError({key: 'nft_not_found', params:[userId], code: 404})
+            throw new NftError({key: 'user_not_found_id', params:[userId], code: 404})
         }
         const filter = await chainParser.getFilterByChains(user.address)
         const options = {page: page, limit: limit, sortBy: sortBy}

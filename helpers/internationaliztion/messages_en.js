@@ -15,6 +15,7 @@ module.exports = {
     user_register_duplication_address: 'The address {0} is already registered',
     user_register_validiation_failed: 'Failed to register user {0} due to validation failure',
     user_not_found_address:'User is not found by address {0}',
+    user_not_found_id: 'User is not found by id(_id){0}',
     user_find_by_address:'Found an user by address {0}', 
     user_login_success: 'User login by address {0} successfully',
     user_logout_success: 'User logout by address {0} successfully',
@@ -90,6 +91,7 @@ module.exports = {
     order_create_validiation_failed: 'Failed to create a new order for userId {0} nftId {1} and from {2} due to {3}',
     order_query_success: 'Query orders for user(userId={0}) successfully',
     order_createInBatch_failed:'Failed to create orders in batch for userId {0} nftIds {1} and froms {2} due to {3}', 
+    order_createInBatch_filter_error: 'The length of filteredNftIds filteredFroms and prices are not the same.',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',
