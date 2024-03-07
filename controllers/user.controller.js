@@ -114,6 +114,16 @@ class UserController {
      * @param {*} next 
      */
     async update(req, res, next) {
+        logger.info('UserController.update. id =',req.body.id, 'name = ', req.body.name, ' intro =', req.body.intro)
+        const id = req.body.id
+        const name = req.body.name
+        const intro = req.body.intro
+        try {
+            const payload = await userService.update(id, name, intro)
+            sendSuccess(res, messageHelper.getMessage('user_update_success', id, name, intro), {user: payload})
+        } catch (e) {
+            next(e)
+        }
 
     }
 }

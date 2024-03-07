@@ -1,6 +1,7 @@
 const logger = require("../helpers/logger");
 const {UserError} = require("../routes/user/UserErrors");
-const userDao = require('../dao/user')
+const userDao = require('../dao/user');
+const messageHelper = require("../helpers/internationaliztion/messageHelper");
 
 class UserService {
     async register(user) {
@@ -62,6 +63,28 @@ class UserService {
         }
     }
 
+    async update(id, name, intro) {
+        logger.info('UserService.update')
+        try {
+            const filter = {_id: id}
+            const update = {}
+            if (name) {
+                update.name = name
+            }
+            if (intro) {
+                update.intro = intro
+            }
+            const user = await userDao.findOneAndUpdate(filter, update)
+            if (!user) {
+                throw new UserError({key: 'user_not_found_id', params:[id]})
+            }
+            return user
+        } catch(e) {
+            const errMsg  = messageHelper.getMessage('user_update_failed', id, name, intro, e)
+            logger.error(errMsg)
+            throw new UserError({message: errMsg})
+        }
+    }
 }
 
 const userService = new UserService()

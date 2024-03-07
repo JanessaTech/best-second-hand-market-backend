@@ -46,7 +46,6 @@ class OrderDAO {
     }
 
     async queryByPagination(filter, options) {
-        //options.populate = 'userId:id name,replies:id userId:userId|id name createdAt'
         const orders = await Order.paginate(filter, options)
         return orders
     }
