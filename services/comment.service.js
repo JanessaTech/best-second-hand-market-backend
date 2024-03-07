@@ -34,7 +34,7 @@ class CommentService {
             const resultByFilter = await comentDao.queryByPagination(filter, options)
             return {comments: resultByFilter.results, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
         } catch (e) {
-            const errMsg = messageHelper.getMessage('comment_query_comments_failed', nftId)
+            const errMsg = messageHelper.getMessage('comment_query_by_nftId_failed', nftId, e)
             throw new CommentError({message: errMsg})
         }
     }

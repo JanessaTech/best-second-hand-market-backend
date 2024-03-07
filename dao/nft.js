@@ -1,6 +1,7 @@
 const logger = require('../helpers/logger')
 const {NFT} = require('../models')
 const {NftError} = require('../routes/nft/NftErrors')
+const {chainParser} = require('../config/configParsers')
 
 class NftDAO {
     async create(nft) {
@@ -56,6 +57,18 @@ class NftDAO {
 
     async queryByPagination(filter, options) {
         const nfts = await NFT.paginate(filter, options)
+        return nfts
+    }
+
+    /**
+     * Query the list of nfts based on the config.chains in config.common.js.
+     * We should make sure the nfts returned are the valid ones which can interact with smart contract
+     * 
+     */
+    async queryAvailbleNfts() {
+        logger.debug('NftDAO.queryAvailbleNfts.')
+        const filter = await chainParser.getFilterByChains()
+        const nfts = await NFT.find(filter)
         return nfts
     }
 }

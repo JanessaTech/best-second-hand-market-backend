@@ -81,7 +81,7 @@ module.exports = {
     comment_query_comments_success: 'Query comments by nftId {0} successfully',
     comment_create_failed: 'Failed to create a new comment for nftId {0} parentId {1} and userId {2} due to {3}',
     comment_create_validiation_failed: 'Failed to create a new comment for nftId {0} parentId {1} and userId {2} due to {3}',
-    comment_query_comments_failed: 'Failed to query comments by nftId {0}',
+    comment_query_by_nftId_failed: 'Failed to query comments by nftId {0} due to {1}',
 
     order_create_success: 'Created a new order for userId {0} nftId {1} and from {2}', 
     order_createInBatch_success: 'Created orders in batch for userId {0} nftIds {1} and froms {2}', 
@@ -93,6 +93,7 @@ module.exports = {
     order_createInBatch_failed:'Failed to create orders in batch for userId {0} nftIds {1} and froms {2} due to {3}', 
     order_createInBatch_filter_error: 'The length of filteredNftIds filteredFroms and prices are not the same.',
     order_createInBatch_invalid_arrays:'nftIds and froms shoud have the same length',
+    order_query_by_userId_failed: 'Failed to query orders by userId {0} due to {1}',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

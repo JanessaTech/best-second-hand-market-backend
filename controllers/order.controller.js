@@ -2,7 +2,22 @@ const logger = require('../helpers/logger')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 const {sendSuccess} = require('../helpers/reponseHandler')
 const orderService = require('../services/order.service')
+const nftService = require('../services/nft.service')
 const {OrderError} = require('../routes/order/OrderErrors')
+
+
+function merge(nfts, orders){
+    logger.debug('in #merge')
+    const merged = []
+    for (const order of orders) {
+        for (const nft of nfts) {
+            if (order.nftId === nft.id) {
+                merged.push({...nft, ...order.toJSON()})
+            }
+        }
+    }
+    return merged
+}
 
 class OrderController {
     /**
@@ -59,7 +74,9 @@ class OrderController {
         const sortBy = req.query.sortBy
 
         try {
-            const payload = await orderService.queryOrdersByUserId(userId, page, limit, sortBy)
+            let payload = await orderService.queryOrdersByUserId(userId, page, limit, sortBy)
+            const nfts = await nftService.queryNFTsByIds(payload.orders.map((order) => order.nftId))
+            payload.orders = merge(nfts, payload.orders)
             sendSuccess(res, messageHelper.getMessage('order_query_success',userId), payload)
         } catch(e) {
             next(e)

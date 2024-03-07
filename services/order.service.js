@@ -77,8 +77,17 @@ class OrderService {
 
     async queryOrdersByUserId(userId, page, limit, sortBy) {
         logger.info('OrderService.queryOrdersByUserId')
-        const filter = {userId: userId}
-        const options = {page: page, limit: limit, sortBy: sortBy}
+        try {
+            const avaliableNFTs = await nftDao.queryAvailbleNfts()
+            const filter = {$and: [{user: userId}, {nftId: {$in: avaliableNFTs.map((nft) => nft._id)}}]}
+            logger.debug('OrderService.queryOrdersByUserId. filter = ', filter)
+            const options = {page: page, limit: limit, sortBy: sortBy}
+            const resultByFilter = await orderDao.queryByPagination(filter, options)
+            return {orders: resultByFilter.results, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
+        } catch (e) {
+            const errMsg = messageHelper.getMessage('order_query_by_userId_failed', userId, e)
+            throw new OrderError({message: errMsg})
+        }
         
     }
 }
