@@ -92,6 +92,7 @@ module.exports = {
     order_query_success: 'Query orders for user(userId={0}) successfully',
     order_createInBatch_failed:'Failed to create orders in batch for userId {0} nftIds {1} and froms {2} due to {3}', 
     order_createInBatch_filter_error: 'The length of filteredNftIds filteredFroms and prices are not the same.',
+    order_createInBatch_invalid_arrays:'nftIds and froms shoud have the same length',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',

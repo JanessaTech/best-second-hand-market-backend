@@ -24,24 +24,6 @@ class NftDAO {
         }
     }
 
-    async findByIdAndUpdate(update) {
-        const filter = {_id: update._id}
-        var _update = {}
-        if (update?.price) {
-            _update.price = update.price
-        }
-        if (update?.status) {
-            _update.status = update.status
-        }
-        try {
-            const nft = await NFT.findOneAndUpdate(filter, _update, {new: true})
-            return nft
-        } catch (err) {
-            logger.error('Failed to update nft due to ', err)
-            throw e
-        }
-    }
-
     async updateMany(filter, update, option = {upsert: false}) {
         try {
             const result  = await NFT.updateMany(filter, update, option)
@@ -62,9 +44,9 @@ class NftDAO {
         return nft
     }
 
-    async findOneAndUpdate(filter, update) {
-        const oldNft = await NFT.findOneAndUpdate(filter, update)
-        return oldNft
+    async findOneAndUpdate(filter, update, option = {new: false, upsert: false}) {
+        const nft = await NFT.findOneAndUpdate(filter, update, option)
+        return nft
     }
 
     async queryAllByFilter(filter) {
@@ -76,8 +58,6 @@ class NftDAO {
         const nfts = await NFT.paginate(filter, options)
         return nfts
     }
-
-    
 }
 
 const nftDao = new NftDAO()

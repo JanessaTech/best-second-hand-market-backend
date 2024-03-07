@@ -7,9 +7,9 @@ require('./user.model')
 
 const orderSchema = new Schema({
     _id: { type: Number,  min: 1 },
-    userId: {
+    user: {
         type: Number,
-        min: [1, "userId should be equal or greater than 1"],
+        min: [1, "user should be equal or greater than 1"],
         validate: {
             validator: function (v) {
                 return v >= 1 && Number.isInteger(v);
@@ -17,7 +17,7 @@ const orderSchema = new Schema({
             message: (props) => `${props.value} should be a positive integer!`,
         },
         ref: 'User',
-        required: [true, 'userId is required'],
+        required: [true, 'user is required'],
     },
     nftId: {
         type: Number,
@@ -55,7 +55,7 @@ const orderSchema = new Schema({
 orderSchema.plugin(toJSON)
 orderSchema.plugin(paginate)
 
-orderSchema.index({userId: 1, nftId: 1},{unique: true})
+orderSchema.index({nftId: 1, from: 1},{unique: true})
 
 orderSchema.pre('save', async function (next) {
     if (!this.isNew) {

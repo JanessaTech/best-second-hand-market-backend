@@ -43,11 +43,11 @@ class OrderService {
             const updatedNFTIds = updatedNFTs.map((nft) => nft._id)
             const prices = updatedNFTs.map((nft) => nft.price)
             logger.debug('OrderService.createInBatch. updatedNFTIds = ', updatedNFTIds)
-            logger.debug('OrderService.createInBatch. prices = ', prices)
+            
             const filteredFroms = []
             const filteredNftIds = nftIds.filter((nftId, index) => {
                 if (!updatedNFTIds.includes(nftId)) {
-                    logger.warn('OrderService.createInBatch. Nft with _id =', nftId + ' is excluded when creating orders in batch')
+                    logger.warn('OrderService.createInBatch. NFT with _id =', nftId + ' is excluded when creating orders in batch')
                     return false
                 }
                 filteredFroms.push(froms[index])
@@ -58,6 +58,8 @@ class OrderService {
                 throw new OrderError({key: 'order_createInBatch_filter_error'})
             }
             logger.debug('[OrderService.createInBatch] filteredNftIds = ', filteredNftIds)
+            logger.debug('OrderService.createInBatch. filteredFroms = ', filteredFroms)
+            logger.debug('OrderService.createInBatch. prices = ', prices)
             const savedOrders = await orderDao.createInBatch(userId, filteredNftIds, filteredFroms, prices)
             return savedOrders
 

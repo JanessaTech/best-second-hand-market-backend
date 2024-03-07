@@ -2,7 +2,6 @@ const logger = require('../helpers/logger')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 const {sendSuccess} = require('../helpers/reponseHandler')
 const orderService = require('../services/order.service')
-const nftService = require('../services/nft.service')
 const {OrderError} = require('../routes/order/OrderErrors')
 
 class OrderController {
@@ -18,10 +17,7 @@ class OrderController {
         const nftId = req.body.nftId
         const from = req.body.from
         try {
-            
-            const order = await orderService.create(userId, nftId, from)
-            const nft = await nftService.findNFTById(nftId)
-            const payload = {...nft, ...order.toJSON()}
+            const payload = await orderService.create(userId, nftId, from)
             sendSuccess(res, messageHelper.getMessage('order_create_success', userId, nftId, from), {order: payload})
         } catch(e) {
             if (!(e instanceof OrderError)) {
@@ -45,6 +41,9 @@ class OrderController {
         const nftIds = req.body.nftIds.map((nftId) => Number(nftId))
         const froms = req.body.froms
         try {
+            if (nftIds.length !== froms.length) {
+                throw new OrderError({key:'order_createInBatch_invalid_arrays'})
+            }
             const payload = await orderService.createInBatch(userId, nftIds, froms)
             sendSuccess(res, messageHelper.getMessage('order_createInBatch_success', userId, nftIds, froms), {orders: payload})
         } catch(e) {

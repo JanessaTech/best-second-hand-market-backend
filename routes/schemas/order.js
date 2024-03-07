@@ -11,8 +11,16 @@ const schemas = {
     createInBatch: yup.object({
         body: yup.object({
             userId: yup.number().typeError('userId should be an integer equal to or greater than 1!').min(1, 'userId should be equal to or greater than 1!').integer('Please enter a valid integer for userId!').required('userId is required'),
-            nftIds: yup.array().required('You must provide the array nftIds').of(yup.number().typeError('nftIds should contain the value which is an integer equal to or greater than 1!').min(1, 'The value in the array nftIds should be equal to or greater than 1!').integer('Please enter a valid integer for the value in nftIds!')).test({message: 'nftIds should be provided and contains at least one value', test:arr => !arr || arr.length > 0}),
-            froms: yup.array().required('You must provide the array froms').of(yup.string().matches(/^0x[a-fA-F0-9]{40}$/, 'You must provide valid address for the value in the array froms')).test({message: 'froms array should be provided and contains at least one value', test:arr => !arr || arr.length > 0}),
+            nftIds: yup.array().required('You must provide the array nftIds')
+                    .of(yup.number().typeError('nftIds should contain the value which is an integer equal to or greater than 1!').min(1, 'The value in the array nftIds should be equal to or greater than 1!').integer('Please enter a valid integer for the value in nftIds!'))
+                    .test({
+                        message: 'nftIds should be provided and contains at least one value', 
+                        test:arr =>  arr.length > 0}),
+            froms: yup.array().required('You must provide the array froms')
+                    .of(yup.string().matches(/^0x[a-fA-F0-9]{40}$/, 'You must provide valid address for the value in the array froms'))
+                    .test({
+                        message: 'froms array should be provided and contains at least one value', 
+                        test:arr => arr.length > 0})
         })
         
     }),

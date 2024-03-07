@@ -31,16 +31,25 @@ class NftService {
         }
     }
 
-    async update(update) {
+    async update(updates) {
         logger.info('NftService.update')
         try {
-            const nft = await nftDao.findByIdAndUpdate(update)
+            const filter = {_id: updates._id}
+            const update = {}
+            if (updates?.price) {
+                update.price = updates.price
+            }
+            if (updates?.status) {
+                update.status = updates.status
+            }
+            const option = {new: true}
+            const nft = await nftDao.findOneAndUpdate(filter, update, option)
             if (!nft) {
-                throw new NftError({key: 'nft_not_found', params:[update._id], code:404})
+                throw new NftError({key: 'nft_not_found', params:[updates._id], code:404})
             }
             return nft.toJSON()
         } catch (e) {
-            logger.error('Failed to update the nft record by _id = ', update._id)
+            logger.error('Failed to update the nft record by _id = ', updates._id)
             throw e
         }
     }
