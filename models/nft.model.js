@@ -25,7 +25,7 @@ const nftSchema = new Schema({
     },
     category: {
         type: String,
-        enum: config.CATEGORIES,
+        enum: Object.values(config.CATEGORIES).map((s) => s.description),
         message: '{VALUE} in category not supported',
         required: [true, 'category is required'],
     },
@@ -59,8 +59,8 @@ const nftSchema = new Schema({
     },
     status: {
         type: String,
-        enum: config.NFTSTATUS,
-        default: 'off', 
+        enum: Object.values(config.NFTSTATUS).map((s) => s.description),
+        default: config.NFTSTATUS.Off.description, 
         message: '{VALUE} in status not supported',
         required: [true, 'status is required'],
     },

@@ -3,8 +3,19 @@ const config = {}
 config.limits = {
   cartlimit: 20
 }
-config.CATEGORIES = ['pets', 'clothes', 'cosmetics', 'outfits', 'car', 'devices', 'books']
-config.NFTSTATUS = ['on', 'off']
+config.CATEGORIES = Object.freeze({
+  Pets: Symbol("pets"),
+  Clothes: Symbol("clothes"),
+  Cosmetics: Symbol("cosmetics"),
+  Outfits: Symbol("outfits"),
+  Cars: Symbol("cars"),
+  Devices: Symbol("devices"),
+  Books: Symbol("books")
+})
+config.NFTSTATUS = Object.freeze({
+  On: Symbol("on"),
+  Off: Symbol("off")
+})
 config.chains = { 
     local: [
       {

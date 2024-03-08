@@ -6,6 +6,7 @@ const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {ethers} = require('ethers')
 const {convertToURL} = require('../helpers/utils')
 const {chainParser} = require('../config/configParsers')
+const config = require('../config/configuration')
 
 class NftService {
 
@@ -117,7 +118,7 @@ class NftService {
     async countNFTsByAddress(address){
         logger.info('NftService.queryNFTsForUser. address = ', address)
         try {
-            const filter = await chainParser.getFilterByChains({owner: address, status: 'on'})
+            const filter = await chainParser.getFilterByChains({owner: address, status: config.NFTSTATUS.On.description})
             const count = await nftDao.countNfts(filter)
             return count
         } catch (e) {
