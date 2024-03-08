@@ -88,7 +88,17 @@ class OrderService {
             const errMsg = messageHelper.getMessage('order_query_by_userId_failed', userId, e)
             throw new OrderError({message: errMsg})
         }
-        
+    }
+
+    async countForUser(userId) {
+        logger.info('OrderService.countForUser. userId=', userId)
+        try {
+            const count = await orderDao.countOrders({user: userId})
+            return count
+        } catch (e) {
+            const errMsg = messageHelper.getMessage('order_count_by_userId_failed', userId, e)
+            throw new OrderError({message: errMsg})
+        }
     }
 }
 

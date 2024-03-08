@@ -114,6 +114,19 @@ class NftService {
         return nfts
     }
 
+    async countNFTsByAddress(address){
+        logger.info('NftService.queryNFTsForUser. address = ', address)
+        try {
+            const filter = await chainParser.getFilterByChains(address, undefined, 'on')
+            const count = await nftDao.countNfts(filter)
+            return count
+        } catch (e) {
+            const errMsg = messageHelper.getMessage('nft_count_by_address_failed', address, e)
+            logger.error(errMsg)
+            throw new NftError({message: errMsg, code:400})
+        }
+    }
+
     async #addExtraInfoToRawNFTs(rawNfts) {
         let nfts = []
         for(const rawNft of rawNfts) {

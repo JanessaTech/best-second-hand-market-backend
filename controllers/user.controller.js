@@ -1,6 +1,9 @@
 const logger = require('../helpers/logger')
 const {sendSuccess} = require('../helpers/reponseHandler')
 const userService = require('../services/user.service')
+const nftService = require('../services/nft.service')
+const orderService = require('../services/order.service')
+const {UserError} = require('../routes/user/UserErrors')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 
 class UserController {
@@ -38,26 +41,6 @@ class UserController {
         }
     }
 
-    /**
-     * Get the user which is associated with a wallet address
-     * @param {
-     *          params:{
-     *              address - The wallet address used to get user
-     *          } 
-     *        } req    : The request sent by frontend
-     * @param {*} res  : The response sent back to frontend. The format is the same as register
-     * @param {*} next : The object used by routes to control the workflow of req&res&exception handling
-     */
-    async findUserByAddress(req, res, next) {
-        logger.info('UserController.findUserByAddress. address = ', req.params?.address)
-        try {
-            const address = req.params.address
-            const payload = await userService.findUserByAddress(address)
-            sendSuccess(res, messageHelper.getMessage('user_find_by_address', address), {user: payload})
-        } catch(e) {
-            next(e)
-        }
-    }
 
     /**
      * Login by wallet address, returns the user info
@@ -98,16 +81,6 @@ class UserController {
     }
 
     /**
-     * Get an overview of a user by id
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    async getOverViewById(req, res, next) {
-
-    }
-
-    /**
      * Update user
      * @param {*} req 
      * @param {*} res 
@@ -126,6 +99,59 @@ class UserController {
         }
 
     }
+
+    /**
+     * Get an overview of a user by id
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+    async getOverViewById(req, res, next) {
+        logger.info('UserController.getOverViewById. id =', req.params.id)
+        const id = req.params.id
+        try {
+            const user = await userService.findUserById(id)
+            const countNft = await nftService.countNFTsByAddress(user.address)
+            const countOrder = await orderService.countForUser(id)
+            const payload = {
+                id: user._id, 
+                name: user.name,
+                intro: user.intro,
+                loginTime: user.loginTime,
+                countNft: countNft,
+                countOrder: countOrder
+            }
+            sendSuccess(res, messageHelper.getMessage('user_overview_success', id), {overview: payload})
+        } catch (e) {
+            if (!(e instanceof UserError)) {
+                throw new UserError({key: 'user_overview_failed', params: [id, e]})
+            } else {
+                next(e)
+            }
+        }
+    }
+
+    /**
+    * Get the user which is associated with a wallet address
+    * @param {
+    *          params:{
+    *              address - The wallet address used to get user
+    *          } 
+    *        } req    : The request sent by frontend
+    * @param {*} res  : The response sent back to frontend. The format is the same as register
+    * @param {*} next : The object used by routes to control the workflow of req&res&exception handling
+    */
+    async findUserByAddress(req, res, next) {
+        logger.info('UserController.findUserByAddress. address = ', req.params?.address)
+        try {
+            const address = req.params.address
+            const payload = await userService.findUserByAddress(address)
+            sendSuccess(res, messageHelper.getMessage('user_find_by_address', address), {user: payload})
+        } catch(e) {
+            next(e)
+        }
+    }
+
 }
 
 const controller = new UserController()

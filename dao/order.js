@@ -49,6 +49,11 @@ class OrderDAO {
         const orders = await Order.paginate(filter, options)
         return orders
     }
+
+    async countOrders(filter) {
+        const count = await Order.countDocuments(filter)
+        return count
+    }
 }
 
 const orderDao = new OrderDAO()

@@ -71,6 +71,11 @@ class NftDAO {
         const nfts = await NFT.find(filter)
         return nfts
     }
+
+    async countNfts(filter) {
+        const count = await NFT.countDocuments(filter)
+        return count
+    }
 }
 
 const nftDao = new NftDAO()

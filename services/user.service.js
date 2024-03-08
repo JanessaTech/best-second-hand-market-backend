@@ -22,20 +22,6 @@ class UserService {
         }
     }
 
-    async findUserByAddress(address) {
-        logger.info('UserService.findUserByAddress')
-        try {
-            const user = await userDao.findOneByFilter({address: address})
-            if (!user) {
-                throw new UserError({key: 'user_not_found_address', params:[address], code: 404})
-            }
-            return user
-        } catch (e) {
-            logger.error('Failed to find user by address ', address)
-            throw e
-        }
-    }
-
     async loginByAddress(address) {
         logger.info('UserService.login')
         try {
@@ -76,7 +62,7 @@ class UserService {
             }
             const user = await userDao.findOneAndUpdate(filter, update)
             if (!user) {
-                throw new UserError({key: 'user_not_found_id', params:[id]})
+                throw new UserError({key: 'user_not_found_id', params:[id], code: 404})
             }
             return user
         } catch(e) {
@@ -85,6 +71,35 @@ class UserService {
             throw new UserError({message: errMsg})
         }
     }
+
+    async findUserByAddress(address) {
+        logger.info('UserService.findUserByAddress')
+        try {
+            const user = await userDao.findOneByFilter({address: address})
+            if (!user) {
+                throw new UserError({key: 'user_not_found_address', params:[address], code: 404})
+            }
+            return user
+        } catch (e) {
+            logger.error('Failed to find user by address ', address)
+            throw e
+        }
+    }
+
+    async findUserById(id) {
+        logger.info('UserService.findUserById. id=', id)
+        try {
+            const user = await userDao.findOneByFilter({_id: id})
+            if (!user) {
+                throw new UserError({key: 'user_not_found_id', params:[id], code: 404})
+            }
+            return user
+        } catch (e) {
+            logger.error('Failed to find user by id ', id)
+            throw e
+        }
+    }
+
 }
 
 const userService = new UserService()

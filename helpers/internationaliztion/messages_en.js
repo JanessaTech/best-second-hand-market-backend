@@ -21,6 +21,8 @@ module.exports = {
     user_logout_success: 'User logout by address {0} successfully',
     user_update_success: 'User(id={0}) is updated successfully with name {1} and intro {2}',
     user_update_failed: 'Failed to update user(id={0}) with name {1} and intro {2} due to {3}',
+    user_overview_failed: 'Failed to get overview for user(id={0}) due to {1}',
+    user_overview_success: 'Get the overview for user(id={0}) successfully',
 
     //nft
     nft_mint_success: 'Nft with tokenId {0} is minted successfully',
@@ -38,6 +40,7 @@ module.exports = {
     nft_find_fullby_id_failed: 'Failed to find full nft with id(_id) {0} due to {1}',
     nft_query_for_user_success: 'Query nfts under the user with userId being {0} successfully',
     nft_updateMany_failed: 'Failed to execute updateMany due to {0}. filter={1}, update={2}, option={3}',
+    nft_count_by_address_failed:'Failed to count nfts by address {0} due to {1}',
 
     //config
     config_chain_not_found: 'The chain with chainId {0} is not found. Please check the correctness of config.chains in config.common.js',
@@ -96,6 +99,7 @@ module.exports = {
     order_createInBatch_filter_error: 'The length of filteredNftIds filteredFroms and prices are not the same.',
     order_createInBatch_invalid_arrays:'nftIds and froms shoud have the same length',
     order_query_by_userId_failed: 'Failed to query orders by userId {0} due to {1}',
+    order_count_by_userId_failed: 'Failed to count orders by userId {0} due to {1}',
 
     //todo
     todo_not_found: 'Todo {0} for user {1} is not found',
