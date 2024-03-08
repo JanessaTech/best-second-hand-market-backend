@@ -25,7 +25,7 @@ const nftSchema = new Schema({
     },
     category: {
         type: String,
-        enum: Object.values(config.CATEGORIES).map((s) => s.description),
+        enum: Object.values(config.CATEGORIES).map((c) => c.description),
         message: '{VALUE} in category not supported',
         required: [true, 'category is required'],
     },
