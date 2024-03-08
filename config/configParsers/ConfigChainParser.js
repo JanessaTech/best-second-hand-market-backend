@@ -172,9 +172,9 @@ class ConfigChainParser {
                             }
                             if(nftIds) {
                                 if (nftIds.length === 0) {
-                                    ands({_id: {$in: [-1]}})
+                                    ands.push({_id: {$in: [-1]}})
                                 } else {
-                                    ands({_id: {$in: nftIds}})
+                                    ands.push({_id: {$in: nftIds}})
                                 }
                             }
                             merged.push({$and: ands})
