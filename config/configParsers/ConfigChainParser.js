@@ -107,7 +107,8 @@ class ConfigChainParser {
         return tokenStandard
     }
 
-    async getFilterByChains(owner = undefined, nftIds = undefined, status = undefined) {
+    //async getFilterByChains(owner = undefined, nftIds = undefined, status = undefined) {
+    async getFilterByChains({owner, nftIds, status}) {
         let merged = []
         for (const [chainId, chain] of this.#chains.entries()) {
             if (chain.getAllContractInstances()) {

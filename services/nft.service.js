@@ -77,7 +77,7 @@ class NftService {
      */
     async queryNFTs(userId, page, limit, sortBy) {
         logger.info('NftService.queryNFTs. userId=', userId)
-        const filter = await chainParser.getFilterByChains()
+        const filter = await chainParser.getFilterByChains({})
         const options = {page: page, limit: limit, sortBy: sortBy}
         let nfts = []
         const resultByFilter = await nftDao.queryByPagination(filter, options)
@@ -94,7 +94,7 @@ class NftService {
         if (!user) {
             throw new NftError({key: 'user_not_found_id', params:[userId], code: 404})
         }
-        const filter = await chainParser.getFilterByChains(user.address)
+        const filter = await chainParser.getFilterByChains({owner: user.address})
         const options = {page: page, limit: limit, sortBy: sortBy}
         let nfts = []
         const resultByFilter = await nftDao.queryByPagination(filter, options)
@@ -107,7 +107,7 @@ class NftService {
 
     async queryNFTsByIds(nftIds) {
         logger.info('NftService.queryNFTsByIds. nftIds = ', nftIds)
-        const filter = await chainParser.getFilterByChains(undefined, nftIds)
+        const filter = await chainParser.getFilterByChains({nftIds: nftIds} )
         const rawNfts = await nftDao.queryAllByFilter(filter)
 
         let nfts = await this.#addExtraInfoToRawNFTs(rawNfts)
@@ -117,7 +117,7 @@ class NftService {
     async countNFTsByAddress(address){
         logger.info('NftService.queryNFTsForUser. address = ', address)
         try {
-            const filter = await chainParser.getFilterByChains(address, undefined, 'on')
+            const filter = await chainParser.getFilterByChains({owner: address, status: 'on'})
             const count = await nftDao.countNfts(filter)
             return count
         } catch (e) {

@@ -67,7 +67,7 @@ class NftDAO {
      */
     async queryAvailbleNfts() {
         logger.debug('NftDAO.queryAvailbleNfts.')
-        const filter = await chainParser.getFilterByChains()
+        const filter = await chainParser.getFilterByChains({})
         const nfts = await NFT.find(filter)
         return nfts
     }
