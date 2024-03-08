@@ -1,5 +1,7 @@
 const yup = require('yup')
 const config = require('../../config/configuration')
+const {getAttrs} = require('../../models/utils')
+const {NFT} = require('../../models')
 
 const schemas = {
     mint: yup.object({
@@ -72,10 +74,22 @@ const schemas = {
             sortBy: yup.string().optional()
                     .test({
                         name: 'validation for sortBy',
-                        message: '',
+                        message: `sortBy is a comma delimited list in which each item should follow the format: attr:(asc|desc). attr is one of (${getAttrs(NFT)}).  eg: ${getAttrs(NFT)[0]}:asc,${getAttrs(NFT)[1]}:desc`,
                         test: sortBy => {
                             if (sortBy) {
-                                
+                                const sortOptions = sortBy.split(',')
+                                for (const sortOption of sortOptions) {
+                                    const [key, order] = sortOption.split(':')
+                                    if (!order) {
+                                        return false
+                                    }
+                                    if (!getAttrs(NFT).includes(key)) {
+                                        return false
+                                    }
+                                    if (!['asc', 'desc'].includes(order)) {
+                                        return false
+                                    }
+                                }
                             }
                             return true
                         }
