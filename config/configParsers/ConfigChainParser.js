@@ -107,54 +107,6 @@ class ConfigChainParser {
         return tokenStandard
     }
 
-    /*
-    async getFilterByChains(owner = undefined, nftIds = undefined, status = undefined) {
-        let merged = []
-        for (const [chainId, chain] of this.#chains.entries()) {
-            if (chain.getAllContractInstances()) {
-                for(const [address, instance] of chain.getAllContractInstances()) {
-                    try {
-                        const tokenIds = owner ? await instance.tokensOfAddress(owner) : await instance.getAllTokenIds()
-                        if (tokenIds && tokenIds.length > 0) {
-                            if (nftIds) {
-                                const ands = []
-                                ands.push({chainId: chainId})
-                                ands.push({address: address})
-                                ands.push({tokenId: {$in: tokenIds}})
-                                if (nftIds.length === 0) {
-                                    ands({_id: {$in: [-1]}})
-                                } else {
-                                    ands({_id: {$in: nftIds}})
-                                }
-                                if (status) {
-                                    ands.push({status: status})
-                                }
-                                
-                                merged.push({$and : [{_id: {$in: nftIds.length === 0 ? [-1] : nftIds}}, {chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
-                            } else {
-                                const ands = []
-                                ands.push({chainId: chainId})
-                                ands.push({address: address})
-                                ands.push({tokenId: {$in: tokenIds}})
-                                if (status) {
-                                    ands.push({status: status})
-                                }
-                                merged.push({$and : [{chainId: chainId}, {address: address}, {tokenId: {$in: tokenIds}}]})
-                            }
-                            
-                        }
-                    }catch (e) {
-                        logger.error(messageHelper.getMessage('contract_read_failed', e))
-                    }
-                    
-                }
-            }
-        }
-        const filter = merged.length > 0 ? {$or: merged} : {_id: -1} // we return empty if all of chains are not readable/don't have tokenIds
-        logger.debug('filter = ', filter)
-        return filter
-    }*/
-
     async getFilterByChains(owner = undefined, nftIds = undefined, status = undefined) {
         let merged = []
         for (const [chainId, chain] of this.#chains.entries()) {
