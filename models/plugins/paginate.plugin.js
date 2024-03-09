@@ -1,6 +1,21 @@
 const logger = require('../../helpers/logger')
-
+/**
+ * The plugin used to query data by page
+ * 
+ * @param {Object} schema 
+ * @param {Object} options - Query object
+ */
 const paginate = (schema, options) => {
+  /**
+   * 
+   * @param {Object}   filter           - Query filter
+   * @param {Object}   options          - Options to decide which attribute should be shown or populated
+   * @param {String}   options.sortBy   - Sorting criteria using the format: sortField:(desc|asc). Multiple sorting criteria should be separated by commas (,). eg: chainId:asc,address:desc
+   * @param {String}   options.populate - Populate data fields using the format: populateField1:selectField1 selectField2,populateField2:selectField3 selectField4:subpopulateField|selectField5 selectField6. eg: 'user:id name,replies:id user:user|id name createdAt' (for comment model)
+   * @param {number}   options.limit    - Maximum number of results per page (default = 10)
+   * @param {number}   options.page     - Current page (default = 1)
+   * @returns 
+   */
     schema.statics.paginate = async function (filter, options) {
         let sort = {createdAt: -1}
         const sortingCriteria = {}

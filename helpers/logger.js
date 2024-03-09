@@ -26,7 +26,7 @@ const customFormat = {
         const level = info[Symbol.for('level')];
         const others = info[Symbol.for('splat')];
         //const args = others? others.map( e => isJson(e) ? '\n' + JSON.stringify(e, null, 4) + '\n' : e).join(' ') : others
-        const args = others? others.map( e => convert(e)).join(' ') : others
+        const args = others ? others.map( e => convert(e)).join(' ') : others
         info[Symbol.for('message')] = args?  `${timestamp}  ${level}: ${message} ${args}` :  `${timestamp}  ${level}: ${message}`;
         return info;
     }

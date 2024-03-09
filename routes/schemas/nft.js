@@ -1,6 +1,6 @@
 const yup = require('yup')
 const config = require('../../config/configuration')
-const {getAttrs, getRefs} = require('../../models/utils')
+const {getAttrs, getRefs, getAttrsByModelName} = require('../../models/utils')
 const {NFT} = require('../../models')
 const {Comment} = require('../../models')
 const comment = require('../../models/comment.model')
@@ -92,31 +92,11 @@ const schemas = {
                                     if (!['asc', 'desc'].includes(order)) {
                                         return false
                                     }
-                                    logger.info('getRefs', getRefs(Comment))
-                                    logger.info('getAttrs', getAttrs(Comment))
                                 }
                             }
                             return true
                         }
-                    }),
-            populate: yup.string().optional()
-                      .test({
-                        name: '',
-                        message: '',
-                        test: populate => {
-                            if (populate) {
-                                const populateOptions = populate.split(',')
-                                for (const populateOption of populateOptions) {
-                                    const [path, select, subPopulate] = populateOption.split(':')
-                                    if (!getAttrs(NFT).includes(path)) {
-                                        return false
-                                    }
-
-                                }
-                            }
-                            return true
-                        }
-                      })
+                    })
         })
     })
 }
