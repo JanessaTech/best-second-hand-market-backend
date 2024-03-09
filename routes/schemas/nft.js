@@ -1,7 +1,10 @@
 const yup = require('yup')
 const config = require('../../config/configuration')
-const {getAttrs} = require('../../models/utils')
+const {getAttrs, getRefs} = require('../../models/utils')
 const {NFT} = require('../../models')
+const {Comment} = require('../../models')
+const comment = require('../../models/comment.model')
+const logger = require('../../helpers/logger')
 
 const schemas = {
     mint: yup.object({
@@ -89,6 +92,8 @@ const schemas = {
                                     if (!['asc', 'desc'].includes(order)) {
                                         return false
                                     }
+                                    logger.info('getRefs', getRefs(Comment))
+                                    logger.info('getAttrs', getAttrs(Comment))
                                 }
                             }
                             return true
@@ -106,6 +111,7 @@ const schemas = {
                                     if (!getAttrs(NFT).includes(path)) {
                                         return false
                                     }
+
                                 }
                             }
                             return true

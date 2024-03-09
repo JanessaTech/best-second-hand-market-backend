@@ -6,12 +6,27 @@ const isJson = (obj) => {
     return obj !== undefined && obj !== null && obj.constructor === Object;
 }
 
+const isArray = (obj) => {
+    return !!obj && obj.constructor === Array;
+}
+
+const convert = (obj) => {
+    if (isJson(obj)) {
+       return  '\n' + JSON.stringify(obj, null, 4)
+    }
+    if (isArray(obj)) {
+        return obj.map((o) => convert(o))
+    }
+    return obj
+}
+
 const customFormat = {
     transform(info) {
         const { timestamp, message } = info;
         const level = info[Symbol.for('level')];
         const others = info[Symbol.for('splat')];
-        const args = others? others.map( e => isJson(e) ? '\n' + JSON.stringify(e, null, 4) + '\n' : e).join(' ') : others
+        //const args = others? others.map( e => isJson(e) ? '\n' + JSON.stringify(e, null, 4) + '\n' : e).join(' ') : others
+        const args = others? others.map( e => convert(e)).join(' ') : others
         info[Symbol.for('message')] = args?  `${timestamp}  ${level}: ${message} ${args}` :  `${timestamp}  ${level}: ${message}`;
         return info;
     }
