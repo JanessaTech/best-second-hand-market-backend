@@ -14,7 +14,7 @@ const schemas = {
                 otherwise: () => yup.number()
             }),
             content: yup.string().max(200, 'intro should be less than 200 characters').required("You must provide content"),
-            userId: yup.number().typeError('userId should be an integer equal to or greater than 1!').min(1, 'userId should be equal to or greater than 1!').integer('Please enter a valid integer for userId!').required('userId is required')
+            user: yup.number().typeError('user should be an integer equal to or greater than 1!').min(1, 'user should be equal to or greater than 1!').integer('Please enter a valid integer for user!').required('user is required')
         }, ['parentId', 'nftId'])
     }),
     delete: yup.object({

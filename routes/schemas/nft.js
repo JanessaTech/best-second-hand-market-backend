@@ -74,7 +74,7 @@ const schemas = {
             sortBy: yup.string().optional()
                     .test({
                         name: 'validation for sortBy',
-                        message: `sortBy is a comma delimited list in which each item should follow the format: attr:(asc|desc). attr is one of (${getAttrs(NFT)}).  eg: ${getAttrs(NFT)[0]}:asc,${getAttrs(NFT)[1]}:desc`,
+                        message: `sortBy is a comma delimited list in which each item should follow the format: attr:(asc|desc). attr is one of (${getAttrs(NFT)}). eg: ${getAttrs(NFT)[0]}:asc,${getAttrs(NFT)[1]}:desc`,
                         test: sortBy => {
                             if (sortBy) {
                                 const sortOptions = sortBy.split(',')
@@ -93,7 +93,24 @@ const schemas = {
                             }
                             return true
                         }
-                    })
+                    }),
+            populate: yup.string().optional()
+                      .test({
+                        name: '',
+                        message: '',
+                        test: populate => {
+                            if (populate) {
+                                const populateOptions = populate.split(',')
+                                for (const populateOption of populateOptions) {
+                                    const [path, select, subPopulate] = populateOption.split(':')
+                                    if (!getAttrs(NFT).includes(path)) {
+                                        return false
+                                    }
+                                }
+                            }
+                            return true
+                        }
+                      })
         })
     })
 }

@@ -9,15 +9,15 @@ class CommentDAO {
             const commentDao = new Comment({
                 nftId: comment?.nftId,
                 parentId : comment?.parentId,
-                userId : comment.userId,
+                user : comment.user,
                 content : comment.content
             })
-            let savedComment = await commentDao.save().then((saved) => saved.populate('userId'))
+            let savedComment = await commentDao.save().then((saved) => saved.populate('user'))
             logger.debug('CommentDAO.create. a new comment is created successfully.', savedComment)
             return savedComment
         } catch (err) {
             logger.error('Failed to create a new comment due to ', err)
-            throw new CommentError({key: 'comment_create_validiation_failed', params:[comment?.nftId, comment?.parentId, comment.userId,  err], errors: err.errors ? err.errors : err.message, code: 400})
+            throw new CommentError({key: 'comment_create_validiation_failed', params:[comment?.nftId, comment?.parentId, comment.user,  err], errors: err.errors ? err.errors : err.message, code: 400})
         }
     }
 
@@ -32,7 +32,7 @@ class CommentDAO {
     }
 
     async queryByPagination(filter, options) {
-        options.populate = 'userId:id name,replies:id userId:userId|id name createdAt'
+        options.populate = 'user:id name,replies:id user:user|id name createdAt'
         const comments = await Comment.paginate(filter, options)
         return comments
     }

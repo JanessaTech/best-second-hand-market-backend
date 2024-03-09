@@ -12,16 +12,16 @@ class CommentController {
      * @param {*} next 
      */
     async create(req, res, next) {
-        logger.info('CommentController.create. nftId =', req.body.nftId, ' parentId =', req.body.parentId, ' userId = ', req.body.userId)
+        logger.info('CommentController.create. nftId =', req.body.nftId, ' parentId =', req.body.parentId, ' user = ', req.body.user)
         const nftId = req.body.nftId
         const parentId = req.body.parentId
-        const userId = req.body.userId
+        const user = req.body.user
         const content = req.body.content
 
         try {
             if (nftId && parentId) throw new CommentError({key: 'comment_nftId_or_parentId'})  // to-do: validate by schema
-            const payload  = await commentService.create(nftId, parentId, userId, content)
-            sendSuccess(res, messageHelper.getMessage('comment_create_success', nftId, parentId, userId), {comment: payload})
+            const payload  = await commentService.create(nftId, parentId, user, content)
+            sendSuccess(res, messageHelper.getMessage('comment_create_success', nftId, parentId, user), {comment: payload})
         } catch (e) {
             next(e)
         }

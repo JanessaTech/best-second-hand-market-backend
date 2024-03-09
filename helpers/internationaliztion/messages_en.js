@@ -80,12 +80,12 @@ module.exports = {
     like_delete_failed: 'Failed to delete a like item for userId {0} and nftId {1} due to {2}',
 
     comment_nftId_or_parentId: 'You must provide either nftId or parentId, both are not allowed',
-    comment_create_success: 'Created a new comment successfully for nftId {0} parentId {1} and userId {2}',
+    comment_create_success: 'Created a new comment successfully for nftId {0} parentId {1} and user {2}',
     comment_delete_success: 'Deleted comment by id(_id) {0} successfully',
     comment_delete_failed: 'Failed to delete comment by id(_id) {0}',
     comment_query_comments_success: 'Query comments by nftId {0} successfully',
-    comment_create_failed: 'Failed to create a new comment for nftId {0} parentId {1} and userId {2} due to {3}',
-    comment_create_validiation_failed: 'Failed to create a new comment for nftId {0} parentId {1} and userId {2} due to {3}',
+    comment_create_failed: 'Failed to create a new comment for nftId {0} parentId {1} and user {2} due to {3}',
+    comment_create_validiation_failed: 'Failed to create a new comment for nftId {0} parentId {1} and user {2} due to {3}',
     comment_query_by_nftId_failed: 'Failed to query comments by nftId {0} due to {1}',
 
     order_create_success: 'Created a new order for userId {0} nftId {1} and from {2}', 

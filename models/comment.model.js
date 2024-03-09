@@ -26,9 +26,9 @@ commentSchema = new Schema({
         maxLength: [200, 'content should have at most 200 characters'], 
         required: [true, 'content is required'],
     },
-    userId: {
+    user: {
         type: Number,
-        min: [1, "userId should be equal or greater than 1"],
+        min: [1, "user should be equal or greater than 1"],
         validate: {
             validator: function (v) {
                 return v >= 1 && Number.isInteger(v);
@@ -36,7 +36,7 @@ commentSchema = new Schema({
             message: (props) => `${props.value} should be a positive integer!`,
         },
         ref: 'User',
-        required: [true, 'userId is required'],
+        required: [true, 'user is required'],
     } 
 }, 
 { 
