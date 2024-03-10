@@ -100,14 +100,7 @@ module.exports = {
     order_createInBatch_invalid_arrays:'nftIds and froms shoud have the same length',
     order_query_by_userId_failed: 'Failed to query orders by userId {0} due to {1}',
     order_count_by_userId_failed: 'Failed to count orders by userId {0} due to {1}',
-
-    //todo
-    todo_not_found: 'Todo {0} for user {1} is not found',
-    todo_getAll: 'Get all todos for user {0} successfully',
-    todo_create: 'Todo {0} is created for user {1} successfully',
-    todo_update : 'Todo {0} is updated for user {1} successfully',
-    todo_deleteById : 'Todo {0} is deleted for user {1} successfully',
-
+    
     // siwe
     siwe_none: 'Generate a random none successfully',
     siwe_verify_success: 'Verify siwe signature successfully',
