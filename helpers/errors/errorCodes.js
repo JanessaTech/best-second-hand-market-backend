@@ -1,13 +1,8 @@
 module.exports = {
-    //account
-    account_not_found : {code : 404},
-
+    // This is the deprecated file. 
+    // You could modify this file only in case there is no way to define the code for an error
     // global
-    UnSupportedAuthError : {code : 401},
-    UnauthorizedError : {code : 401},
     ValidationError: {code : 400},
     JsonWebTokenError: {code : 400},
     TokenExpiredError: {code : 400},
-    UnmatchedTokenError: {code : 400},
-    Error: {code: 500}
 }

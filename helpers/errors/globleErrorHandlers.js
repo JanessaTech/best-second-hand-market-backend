@@ -79,6 +79,7 @@ module.exports = (app) => {
     function handleDefaultError() {
         return (error, req, res, next) => {
             error.key = 'Error'
+            error.code = 500
             sendError(res, error)
         }
     }

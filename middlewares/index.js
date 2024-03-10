@@ -34,7 +34,7 @@ const middlewares = {
                         try {
                             let u = userService.getUserByIdInSyn(user.id)
                             if (u.token !== token) {
-                                const error = new globalErrors.UnmatchedTokenError({params: [user.name]})
+                                const error = new globalErrors.UnmatchedTokenError({params: [user.name], code:400})
                                 next(error)
                             } else {
                                 res.locals.authenticated = true
@@ -46,7 +46,7 @@ const middlewares = {
                     }
                 })
             } else {
-                const error = new globalErrors.UnSupportedAuthError()
+                const error = new globalErrors.UnSupportedAuthError({code:401})
                 next(error)
             }
         }
@@ -64,7 +64,7 @@ const middlewares = {
             if (authenticated && isAllowed) {
                 next()
             } else {
-                let error = new globalErrors.UnauthorizedError({params: [req.originalUrl]})
+                let error = new globalErrors.UnauthorizedError({params: [req.originalUrl], code:401})
                 next(error)
             }
         }

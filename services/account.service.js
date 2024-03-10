@@ -15,7 +15,7 @@ class AccountService {
 
             }
         } else {
-            throw new AccountError({key: 'account_not_found', params:[acc.name]})
+            throw new AccountError({key: 'account_not_found', params:[acc.name], code:404})
         }
     }
 
@@ -38,7 +38,7 @@ class AccountService {
         if (this.accountMap.has(id)) {
             return this.accountMap.get(id)
         } else {
-            throw new AccountError({key: 'account_not_found', params:[id]})
+            throw new AccountError({key: 'account_not_found', params:[id], code:404})
         }
     }
 
@@ -46,7 +46,7 @@ class AccountService {
         if (this.accountMap.has(id)) {
             return this.accountMap.get(id)
         } else {
-            throw new AccountError({key: 'account_not_found', params:[id]})
+            throw new AccountError({key: 'account_not_found', params:[id], code:404})
         }
     }
     async updateAccount(acc) {
@@ -54,7 +54,7 @@ class AccountService {
             this.accountMap.set(acc.id, acc)
             return acc
         } else {
-            throw new AccountError({key: 'account_not_found', params:[acc.name]})
+            throw new AccountError({key: 'account_not_found', params:[acc.name], code:404})
         }
     }
 
@@ -62,7 +62,7 @@ class AccountService {
         if (this.accountMap.has(id)) {
             this.accountMap.delete(id)
         } else {
-            throw new AccountError({key: 'account_not_found', params:[id]})
+            throw new AccountError({key: 'account_not_found', params:[id], code:404})
         }
     }
 }
