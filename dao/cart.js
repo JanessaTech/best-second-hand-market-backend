@@ -4,13 +4,13 @@ const {CartError} = require('../routes/cart/CartErrors')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 
 class CartDAO {
-    async add(cart) {
+    async add(cart, session) {
         try {
             const cartDao = new Cart({
                 userId: cart.userId,
                 nftId: cart.nftId
             })
-            const savedCart = await cartDao.save()
+            const savedCart = await cartDao.save({ session: session })
             logger.debug('CartDAO.add. a new cart item is added successfully.', savedCart)
             return savedCart
         } catch (err) {

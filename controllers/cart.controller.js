@@ -4,6 +4,7 @@ const cartService = require('../services/cart.service')
 const nftService = require('../services/nft.service')
 const {sendSuccess} = require('../helpers/reponseHandler')
 const {CartError} = require('../routes/cart/CartErrors')
+const cartSessionWrapper = require('./sessionWrappers/cartSessionWrapper')
 const config = require('../config/configuration')
 
 class CartController {
@@ -18,6 +19,7 @@ class CartController {
         const userId = Number(req.body.userId)
         const nftId = Number(req.body.nftId)
         try {
+            
             const nft = await nftService.findNFTById(nftId)
             const nftIds = await cartService.queryByUser(userId)
             if (nft.owner.id === userId) {
@@ -33,6 +35,8 @@ class CartController {
                 throw new CartError({key: 'cart_nft_status_off', params: [nftId]})
             }
             const payload = await cartService.add(userId, nftId)
+            //throw new CartError({key: 'cart_add_failed', params:[userId, nftId, 'for test']})
+            //const payload = await cartSessionWrapper.add(userId, nftId)
             sendSuccess(res, messageHelper.getMessage('cart_add_success', userId, nftId), {cart: payload})
         } catch(e) {
             if (!(e instanceof CartError)) {

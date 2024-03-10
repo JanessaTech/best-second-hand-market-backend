@@ -2,11 +2,11 @@ const logger = require("../helpers/logger")
 const cartDao = require('../dao/cart')
 
 class CartService {
-    async add(userId, nftId) {
+    async add(userId, nftId, session) {
         logger.info('CartService.add')
         try {
             const cart = {userId: userId, nftId: nftId}
-            const savedCart = await cartDao.add(cart)
+            const savedCart = await cartDao.add(cart, session)
             return savedCart
         } catch (e) {
             logger.error('Failed to add a new item to cart. userId =', userId, ' nftId =', nftId)
