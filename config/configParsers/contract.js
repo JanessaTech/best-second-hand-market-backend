@@ -17,8 +17,8 @@ module.exports = class Contract {
         this.#provider = provider
         this.#tokenStandard = tokenStandard
         this.#instance = new ethers.Contract(address, abi, provider)
-        this.#instance.on('mint_tracer', (to, uri, event) => {
-            logger.debug('Received from mint_tracer event: ', 'to =', to, 'uri =', uri, ' event =', event)
+        this.#instance.on('buy_tracer', (from, to, ids) => {
+            logger.debug('Received from buy_tracer event: ', 'from =', from, 'to =', to, ' ids =', ids)
         })
     }
 
