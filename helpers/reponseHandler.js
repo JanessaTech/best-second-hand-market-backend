@@ -13,7 +13,7 @@ module.exports = class Response {
 
     static sendError(res, error) {
         let key = error.key || error.name
-        let code = error.code || errorCodes[key].code
+        let code = error?.code ? error.code : 400
         let params = error.params || []
         let message = error.message || messageHelper.getMessage(key, ...params)
         res.status(code).json({

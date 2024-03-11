@@ -8,6 +8,7 @@ module.exports = (app) => {
     function handleValidationError() {
         return (error, req, res, next) => {
             if (error instanceof ValidationError) {
+                error.code = 400
                 sendError(res, error)
             } else {
                 return next(error)
@@ -18,6 +19,7 @@ module.exports = (app) => {
     function handleJsonWebTokenError() {
         return (error, req, res, next) => {
             if (error instanceof JsonWebTokenError) {
+                error.code = 400
                 sendError(res, error)
             } else {
                 return next(error)
@@ -28,6 +30,7 @@ module.exports = (app) => {
     function handleTokenExpiredError() {
         return (error, req, res, next) => {
             if (error instanceof TokenExpiredError) {
+                error.code = 400
                 sendError(res, error)
             } else {
                 return next(error)
