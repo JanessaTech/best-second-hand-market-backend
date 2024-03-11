@@ -3,13 +3,14 @@ const jwt = require("jsonwebtoken")
 const globalErrors = require('../helpers/errors/globalErrors')
 const urlHelper = require('../helpers/urlHelper')
 const accountService = require('../services/account.service')
+const config = require('../config/configuration')
 const path  = require("path")
 const multer = require("multer")
 
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'uploads/')
+      cb(null, config.staticDirs.profiles)
     },
     filename: function (req, file, cb) {
         const { originalname } = file;
@@ -19,7 +20,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 1048576}, // less than 1M
+    limits: { fileSize: config.multer.fileSize}, // less than 1M
     fileFilter: (req, file, cb) => {
         checkFileType(req, file, cb);
     },
@@ -27,7 +28,7 @@ const upload = multer({
 
 function checkFileType(req, file, cb) {
     // Allowed extensions
-    var fileTypes = /jpeg|jpg|png|gif/;
+    var fileTypes = config.multer.fileTypes
     // Check extention
     var extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
     // Check mime type

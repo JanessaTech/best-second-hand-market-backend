@@ -2,8 +2,10 @@ const express = require('express')
 const cors = require('cors');
 const app = express()
 const cookieParser = require('cookie-parser')
+const config = require('./config/configuration')
 
-app.use(express.static('uploads')) // we could access to the file by saying http://localhost:3100/file.png
+//define where to upload profile file to. we could access these filer under the dir by http://localhost:3100/file.png (file.png is the file under the dir)
+app.use(express.static(config.staticDirs.profiles))
 
 const initRoutes = require('./routes')
 const initGlobalErrorHandlers = require('./helpers/errors/globleErrorHandlers')
