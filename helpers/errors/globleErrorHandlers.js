@@ -107,6 +107,6 @@ module.exports = (app) => {
     app.use(handleUnauthorizedError())
     app.use(handleUnmatchedTokenError())
     app.use(handleMuterError())
-    //app.use(handleGlobalDemoError())
+    app.use(handleGlobalDemoError())
     app.use(handleDefaultError())
 }

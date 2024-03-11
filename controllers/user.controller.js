@@ -67,6 +67,7 @@ class UserController {
         try {
             const user = {
                 name: req.body.name,
+                profile: req?.file?.filename,
                 address: req.body.address,
                 intro: req.body.intro
             }
@@ -186,13 +187,6 @@ class UserController {
         } catch(e) {
             next(e)
         }
-    }
-
-    async uploadFile(req, res, next) {
-        logger.info('UserController.upload_file')
-        logger.debug('req.body.name:', req.body.name)
-        logger.debug(req.file.filename)
-        sendSuccess(res, 'file is uploaded successfully')
     }
 }
 

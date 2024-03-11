@@ -13,6 +13,12 @@ const userSchema = new Schema({
         maxLength: [20, 'name should have at most 20 characters'], 
         required: [true, 'name is required'],
     },
+    profile: {
+        type: String,
+        unique: true,
+        default: 'profile_0.png',
+        required: [true, 'profile is required'],
+    },
     address: {
         type: String,
         index: true,

@@ -7,6 +7,7 @@ class UserDAO {
         try {
             const userDao = new User({
                 name: user.name,
+                profile: user.profile,
                 address: user.address,
                 intro: user.intro
             })

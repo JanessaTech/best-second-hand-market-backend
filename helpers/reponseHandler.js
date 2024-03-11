@@ -1,4 +1,3 @@
-const errorCodes = require("./errors/errorCodes");
 const messageHelper = require("./internationaliztion/messageHelper");
 
 module.exports = class Response {
