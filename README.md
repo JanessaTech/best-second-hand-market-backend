@@ -47,5 +47,6 @@ npm install --save cors
 npm install --save mongoose
 npm install --save-dev jest
 npm install --save-dev jest-when
+npm install --save multer
 
 ```

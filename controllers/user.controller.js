@@ -5,6 +5,42 @@ const nftService = require('../services/nft.service')
 const orderService = require('../services/order.service')
 const {UserError} = require('../routes/user/UserErrors')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
+const path  = require("path")
+const multer = require("multer")
+
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        const { originalname } = file;
+        const fileExtension = (originalname.match(/\.+[\S]+$/) || [])[0]
+        cb(null, `${file.fieldname}__${Date.now()}${fileExtension}`)
+    }
+})
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1048576}, // less than 1M
+    fileFilter: (req, file, cb) => {
+        checkFileType(req, file, cb);
+    },
+}).single('profile');
+
+function checkFileType(req, file, cb) {
+    // Allowed extensions
+    var fileTypes = /jpeg|jpg|png|gif/;
+    // Check extention
+    var extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    // Check mime type
+    var mimeType = fileTypes.test(file.mimetype);
+  
+    if (mimeType && extname) {
+      return cb(null, true);
+    }
+    cb(null, false);
+  }
+
 
 class UserController {
 
@@ -152,6 +188,12 @@ class UserController {
         }
     }
 
+    async uploadFile(req, res, next) {
+        logger.info('UserController.upload_file')
+        logger.debug('req.body.name:', req.body.name)
+        logger.debug(req.file.filename)
+        sendSuccess(res, 'file is uploaded successfully')
+    }
 }
 
 const controller = new UserController()

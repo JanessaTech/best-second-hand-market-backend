@@ -2,6 +2,8 @@ const globalErrors = require('./globalErrors')
 const {sendError} = require('../reponseHandler')
 const ValidationError = require('yup').ValidationError
 const {JsonWebTokenError,TokenExpiredError} = require("jsonwebtoken")
+const {MulterError} = require("multer")
+
 module.exports = (app) => {
     function handleValidationError() {
         return (error, req, res, next) => {
@@ -62,6 +64,17 @@ module.exports = (app) => {
         }
     }
 
+    function handleMuterError() {
+        return (error, req, res, next) => {
+            if (error instanceof MulterError) {
+                error.code = 400
+                sendError(res, error)
+            } else {
+                return next(error)
+            }
+        }
+    }
+
     /**
      * This is an example how to handle GlobalDemoError
      * @returns
@@ -90,6 +103,7 @@ module.exports = (app) => {
     app.use(handleUnSupportedAuth())
     app.use(handleUnauthorizedError())
     app.use(handleUnmatchedTokenError())
+    app.use(handleMuterError())
     //app.use(handleGlobalDemoError())
     app.use(handleDefaultError())
 }

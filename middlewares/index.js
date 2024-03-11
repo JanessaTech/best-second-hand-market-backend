@@ -3,6 +3,42 @@ const jwt = require("jsonwebtoken")
 const globalErrors = require('../helpers/errors/globalErrors')
 const urlHelper = require('../helpers/urlHelper')
 const accountService = require('../services/account.service')
+const path  = require("path")
+const multer = require("multer")
+
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        const { originalname } = file;
+        const fileExtension = (originalname.match(/\.+[\S]+$/) || [])[0]
+        cb(null, `${file.fieldname}__${Date.now()}${fileExtension}`)
+    }
+})
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1048576}, // less than 1M
+    fileFilter: (req, file, cb) => {
+        checkFileType(req, file, cb);
+    },
+}).single('profile');
+
+function checkFileType(req, file, cb) {
+    // Allowed extensions
+    var fileTypes = /jpeg|jpg|png|gif/;
+    // Check extention
+    var extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    // Check mime type
+    var mimeType = fileTypes.test(file.mimetype);
+  
+    if (mimeType && extname) {
+      return cb(null, true);
+    }
+    cb(null, false);
+  }
+
 
 const middlewares = {
     validate : (schema) => {
@@ -67,6 +103,19 @@ const middlewares = {
                 let error = new globalErrors.UnauthorizedError({params: [req.originalUrl], code:401})
                 next(error)
             }
+        }
+    },
+    upload: () => {
+        return (req, res, next) => {
+            logger.debug('start to upload file')
+            upload(req, res, function(err) {
+                if (err) {
+                    logger.debug('err:', err)
+                    next(err)
+                } else{
+                    next()
+                }
+            })
         }
     }
 }

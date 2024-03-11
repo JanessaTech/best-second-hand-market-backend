@@ -21,7 +21,6 @@ const onListening = () => {
     logger.info('Server is listening on ' + bind)
 }
 
-
 logger.info('Register listening event handler')
 server.on('listening', onListening)
 

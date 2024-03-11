@@ -1,10 +1,7 @@
 const yup = require('yup')
 const config = require('../../config/configuration')
-const {getAttrs, getRefs, getAttrsByModelName} = require('../../models/utils')
+const {getAttrs} = require('../../models/utils')
 const {NFT} = require('../../models')
-const {Comment} = require('../../models')
-const comment = require('../../models/comment.model')
-const logger = require('../../helpers/logger')
 
 const schemas = {
     mint: yup.object({

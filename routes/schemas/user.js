@@ -34,6 +34,11 @@ const schemas = {
         params: yup.object({
             id: yup.number().typeError('id should be an integer equal to or greater than 1!').min(1, 'id should be equal to or greater than 1!').integer('Please enter a valid integer for id!').required('id is required'),
         })
+    }),
+    uploadFile: yup.object({
+        body: yup.object({
+            name: yup.string().min(5, 'name should have at least 5 characters').required('name is required')
+        })
     })
 
 }
