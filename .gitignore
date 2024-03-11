@@ -38,7 +38,7 @@ node_modules
 dist
 
 ### nodejs ######
-
+/uploads
 
 #### logs
 /logs/
