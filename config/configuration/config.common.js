@@ -3,6 +3,10 @@ const config = {}
 config.limits = {
   cartlimit: 20
 }
+config.multer = {
+  fileSize: 1048576, // less than 1M
+  fileTypes: /jpeg|jpg|png|gif/  // file types accepted
+}
 config.CATEGORIES = Object.freeze({
   Pets: Symbol("pets"),
   Clothes: Symbol("clothes"),

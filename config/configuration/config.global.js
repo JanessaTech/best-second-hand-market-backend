@@ -12,10 +12,6 @@ config.database = {
 config.staticDirs = {
     profiles: 'uploads'
 }
-config.multer = {
-    fileSize: 1048576, // less than 1M
-    fileTypes: /jpeg|jpg|png|gif/  // file types accepted
-}
 
 
 module.exports = config
