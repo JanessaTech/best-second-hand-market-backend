@@ -9,7 +9,7 @@ router.post('/register',  upload(), validate(userSchema.register), controller.re
 router.get('/:address', validate(userSchema.findUserByAddress), controller.findUserByAddress)
 router.post('/login', validate(userSchema.loginByAddress), controller.loginByAddress)
 router.post('/logout', validate(userSchema.logoutByAddress), controller.logoutByAddress)
-router.post('/update', validate(userSchema.update), controller.update)
+router.post('/update', upload(), validate(userSchema.update), controller.update)
 router.get('/overview/:id', validate(userSchema.getOverViewById), controller.getOverViewById)
 
 initUserErrorHandlers(router)

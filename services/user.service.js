@@ -49,7 +49,7 @@ class UserService {
         }
     }
 
-    async update(id, name, intro) {
+    async update(id, name, intro, profile) {
         logger.info('UserService.update')
         try {
             const filter = {_id: id}
@@ -59,6 +59,9 @@ class UserService {
             }
             if (intro) {
                 update.intro = intro
+            }
+            if (profile) {
+                update.profile = profile
             }
             const user = await userDao.findOneAndUpdate(filter, update)
             if (!user) {

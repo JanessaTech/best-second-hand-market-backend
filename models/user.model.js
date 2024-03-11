@@ -16,7 +16,7 @@ const userSchema = new Schema({
     profile: {
         type: String,
         unique: true,
-        default: 'profile_0.png',
+        default: 'profile__0.png',
         required: [true, 'profile is required'],
     },
     address: {

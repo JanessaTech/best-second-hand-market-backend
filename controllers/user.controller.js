@@ -124,13 +124,14 @@ class UserController {
      * @param {*} next 
      */
     async update(req, res, next) {
-        logger.info('UserController.update. id =',req.body.id, 'name = ', req.body.name, ' intro =', req.body.intro)
+        logger.info('UserController.update. id =',req.body.id, 'name = ', req.body.name, ' intro =', req.body.intro, ' profile =', req?.file?.filename)
         const id = req.body.id
         const name = req.body.name
         const intro = req.body.intro
+        const profile =  req?.file?.filename
         try {
-            const payload = await userService.update(id, name, intro)
-            sendSuccess(res, messageHelper.getMessage('user_update_success', id, name, intro), {user: payload})
+            const payload = await userService.update(id, name, intro, profile)
+            sendSuccess(res, messageHelper.getMessage('user_update_success', id, name, intro, profile), {user: payload})
         } catch (e) {
             next(e)
         }

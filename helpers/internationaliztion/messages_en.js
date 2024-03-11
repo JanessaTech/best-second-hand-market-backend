@@ -19,7 +19,7 @@ module.exports = {
     user_find_by_address:'Found an user by address {0}', 
     user_login_success: 'User login by address {0} successfully',
     user_logout_success: 'User logout by address {0} successfully',
-    user_update_success: 'User(id={0}) is updated successfully with name {1} and intro {2}',
+    user_update_success: 'User(id={0}) is updated successfully with name {1}, intro {2} and profile {3}',
     user_update_failed: 'Failed to update user(id={0}) with name {1} and intro {2} due to {3}',
     user_overview_failed: 'Failed to get overview for user(id={0}) due to {1}',
     user_overview_success: 'Get the overview for user(id={0}) successfully',
