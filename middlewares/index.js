@@ -7,7 +7,6 @@ const config = require('../config/configuration')
 const path  = require("path")
 const multer = require("multer")
 
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, config.staticDirs.profiles)
@@ -24,7 +23,7 @@ const upload = multer({
     fileFilter: (req, file, cb) => {
         checkFileType(req, file, cb);
     },
-}).single('profile');
+});
 
 function checkFileType(req, file, cb) {
     // Allowed extensions
@@ -106,10 +105,10 @@ const middlewares = {
             }
         }
     },
-    upload: () => {
+    upload: (fieldName) => {
         return (req, res, next) => {
-            logger.debug('start to upload file')
-            upload(req, res, function(err) {
+            logger.debug('start to upload file for fieldName = ', fieldName)
+            upload.single(fieldName)(req, res, function(err) {
                 if (err) {
                     logger.debug('err:', err)
                     next(err)
