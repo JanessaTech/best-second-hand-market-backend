@@ -5,7 +5,8 @@ config.limits = {
 }
 config.multer = {
   fileSize: 1048576, // less than 1M
-  fileTypes: /jpeg|jpg|png|gif/  // file types accepted
+  fileTypes: /jpeg|jpg|png|gif/,  // file types accepted
+  acceptedImageTypes: ['image/gif', 'image/jpeg', 'image/png']
 }
 config.CATEGORIES = Object.freeze({
   Pets: Symbol("pets"),

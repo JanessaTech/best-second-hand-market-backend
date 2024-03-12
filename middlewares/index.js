@@ -28,13 +28,13 @@ const upload = multer({
 function checkFileType(req, file, cb) {
     // Allowed extensions
     var fileTypes = config.multer.fileTypes
+    var acceptedImageTypes = config.multer.acceptedImageTypes
     // Check extention
     var extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
     // Check mime type
-    var mimeType = fileTypes.test(file.mimetype);
-  
-    if (mimeType && extname) {
-      return cb(null, true);
+    var accepted = acceptedImageTypes.includes(file.mimetype);
+    if (accepted && extname) {
+        return cb(null, true);
     }
     cb(null, false);
   }
