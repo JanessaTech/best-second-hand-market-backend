@@ -2,6 +2,7 @@ const logger = require('../helpers/logger')
 const {sendSuccess} = require('../helpers/reponseHandler')
 const nftService = require('../services/nft.service')
 const cartService = require('../services/cart.service')
+const likeService = require('../services/like.service')
 const {NftError} = require('../routes/nft/NftErrors')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 
@@ -69,6 +70,8 @@ class NFTcontroller {
             const payload = await nftService.findNFTById(id, true)
             const nftIdsInCart = userId ? await cartService.queryByUser(userId): []
             payload.inCart = userId ? nftIdsInCart.includes(id) : undefined
+            payload.isLike = userId ? await likeService.isLike(userId, id): undefined
+            payload.likes = await likeService.countLike(id)
             sendSuccess(res, messageHelper.getMessage('nft_by_id_success', id), {nft: payload})
         } catch (e) {
             if (!(e instanceof NftError)) {

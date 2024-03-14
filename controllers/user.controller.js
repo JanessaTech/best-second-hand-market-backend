@@ -154,6 +154,7 @@ class UserController {
             const payload = {
                 id: user._id, 
                 name: user.name,
+                profile: user.profile,
                 intro: user.intro,
                 loginTime: user.loginTime,
                 countNft: countNft,

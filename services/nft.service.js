@@ -62,7 +62,6 @@ class NftService {
             if (!nft) {
                 throw new NftError({key: 'nft_not_found', params:[id], code:404})
             }
-
             const fullNFT = await this.#addExtraInfo(nft)
             return fullNFT
         } catch (e) {
