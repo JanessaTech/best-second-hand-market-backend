@@ -32,7 +32,7 @@ class CommentDAO {
     }
 
     async queryByPagination(filter, options) {
-        options.populate = 'user:id name,replies:id user:user|id name createdAt'
+        options.populate = 'user:id name profile,replies:id user content createdAt updatedAt:user|id name profile'
         const comments = await Comment.paginate(filter, options)
         return comments
     }
