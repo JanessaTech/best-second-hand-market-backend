@@ -51,6 +51,7 @@ commentSchema.virtual('replies', {
     ref: 'comment',
     localField: '_id',
     foreignField: 'parentId',
+    options: { sort: { 'createdAt': -1}},
 })
 
 commentSchema.pre('save', async function (next) {
