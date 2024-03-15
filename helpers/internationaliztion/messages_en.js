@@ -57,11 +57,11 @@ module.exports = {
     //cart
     cart_add_success: 'Add nftId {0} for userId {1} successfully',
     cart_add_failed: 'Failed to add a new cart item(userId={0}, nftId={1}) due to {2}',
-    cart_remove_success: 'Remove cart item with id {0} successfully',
+    cart_remove_success: 'Remove cart item by userId {0} and nftId {1} successfully',
     cart_query_user: 'Query the list of nft ids for user {0} successfully',
     cart_query_user_failed: 'Failed to query the list of nft ids for user {0} due to {1}',
     cart_add_validiation_failed: 'Failed to add a new cart item for userId {0} and nftId {1} due to {2}',
-    cart_delete_failed: 'Failed to delete cart item by id {0} due to {1}',
+    cart_delete_failed: 'Failed to delete cart item by userId {0} and nftId {1} due to {2}',
     cart_isInCart_success: 'Get inCart status successfully for userId {0} and nftId {1}',
     cart_isInCart_failed:'Failed to get inCart status for userId {0} and nftId {1} due to {2}',
     cart_add_own_failed: 'You are not allowed to add a new cart item(userId={0}, nftId={1}) into cart because the nft(nftId={1}) already belongs to the nft owner(userId={0})',

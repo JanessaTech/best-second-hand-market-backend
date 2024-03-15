@@ -14,10 +14,10 @@ class CartService {
         }
     }
 
-    async remove(id) {
+    async remove(userId, nftId) {
         logger.info('CartService.remove')
         try {
-            await cartDao.delete(id)
+            await cartDao.delete(userId, nftId)
         } catch (e) {
             throw e
         }

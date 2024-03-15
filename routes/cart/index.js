@@ -6,7 +6,7 @@ const {validate} = require('../../middlewares')
 const {cartSchema} = require('../schemas')
 
 router.post('/', validate(cartSchema.add), controller.add) 
-router.delete('/:id', validate(cartSchema.remove), controller.remove)
+router.delete('/', validate(cartSchema.remove), controller.remove)
 router.get('/isInCart', validate(cartSchema.isInCart), controller.isInCart)
 router.get('/:userId', validate(cartSchema.queryByUser), controller.queryByUser)
 
