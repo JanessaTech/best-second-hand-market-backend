@@ -55,12 +55,12 @@ class CartController {
      * @param {*} next 
      */
     async remove(req, res, next) {
-        logger.info('CartController.remove. userId =', req.query.userId, 'nftId=',  req.query.nftId)
+        logger.info('CartController.remove. userId =', req.query.userId, 'nftIds=',  req.query.nftId)
         try {
             const userId = req.query.userId
-            const nftId = req.query.nftId
-            cartService.remove(userId, nftId)
-            sendSuccess(res, messageHelper.getMessage('cart_remove_success', userId, nftId))
+            const nftIds = req.query.nftId
+            cartService.remove(userId, nftIds)
+            sendSuccess(res, messageHelper.getMessage('cart_remove_success', userId, nftIds))
         } catch(e) {
             next(e)
         }

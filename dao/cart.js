@@ -19,11 +19,11 @@ class CartDAO {
         }
     }
 
-    async delete(userId, nftId) {
+    async delete(userId, nftIds) {
         try {
-            await Cart.findOneAndDelete({userId: userId, nftId: nftId})
+            await Cart.deleteMany({userId: userId, nftId: {$in: nftIds}})
         } catch (err) {
-            const errMsg = messageHelper.getMessage('cart_delete_failed', userId, nftId, err)
+            const errMsg = messageHelper.getMessage('cart_delete_failed', userId, nftIds, err)
             logger.error(errMsg)
             throw new CartError({message: errMsg, code: 400})
         }
