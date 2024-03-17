@@ -5,6 +5,7 @@ const cartService = require('../services/cart.service')
 const likeService = require('../services/like.service')
 const {NftError} = require('../routes/nft/NftErrors')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
+const httpHelper = require('../helpers/httpHelper')
 
 class NFTcontroller {
 
@@ -119,19 +120,22 @@ class NFTcontroller {
      * @param {*} next 
      */
     async queryNFTsForUser(req, res, next) {
-        logger.info('NFTcontroller.queryNFTsForUser userId =', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
-        const userId = req.params.userId
-        const page = req.query.page
+        logger.info('NFTcontroller.queryNFTsForUser userId =', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy, ' chainId =', req.query.chainId, ' category =', req.query.category, ' prices =', req.query.prices)
+        const userId = Number(req.params.userId)
+        const page = req.query.page 
         const limit = req.query.limit
         const sortBy = req.query.sortBy
+        const chainId = req.query.chainId
+        const category = req.query.category
+        const prices = req.query.prices
+        const query = httpHelper.getQueryObject(page, limit, sortBy, chainId, category, prices)
         try {
-            const payload = await nftService.queryNFTsForUser(userId, page, limit, sortBy)
+            const payload = await nftService.queryNFTsForUser(userId, query)
             sendSuccess(res, messageHelper.getMessage('nft_query_for_user_success', userId), payload)
         }catch(e) {
             next(e)
         }
-    }
-     
+    } 
 }
 
 const controller = new NFTcontroller()

@@ -107,16 +107,17 @@ class ConfigChainParser {
         return tokenStandard
     }
 
-    async getFilterByChains({owner, nftIds, status}) {
+    async getFilterByChains({owner, chainId, category, prices, status, nftIds}) {
         let merged = []
-        for (const [chainId, chain] of this.#chains.entries()) {
-            if (chain.getAllContractInstances()) {
+        for (const [_chainId, chain] of this.#chains.entries()) {
+            if (chainId && chainId !== _chainId) continue
+            if (chain.getAllContractInstances().size) {
                 for(const [address, instance] of chain.getAllContractInstances()) {
                     try {
                         const tokenIds = owner ? await instance.tokensOfAddress(owner) : await instance.getAllTokenIds()
                         if (tokenIds && tokenIds.length > 0) {
                             const ands = []
-                            ands.push({chainId: chainId})
+                            ands.push({chainId: _chainId})
                             ands.push({address: address})
                             ands.push({tokenId: {$in: tokenIds}})
                             if (status) {
@@ -128,6 +129,15 @@ class ConfigChainParser {
                                 } else {
                                     ands.push({_id: {$in: nftIds}})
                                 }
+                            }
+                            if (category && category.length > 0) {
+                                ands.push({category: {$in: category}})
+                            }
+                            if (prices) {
+                                const [minPart, maxPart] = prices.split('|')
+                                const [, min] = minPart.split(':')
+                                const [, max] = maxPart.split(':')
+                                ands.push({price: {$gte : Number(min), $lte : Number(max)}})
                             }
                             merged.push({$and: ands})
                         }

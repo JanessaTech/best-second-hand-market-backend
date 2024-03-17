@@ -28,7 +28,8 @@ const schemas = {
             userId: yup.number().typeError('userId should be an integer equal to or greater than 1!').min(1, 'userId should be equal to or greater than 1!').integer('Please enter a valid integer for userId!').required('userId is required')
         }),
         query: yup.object({
-            category: yup.mixed().oneOf(Object.values(config.CATEGORIES).map((c) => c.description)).optional(),
+            category: yup.array().optional()
+                      .of(yup.string().oneOf(Object.values(config.CATEGORIES).map((c) => c.description))),
             chainId: yup.number().typeError('chainId should be an integer equal to or greater than 1!').min(1, "chainId should be an integer equal to or greater than 1!").integer('Please enter a valid integer for chainId!').optional(),
             prices: yup.string().optional()
                     .test({

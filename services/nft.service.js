@@ -88,14 +88,14 @@ class NftService {
         return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
     }
 
-    async queryNFTsForUser(userId, page, limit, sortBy) {
+    async queryNFTsForUser(userId, query) {
         logger.info('NftService.queryNFTsForUser userId=', userId)
         const user = await userDao.findOneByFilter({_id: userId})
         if (!user) {
             throw new NftError({key: 'user_not_found_id', params:[userId], code: 404})
         }
-        const filter = await chainParser.getFilterByChains({owner: user.address})
-        const options = {page: page, limit: limit, sortBy: sortBy}
+        const filter = await chainParser.getFilterByChains({owner: user.address, ...query})
+        const options = {page: query?.page, limit: query?.limit, sortBy: query?.sortBy}
         let nfts = []
         const resultByFilter = await nftDao.queryByPagination(filter, options)
         if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {

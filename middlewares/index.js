@@ -1,7 +1,7 @@
 const logger = require('../helpers/logger')
 const jwt = require("jsonwebtoken")
 const globalErrors = require('../helpers/errors/globalErrors')
-const urlHelper = require('../helpers/urlHelper')
+const httpHelper = require('../helpers/httpHelper')
 const accountService = require('../services/account.service')
 const config = require('../config/configuration')
 const path  = require("path")
@@ -95,7 +95,7 @@ const middlewares = {
             logger.debug('res.locals.user:' + res.locals.user)
             let user = res.locals.user
             let authenticated = res.locals.authenticated
-            let allowedPermissions = urlHelper.getRoles(req.originalUrl)
+            let allowedPermissions = httpHelper.getRoles(req.originalUrl)
             let isAllowed = user.roles.some(r => allowedPermissions.includes(r))
             if (authenticated && isAllowed) {
                 next()
