@@ -101,7 +101,7 @@ class NftService {
         if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
             nfts = await this.#addExtraInfoToRawNFTs(resultByFilter.results)
         }
-        logger.info(`${resultByFilter.totalResults} nfts are returned`)
+        logger.info(`${nfts.length} nfts are returned`)
         return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
     }
 
