@@ -22,7 +22,11 @@ const paginate = (schema, options) => {
         if (options.sortBy) {
           options.sortBy.split(',').forEach((sort) => {
             const [key, order] = sort.split(':')
-            sortingCriteria[key] = order === 'asc' ? 1 : -1
+            if (key === 'id') {
+              sortingCriteria['_id'] = order === 'asc' ? 1 : -1
+            } else {
+              sortingCriteria[key] = order === 'asc' ? 1 : -1
+            }
           })
             sort = sortingCriteria
         }

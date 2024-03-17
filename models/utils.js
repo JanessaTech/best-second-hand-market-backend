@@ -4,7 +4,9 @@ const mongoose = require('mongoose')
 const getAttrs = (model) => {
     logger.debug('models.utils.getAttrs. Get attributes for model', model.modelName)
     let props = Object.keys(model.schema.paths)
-    props = props.filter((attr) => attr !== '__v').map((attr) => (attr === '_id') ? 'id' : attr) // by defaut, we added replace _id with in toJSON plugin
+    //props = props.filter((attr) => attr !== '__v').map((attr) => (attr === '_id') ? 'id' : attr)
+    props = props.filter((attr) => attr !== '__v')
+    props.push('id')  // by defaut, we added replace _id with in toJSON plugin
     logger.debug('models.utils.getAttrs. The attributes are:', props)
     return props  
 }
