@@ -119,7 +119,7 @@ class NFTcontroller {
      * @param {*} next 
      */
     async queryNFTsForUser(req, res, next) {
-        logger.info('NFTcontroller.queryNFTsForUser userId =', req.query.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
+        logger.info('NFTcontroller.queryNFTsForUser userId =', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
         const userId = req.params.userId
         const page = req.query.page
         const limit = req.query.limit
