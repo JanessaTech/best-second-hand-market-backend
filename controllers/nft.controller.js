@@ -89,13 +89,17 @@ class NFTcontroller {
      * The method is used when wallet is not connected
      */
     async queryNFTs(req, res, next) {
-        logger.info('NFTcontroller.queryNFTs. userId =', req.query.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
+        logger.info('NFTcontroller.queryNFTs. userId =', req.query.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy, ' chainId =', req.query.chainId, ' category =', req.query.category, ' prices =', req.query.prices)
         const userId = req.query.userId
         const page = req.query.page
         const limit = req.query.limit
         const sortBy = req.query.sortBy
+        const chainId = req.query.chainId
+        const category = req.query.category
+        const prices = req.query.prices
+        const query = httpHelper.getQueryObject(page, limit, sortBy, chainId, category, prices)
         try {
-            const nftsWithPagination = await nftService.queryNFTs(userId, page, limit, sortBy)
+            const nftsWithPagination = await nftService.queryNFTs(query)
             const nftIdsInCart = userId ? await cartService.queryByUser(userId): []
             const nftsWithCartInfo = nftsWithPagination.nfts.map((nft) => {
                 nft.inCart = userId ? nftIdsInCart.includes(nft.id) : undefined

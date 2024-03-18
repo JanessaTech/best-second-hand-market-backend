@@ -75,10 +75,10 @@ class NftService {
      * @param {*} userId 
      * @returns 
      */
-    async queryNFTs(userId, page, limit, sortBy) {
-        logger.info('NftService.queryNFTs. userId=', userId)
-        const filter = await chainParser.getFilterByChains({})
-        const options = {page: page, limit: limit, sortBy: sortBy}
+    async queryNFTs(query) {
+        logger.info('NftService.queryNFTs. query=', query)
+        const filter = await chainParser.getFilterByChains({...query})
+        const options = {page: query?.page, limit: query?.limit, sortBy: query?.sortBy}
         let nfts = []
         const resultByFilter = await nftDao.queryByPagination(filter, options)
         if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {

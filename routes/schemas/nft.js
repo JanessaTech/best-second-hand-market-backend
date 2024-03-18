@@ -94,7 +94,8 @@ const schemas = {
     queryNFTs: yup.object({
         query: yup.object({
             userId: yup.number().min(1, 'userId should be equal to or greater than 1!').integer('Please enter a valid integer for userId!').optional(),
-            category: yup.mixed().oneOf(Object.values(config.CATEGORIES).map((c) => c.description)).optional(),
+            category: yup.array().optional()
+                      .of(yup.string().oneOf(Object.values(config.CATEGORIES).map((c) => c.description))),
             chainId: yup.number().typeError('chainId should be an integer equal to or greater than 1!').min(1, "chainId should be an integer equal to or greater than 1!").integer('Please enter a valid integer for chainId!').optional(),
             prices: yup.string().optional()
                     .test({
