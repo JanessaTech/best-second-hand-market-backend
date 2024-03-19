@@ -17,7 +17,7 @@ const paginate = (schema, options) => {
    * @returns 
    */
     schema.statics.paginate = async function (filter, options) {
-        let sort = {createdAt: -1}
+        let sort = {updatedAt: -1}
         const sortingCriteria = {}
         if (options.sortBy) {
           options.sortBy.split(',').forEach((sort) => {

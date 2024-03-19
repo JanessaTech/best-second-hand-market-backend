@@ -1,5 +1,4 @@
 const logger = require("../helpers/logger")
-const comentDao = require('../db')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {CommentError} = require('../routes/comment/CommentErrors')
 const {commentDao} = require("../db")
@@ -9,7 +8,7 @@ class CommentService {
         logger.info('CommentService.create')
         const comment = {nftId: nftId, parentId: parentId, user: user, content: content}
         try {
-            const savedComment = await comentDao.create(comment)
+            const savedComment = await commentDao.create(comment)
             return savedComment
         } catch (e) {
             logger.error('Failed to create a new comment ', comment)
@@ -31,7 +30,7 @@ class CommentService {
         try {
             const filter = {nftId: nftId}
             const options = {page: page, limit: limit, sortBy: sortBy}
-            const resultByFilter = await comentDao.queryByPagination(filter, options)
+            const resultByFilter = await commentDao.queryByPagination(filter, options)
             return {comments: resultByFilter.results, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
         } catch (e) {
             const errMsg = messageHelper.getMessage('comment_query_by_nftId_failed', nftId, e)
