@@ -2,6 +2,7 @@ const logger = require("../helpers/logger");
 const {NftError} = require('../routes/nft/NftErrors')
 const nftDao = require('../dao/nft')
 const userDao = require('../dao/user')
+const likeDao = require('../dao/like')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {ethers} = require('ethers')
 const {convertToURL} = require('../helpers/utils')
@@ -95,6 +96,25 @@ class NftService {
             throw new NftError({key: 'user_not_found_id', params:[userId], code: 404})
         }
         const filter = await chainParser.getFilterByChains({owner: user.address, ...query})
+        const options = {page: query?.page, limit: query?.limit, sortBy: query?.sortBy}
+        let nfts = []
+        const resultByFilter = await nftDao.queryByPagination(filter, options)
+        if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
+            nfts = await this.#addExtraInfoToRawNFTs(resultByFilter.results)
+        }
+        logger.info(`${nfts.length} nfts are returned`)
+        return {nfts: nfts, page: resultByFilter.page, limit: resultByFilter.limit, totalPages: resultByFilter.totalPages, totalResults: resultByFilter.totalResults}
+    }
+
+    async queryFavoriteNFTsForUser(userId, query) {
+        logger.info('NftService.queryFavoriteNFTsForUser userId=', userId)
+        const user = await userDao.findOneByFilter({_id: userId})
+        if (!user) {
+            throw new NftError({key: 'user_not_found_id', params:[userId], code: 404})
+        }
+        const likes = await likeDao.queryAllByFilter({userId:userId})
+        const nftIds = likes.map((like) => like.nftId)
+        const filter = await chainParser.getFilterByChains({...query, nftIds: nftIds})
         const options = {page: query?.page, limit: query?.limit, sortBy: query?.sortBy}
         let nfts = []
         const resultByFilter = await nftDao.queryByPagination(filter, options)

@@ -29,6 +29,11 @@ class LikeDAO {
         return like
     }
 
+    async queryAllByFilter(filter) {
+        const likes = await Like.find(filter)
+        return likes
+    }
+
     async countLike(filter) {
         const count = await Like.countDocuments(filter)
         return count

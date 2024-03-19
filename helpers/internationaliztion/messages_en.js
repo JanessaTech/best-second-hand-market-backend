@@ -39,6 +39,7 @@ module.exports = {
     nft_query_all_failed: 'Failed to query all nfts with userId = {0} due to {1}',
     nft_find_fullby_id_failed: 'Failed to find full nft with id(_id) {0} due to {1}',
     nft_query_for_user_success: 'Query nfts under the user with userId being {0} successfully',
+    nft_query_favorite_for_user_success: 'Query the favorite nfts for the user with userId being {0} successfully',
     nft_updateMany_failed: 'Failed to execute updateMany due to {0}. filter={1}, update={2}, option={3}',
     nft_count_by_address_failed:'Failed to count nfts by address {0} due to {1}',
 
