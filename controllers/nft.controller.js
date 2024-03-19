@@ -97,7 +97,7 @@ class NFTcontroller {
         const chainId = req.query.chainId
         const category = req.query.category
         const prices = req.query.prices
-        const query = httpHelper.getQueryObject(page, limit, sortBy, chainId, category, prices)
+        const query = httpHelper.getQueryObject({page, limit, sortBy, chainId, category, prices})
         try {
             const nftsWithPagination = await nftService.queryNFTs(query)
             const nftIdsInCart = userId ? await cartService.queryByUser(userId): []
@@ -133,7 +133,7 @@ class NFTcontroller {
         const status = req.query.status
         const category = req.query.category
         const prices = req.query.prices
-        const query = httpHelper.getQueryObject(page, limit, sortBy, chainId, status, category, prices)
+        const query = httpHelper.getQueryObject({page, limit, sortBy, chainId, status, category, prices})
         try {
             const payload = await nftService.queryNFTsForUser(userId, query)
             sendSuccess(res, messageHelper.getMessage('nft_query_for_user_success', userId), payload)
