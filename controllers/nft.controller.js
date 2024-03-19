@@ -124,15 +124,16 @@ class NFTcontroller {
      * @param {*} next 
      */
     async queryNFTsForUser(req, res, next) {
-        logger.info('NFTcontroller.queryNFTsForUser userId =', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy, ' chainId =', req.query.chainId, ' category =', req.query.category, ' prices =', req.query.prices)
+        logger.info('NFTcontroller.queryNFTsForUser userId =', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy, ' chainId =', req.query.chainId, ' status =', req.query.status, ' category =', req.query.category, ' prices =', req.query.prices)
         const userId = Number(req.params.userId)
         const page = req.query.page 
         const limit = req.query.limit
         const sortBy = req.query.sortBy
         const chainId = req.query.chainId
+        const status = req.query.status
         const category = req.query.category
         const prices = req.query.prices
-        const query = httpHelper.getQueryObject(page, limit, sortBy, chainId, category, prices)
+        const query = httpHelper.getQueryObject(page, limit, sortBy, chainId, status, category, prices)
         try {
             const payload = await nftService.queryNFTsForUser(userId, query)
             sendSuccess(res, messageHelper.getMessage('nft_query_for_user_success', userId), payload)

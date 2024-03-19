@@ -31,6 +31,7 @@ const schemas = {
             category: yup.array().optional()
                       .of(yup.string().oneOf(Object.values(config.CATEGORIES).map((c) => c.description))),
             chainId: yup.number().typeError('chainId should be an integer equal to or greater than 1!').min(1, "chainId should be an integer equal to or greater than 1!").integer('Please enter a valid integer for chainId!').optional(),
+            status: yup.mixed().oneOf(Object.values(config.NFTSTATUS).map((s) => s.description)).optional(),
             prices: yup.string().optional()
                     .test({
                         name: 'validation for max and min',
