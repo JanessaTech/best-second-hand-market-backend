@@ -1,6 +1,6 @@
 const logger = require('../helpers/logger')
 const jwt = require("jsonwebtoken")
-const globalErrors = require('../helpers/errors/globalErrors')
+const globalErrors = require('../routes/base_errors/globalErrors')
 const httpHelper = require('../helpers/httpHelper')
 const accountService = require('../services/account.service')
 const config = require('../config/configuration')

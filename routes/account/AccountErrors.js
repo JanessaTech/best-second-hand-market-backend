@@ -1,4 +1,5 @@
-const BaseError = require('../../helpers/errors/baseError')
+const BaseError = require('../base_errors/baseError')
+
 class AccountError extends BaseError {
     constructor(props) {
         super(props);

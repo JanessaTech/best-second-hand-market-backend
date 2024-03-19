@@ -1,6 +1,6 @@
 const {SiweError} = require("./SiweError")
 const logger = require("../../helpers/logger")
-const {sendError} = require("../../helpers/reponseHandler")
+const {sendError} = require("../reponseHandler")
 
 module.exports = (router) => {
     function handleSiweError() {

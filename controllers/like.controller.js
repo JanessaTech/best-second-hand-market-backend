@@ -1,7 +1,7 @@
 const logger = require('../helpers/logger')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 const likeService = require('../services/like.service')
-const {sendSuccess} = require('../helpers/reponseHandler')
+const {sendSuccess} = require('../routes/reponseHandler')
 
 class LikeController {
     /**

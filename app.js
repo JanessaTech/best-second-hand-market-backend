@@ -8,7 +8,7 @@ const config = require('./config/configuration')
 app.use(express.static(`${config.staticDirs.profiles}/${config.env}`))
 
 const initRoutes = require('./routes')
-const initGlobalErrorHandlers = require('./helpers/errors/globleErrorHandlers')
+const initGlobalErrorHandlers = require('./routes/base_errors/globleErrorHandlers')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

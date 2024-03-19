@@ -1,5 +1,5 @@
 const accountService = require('../services/account.service')
-const {sendSuccess} = require('../helpers/reponseHandler')
+const {sendSuccess} = require('../routes/reponseHandler')
 const logger = require('../helpers/logger')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 const bcrypt = require('bcrypt')

@@ -1,4 +1,4 @@
-const messageHelper = require("./internationaliztion/messageHelper");
+const messageHelper = require("../helpers/internationaliztion/messageHelper");
 
 module.exports = class Response {
     static sendSuccess(res, message, data = undefined, code = 200) {

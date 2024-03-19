@@ -1,4 +1,4 @@
-const BaseError = require('../../helpers/errors/baseError')
+const BaseError = require('../base_errors/baseError')
 
 class NftError extends BaseError {
     constructor(props) {

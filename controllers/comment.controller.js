@@ -1,5 +1,5 @@
 const logger = require('../helpers/logger')
-const {sendSuccess} = require('../helpers/reponseHandler')
+const {sendSuccess} = require('../routes/reponseHandler')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 const commentService = require('../services/comment.service')
 const {CommentError} = require('../routes/comment/CommentErrors')

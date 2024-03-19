@@ -1,5 +1,5 @@
 const logger = require('../helpers/logger')
-const {sendSuccess} = require('../helpers/reponseHandler')
+const {sendSuccess} = require('../routes/reponseHandler')
 const nftService = require('../services/nft.service')
 const cartService = require('../services/cart.service')
 const likeService = require('../services/like.service')

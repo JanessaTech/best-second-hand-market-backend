@@ -1,6 +1,6 @@
 const {UserError} = require("./UserErrors");
 const logger = require("../../helpers/logger");
-const {sendError} = require("../../helpers/reponseHandler");
+const {sendError} = require("../reponseHandler");
 
 module.exports = (router) => {
     function handleUserError() {

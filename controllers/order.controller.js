@@ -1,6 +1,6 @@
 const logger = require('../helpers/logger')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
-const {sendSuccess} = require('../helpers/reponseHandler')
+const {sendSuccess} = require('../routes/reponseHandler')
 const orderService = require('../services/order.service')
 const nftService = require('../services/nft.service')
 const {OrderError} = require('../routes/order/OrderErrors')

@@ -1,5 +1,5 @@
 const logger = require("../../helpers/logger");
-const {sendError} = require("../../helpers/reponseHandler");
+const {sendError} = require("../reponseHandler");
 const { NftError } = require("./NftErrors")
 
 module.exports = (router) => {

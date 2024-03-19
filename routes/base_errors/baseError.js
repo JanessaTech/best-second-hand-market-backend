@@ -1,4 +1,4 @@
-const messageHelper = require("../internationaliztion/messageHelper")
+const messageHelper = require("../../helpers/internationaliztion/messageHelper")
 
 module.exports = class BaseError extends Error {
     /**

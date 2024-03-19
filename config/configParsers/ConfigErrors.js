@@ -1,4 +1,4 @@
-const BaseError = require('../../helpers/errors/baseError')
+const BaseError = require('../../routes/base_errors/baseError')
 
 class ConfigChainError extends BaseError {
     constructor(props) {
