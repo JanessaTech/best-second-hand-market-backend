@@ -1,8 +1,8 @@
 const logger = require("../helpers/logger")
-const comentDao = require('../dao/comment')
+const comentDao = require('../db')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {CommentError} = require('../routes/comment/CommentErrors')
-const commentDao = require("../dao/comment")
+const {commentDao} = require("../db")
 
 class CommentService {
     async create(nftId, parentId, user, content) {

@@ -13,3 +13,12 @@ db.on('error', (err) => {
     logger.error(`Database error: ${err}`);
     process.exit()
 });
+
+module.exports = {
+    cartDao: require('./dao/cart'),
+    commentDao: require('./dao/comment'),
+    likeDao: require('./dao/like'),
+    nftDao: require('./dao/nft'),
+    orderDao: require('./dao/order'),
+    userDao: require('./dao/user')
+}

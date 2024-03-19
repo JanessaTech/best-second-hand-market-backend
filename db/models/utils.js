@@ -1,4 +1,4 @@
-const logger = require('../helpers/logger')
+const logger = require('../../helpers/logger')
 const mongoose = require('mongoose')
 
 const getAttrs = (model) => {

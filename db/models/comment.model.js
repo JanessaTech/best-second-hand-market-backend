@@ -3,7 +3,7 @@ const { Schema } = mongoose
 const Counter = require('./counter.model')
 const {toJSON, paginate} = require('./plugins/')
 require('./user.model')
-const logger = require('../helpers/logger')
+const logger = require('../../helpers/logger')
 
 commentSchema = new Schema({
     _id: { type: Number,  min: 1 },

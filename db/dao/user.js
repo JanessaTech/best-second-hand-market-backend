@@ -1,6 +1,6 @@
 const {User} = require('../models')
-const logger = require('../helpers/logger')
-const {UserError} = require('../routes/user/UserErrors')
+const logger = require('../../helpers/logger')
+const {UserError} = require('../../routes/user/UserErrors')
 
 class UserDAO {
     async create(user) {

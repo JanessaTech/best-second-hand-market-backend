@@ -1,4 +1,4 @@
-const logger = require('../../helpers/logger')
+const logger = require('../../../helpers/logger')
 /**
  * The plugin used to query data by page
  * 

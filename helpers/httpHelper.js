@@ -1,4 +1,6 @@
 const urls = require('../config/urls')
+const config = require('../config/configuration')
+const logger = require('../helpers/logger')
 
 function getRoles(originalUrl) {
     for(let prop in urls) {
@@ -36,7 +38,15 @@ function getQueryObject({page, limit, sortBy, chainId, status, category, prices}
     return query
 }
 
+const convertToURL = (ipfs) => {
+    const cid = ipfs.substring('ipfs://'.length)
+    const [protocol, domain] = config.gateway.split('://')
+    const url = `${protocol}://${cid}.ipfs.${domain}`
+    logger.debug(`ipfs = ${ipfs} to url = ${url}`)
+    return url
+}
+
 
 module.exports = {
-    getRoles, getQueryObject
+    getRoles, getQueryObject, convertToURL
 }

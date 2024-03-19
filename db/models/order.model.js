@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
-const logger = require('../helpers/logger')
+const logger = require('../../helpers/logger')
 const Counter = require('./counter.model')
 const {toJSON, paginate} = require('./plugins/')
 require('./user.model')

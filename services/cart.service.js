@@ -1,5 +1,5 @@
 const logger = require("../helpers/logger")
-const cartDao = require('../dao/cart')
+const {cartDao} = require('../db')
 
 class CartService {
     async add(userId, nftId, session) {

@@ -1,7 +1,5 @@
 const logger = require("../helpers/logger")
-const orderDao = require('../dao/order')
-const nftDao = require('../dao/nft')
-const userDao = require('../dao/user')
+const {orderDao, nftDao, userDao} = require('../db')
 const {OrderError} = require('../routes/order/OrderErrors')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 

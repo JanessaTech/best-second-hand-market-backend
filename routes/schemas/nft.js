@@ -1,7 +1,7 @@
 const yup = require('yup')
 const config = require('../../config/configuration')
-const {getAttrs} = require('../../models/utils')
-const {NFT} = require('../../models')
+const {getAttrs} = require('../../db/models/utils')
+const {NFT} = require('../../db/models')
 
 const schemas = {
     mint: yup.object({

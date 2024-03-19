@@ -1,11 +1,9 @@
 const logger = require("../helpers/logger");
 const {NftError} = require('../routes/nft/NftErrors')
-const nftDao = require('../dao/nft')
-const userDao = require('../dao/user')
-const likeDao = require('../dao/like')
+const {nftDao, userDao, likeDao} = require('../db')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {ethers} = require('ethers')
-const {convertToURL} = require('../helpers/utils')
+const {convertToURL} = require('../helpers/httpHelper')
 const {chainParser} = require('../config/configParsers')
 const config = require('../config/configuration')
 

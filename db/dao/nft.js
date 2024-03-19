@@ -1,7 +1,7 @@
-const logger = require('../helpers/logger')
+const logger = require('../../helpers/logger')
 const {NFT} = require('../models')
-const {NftError} = require('../routes/nft/NftErrors')
-const {chainParser} = require('../config/configParsers')
+const {NftError} = require('../../routes/nft/NftErrors')
+const {chainParser} = require('../../config/configParsers')
 
 class NftDAO {
     async create(nft) {

@@ -1,7 +1,7 @@
-const logger = require('../helpers/logger')
+const logger = require('../../helpers/logger')
 const {Like} = require('../models')
-const {LikeError} = require('../routes/like/LikeErrors')
-const messageHelper = require('../helpers/internationaliztion/messageHelper')
+const {LikeError} = require('../../routes/like/LikeErrors')
+const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 
 class LikeDAO {
     async findOneAndUpdate(userId, nftId) {

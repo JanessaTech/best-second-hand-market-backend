@@ -1,6 +1,6 @@
-const logger = require('../helpers/logger')
+const logger = require('../../helpers/logger')
 const {Order} = require('../models')
-const {OrderError} = require('../routes/order/OrderErrors')
+const {OrderError} = require('../../routes/order/OrderErrors')
 
 class OrderDAO {
     async create(userId, nftId, from, price) {

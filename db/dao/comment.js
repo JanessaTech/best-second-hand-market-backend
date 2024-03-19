@@ -1,7 +1,7 @@
-const logger = require('../helpers/logger')
-const messageHelper = require('../helpers/internationaliztion/messageHelper')
+const logger = require('../../helpers/logger')
+const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const {Comment} = require('../models')
-const {CommentError} = require('../routes/comment/CommentErrors')
+const {CommentError} = require('../../routes/comment/CommentErrors')
 
 class CommentDAO {
     async create(comment) {

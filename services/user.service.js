@@ -1,6 +1,6 @@
 const logger = require("../helpers/logger");
 const {UserError} = require("../routes/user/UserErrors");
-const userDao = require('../dao/user');
+const {userDao} = require('../db');
 const messageHelper = require("../helpers/internationaliztion/messageHelper");
 
 class UserService {

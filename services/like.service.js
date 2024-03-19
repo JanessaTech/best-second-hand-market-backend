@@ -1,5 +1,5 @@
 const logger = require("../helpers/logger")
-const likeDao = require('../dao/like')
+const {likeDao} = require('../db')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {LikeError} = require('../routes/like/LikeErrors')
 
