@@ -1,6 +1,6 @@
 const yup = require('yup')
 const config = require('../../config/configuration')
-const {getAttrs} = require('../../db/models/utils')
+const {getAttrs} = require('../../db/utils')
 const {NFT} = require('../../db/models')
 
 const schemas = {

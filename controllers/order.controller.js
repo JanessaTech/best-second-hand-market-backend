@@ -2,8 +2,10 @@ const logger = require('../helpers/logger')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 const {sendSuccess} = require('../routes/reponseHandler')
 const orderService = require('../services/order.service')
+const fullOrderViewService = require('../services/fullorder.view.service')
 const nftService = require('../services/nft.service')
 const {OrderError} = require('../routes/order/OrderErrors')
+const httpHelper = require('../helpers/httpHelper')
 
 
 function merge(nfts, orders){
@@ -66,8 +68,9 @@ class OrderController {
         }
     }
 
+    /*
     async queryOrdersByUserId(req, res, next) {
-        logger.info('OrderController.createInBatch. userId=', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
+        logger.info('OrderController.queryOrdersByUserId. userId=', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
         const userId = req.params.userId
         const page = req.query.page
         const limit = req.query.limit
@@ -78,6 +81,24 @@ class OrderController {
             const nfts = await nftService.queryNFTsByIds(payload.orders.map((order) => order.nftId))
             payload.orders = merge(nfts, payload.orders)
             sendSuccess(res, messageHelper.getMessage('order_query_success',userId), payload)
+        } catch(e) {
+            next(e)
+        }
+    }*/
+    async queryOrdersByUserId(req, res, next) {
+        logger.info('OrderController.queryOrdersByUserId userId =', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy, ' chainId =', req.query.chainId, ' status =', req.query.status, ' category =', req.query.category, ' prices =', req.query.prices)
+        const userId = Number(req.params.userId)
+        const page = req.query.page 
+        const limit = req.query.limit
+        const sortBy = req.query.sortBy
+        const chainId = req.query.chainId
+        const status = req.query.status
+        const category = req.query.category
+        const prices = req.query.prices
+        const query = httpHelper.getQueryObject({page, limit, sortBy, chainId, status, category, prices})
+        try {
+            const payload = await fullOrderViewService.queryOrdersByUserId(userId, query)
+            sendSuccess(res, messageHelper.getMessage('order_query_success', userId), payload)
         } catch(e) {
             next(e)
         }

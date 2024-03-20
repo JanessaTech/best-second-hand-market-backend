@@ -3,16 +3,18 @@ const logger = require('../helpers/logger')
 const config = require('../config/configuration')
 
 mongoose.connect(`mongodb://${config.database.host}:27017/${config.database.dataBaseName}`)
-let db = mongoose.connection
-db.once('open', () => {
+let conn = mongoose.connection
+conn.once('open', () => {
     logger.info(`mongodb connection url: mongodb://${config.database.host}:27017/${config.database.dataBaseName}`)
-    logger.info('Connected to the database.');
+    logger.info('Connected to the database.')
 });
-db.on('error', (err) => {
+conn.on('error', (err) => {
     logger.debug(`mongodb connection url: mongodb://${config.database.host}:27017/${config.database.dataBaseName}`)
-    logger.error(`Database error: ${err}`);
+    logger.error(`Database error: ${err}`)
     process.exit()
 });
+
+
 
 module.exports = {
     cartDao: require('./dao/cart'),
@@ -20,5 +22,6 @@ module.exports = {
     likeDao: require('./dao/like'),
     nftDao: require('./dao/nft'),
     orderDao: require('./dao/order'),
-    userDao: require('./dao/user')
+    userDao: require('./dao/user'),
+    fullOrderViewDao: require('./dao/fullOrderView')
 }
