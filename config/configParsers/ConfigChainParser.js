@@ -7,6 +7,7 @@ const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const {ConfigChainError} = require('./ConfigErrors')
 
 class ConfigChainParser {
+
     #chains
 
     /**
@@ -70,22 +71,50 @@ class ConfigChainParser {
         return chain
     }
 
-    /**
-     * Get the Contract object by chain object and the smart contract address
-     * 
-     * @param {Object} [chain] - The Chain object to get contract instance from by contract address
-     * @param {string} [address] - The smart contract address
-     * @returns {Object} - The Contract object representing the smart contract instance which we will use to interact with
-     */
-    getContractInstance(chain, address) {
-        logger.debug('address = ', address, 'typeof address = ', typeof address)
+    getContractInstance(chainId, address) {
+        logger.debug('ConfigChainParser.getContractInstance. chainId = ', chainId, 'address = ', address)
+
+        const chain = this.#chains.get(chainId)
+        if (!chain) {
+            const errMsg = messageHelper.getMessage('config_chain_not_found', chainId)
+            logger.error(errMsg)
+            throw new ConfigChainError({message: errMsg, code: 400})
+        }
+
         const contractInstance = chain.getContractInstance(address)
         if(!contractInstance) {
             const errMsg = messageHelper.getMessage('config_contractInst_not_found', chain.chainId, address)
             logger.error(errMsg)
             throw new ConfigChainError({message: errMsg, code: 400})
         }
+
         return contractInstance 
+    }
+
+    async getOwner(chainId, address, tokenId) {
+        logger.debug('ConfigChainParser.getOwner. chainId =', chainId, ' address =', address, ' tokenId =', tokenId)
+
+        const contractInstance = this.getContractInstance(chainId, address)
+        
+        const owner = await contractInstance.getOwnerOfToken(tokenId)
+        logger.debug('The owner of tokenId ', tokenId, ' is :', owner)
+        if (owner === ethers.ZeroAddress) {
+            throw new ConfigChainError({key: 'config_contract_token_not_found', params:[tokenId, chain.chainId, address], code:404})
+        }
+        return owner
+    }
+
+    async getNftUri(chainId, address, tokenId) {
+        logger.debug('ConfigChainParser.getNftUri. chainId =', chainId, ' address =', address, ' tokenId =', tokenId)
+
+        const contractInstance = this.getContractInstance(chainId, address)
+
+        const uri = await contractInstance.getUri(tokenId)
+        logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
+        if (!uri) {
+            throw new ConfigChainError({key: 'config_contract_invalid_uri', params:[tokenId, chain.chainId, address], code:400})
+        }
+        return uri
     }
 
     /**
@@ -96,8 +125,7 @@ class ConfigChainParser {
      * @returns {string} - tokenStandard for the smart contract
      */
     getTokenStandard(chainId, address) {
-        const chain = this.getChain(chainId)
-        const contractInstance = this.getContractInstance(chain, address)
+        const contractInstance = this.getContractInstance(chainId, address)
         const tokenStandard = contractInstance.tokenStandard
         if (!tokenStandard) {
             const errMsg = messageHelper.getMessage('config_tokenStandard_not_found', chain.chainId, address)

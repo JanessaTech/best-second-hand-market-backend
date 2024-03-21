@@ -33,8 +33,6 @@ module.exports = {
     nft_not_found: 'The nft with id(_id) {0} is not found',
     nft_by_id_success: 'The nft with id(_id) {0} is found',
     nft_by_id_failed: 'Failed to find the nft with id(_id) {0} (userId = {1}) due to {2}',
-    nft_failed_get_owner: 'Failed to get NFT owner by token id {0} for the combination of chainId {1} and address {2} due to {3}',
-    nft_failed_get_uri: 'Failed to get NFT uri by token id {0} for the combination of chainId {1} and address {2} due to {3}',
     nft_query_all_success: 'Query all nfts by userId {0} successfully',
     nft_query_all_failed: 'Failed to query all nfts with userId = {0} due to {1}',
     nft_find_fullby_id_failed: 'Failed to find full nft with id(_id) {0} due to {1}',
@@ -47,11 +45,11 @@ module.exports = {
     config_chain_not_found: 'The chain with chainId {0} is not found. Please check the correctness of config.chains in config.common.js',
     config_contractInst_not_found: 'The corresponding contract instance is not found by chainId {0} and address {1}. Please check the correctness of config.chains in config.common.js',
     config_tokenStandard_not_found: 'The tokenStandard is not found by chainId {0} and address {1}. Please check the correctness of config.chains in config.common.js',
+    config_contract_token_not_found: 'Token {0} is not found in the contract under the combination of chainId {1} and address {2}',
+    config_contract_invalid_uri: 'Invalid uri for token {0} in the contract under the combination of chainId {1} and address {2}',
 
     //contracts
     contract_get_tokenIds: 'Get getAllTokenIds under the combination of chainId {0} and address {1}',
-    contract_token_not_found: 'Token {0} is not found in the contract under the combination of chainId {1} and address {2}',
-    contract_invalid_uri: 'Invalid uri for token {0} in the contract under the combination of chainId {1} and address {2}',
     contract_read_failed: 'Failed to read contract due to {0}',
     contract_get_tokenIds_byAddress: 'Get tokenIds for owner {0} under the combination of chainId {1} and address {2}',
     

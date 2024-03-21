@@ -2,7 +2,6 @@ const logger = require("../helpers/logger");
 const {NftError} = require('../routes/nft/NftErrors')
 const {nftDao, userDao, likeDao} = require('../db')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
-const {ethers} = require('ethers')
 const {convertToURL} = require('../helpers/httpHelper')
 const {chainParser} = require('../config/configParsers')
 const config = require('../config/configuration')
@@ -12,8 +11,7 @@ class NftService {
     async mint(nft) {
         logger.info('NftService.mint')
         try {
-            const chain = chainParser.getChain(nft.chainId)
-            await this.#getOwner(chain, nft)  // check if the owner of the token is a registered user
+            await this.#checkOwnerValid(nft.chainId, nft.address, nft.tokenId)
             const byTokenId = await nftDao.findOneByFilter({chainId:nft.chainId, address: nft.address, tokenId:nft.tokenId})
             if (byTokenId) {
                 throw new NftError({key: 'nft_mint_duplication', params:[nft.chainId, nft.address, nft.tokenId], code: 400})
@@ -160,13 +158,19 @@ class NftService {
 
     async #addExtraInfo(nft) {
         const chain = chainParser.getChain(nft.chainId)
-        const owner = await this.#getOwner(chain, nft)
-        const uri = await this.#getNftUri(chain, nft.address, nft.tokenId)
         const chainName = chain.chainName
-        const tokenStandard = chain.getContractInstance(nft.address)?.tokenStandard
+        const owner = await chainParser.getOwner(nft.chainId, nft.address, nft.tokenId)
+        const user = await userDao.findOneByFilter({address: owner})
+        if (!user) {
+            const errMsg = messageHelper.getMessage('user_not_found_address', owner)
+            logger.error(errMsg) // code shouldn't hit here. Fix it if that happened
+            throw new NftError({message: errMsg, code: 400})
+        }
+        const uri = await chainParser.getNftUri(nft.chainId, nft.address, nft.tokenId)
+        const tokenStandard = chainParser.getTokenStandard(nft.chainId, nft.address)
 
         let jsonNFT = nft.toJSON()
-        jsonNFT.owner = owner
+        jsonNFT.owner = user.toJSON()
         jsonNFT.uri = uri
         jsonNFT.url = convertToURL(uri)
         jsonNFT.chainName = chainName
@@ -175,46 +179,12 @@ class NftService {
         return jsonNFT
     }
 
-    async #getOwner(chain, nft) {
-        const owner = await this.#getNftOwner(chain, nft.address, nft.tokenId)
+    async #checkOwnerValid(chainId, address, tokenId) {
+        const owner = await chainParser.getOwner(chainId, address, tokenId)
         const user = await userDao.findOneByFilter({address: owner})
         if (!user) {
             const errMsg = messageHelper.getMessage('user_not_found_address', owner)
             logger.error(errMsg) // code shouldn't hit here. Fix it if that happened
-            throw new NftError({message: errMsg, code: 400})
-
-        }
-        return user.toJSON()
-    }
-
-    async #getNftOwner(chain, address, tokenId) {
-        try {
-            const contractInstance = chainParser.getContractInstance(chain, address)
-            const owner = await contractInstance.getOwnerOfToken(tokenId)
-            logger.debug('The owner of tokenId ', tokenId, ' is :', owner)
-            if (owner === ethers.ZeroAddress) {
-                throw new NftError({key: 'contract_token_not_found', params:[tokenId, chain.chainId, address], code:404})
-            }
-            return owner
-        } catch (e) {
-            const errMsg = messageHelper.getMessage('nft_failed_get_owner', tokenId, chain.chainId, address, e)
-            logger.error(errMsg)
-            throw new NftError({message: errMsg, code: 400})
-        }
-    }
-
-    async #getNftUri(chain, address, tokenId) {
-        try {
-            const contractInstance = chainParser.getContractInstance(chain, address)
-            const uri = await contractInstance.getUri(tokenId)
-            logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
-            if (!uri) {
-                throw new NftError({key: 'contract_invalid_uri', params:[tokenId, chain.chainId, address], code:400})
-            }
-            return uri
-        } catch (e) {
-            const errMsg = messageHelper.getMessage('nft_failed_get_uri', tokenId, chain.chainId, address, e)
-            logger.error(errMsg)
             throw new NftError({message: errMsg, code: 400})
         }
     }
