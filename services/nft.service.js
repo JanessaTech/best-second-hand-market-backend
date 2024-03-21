@@ -63,7 +63,7 @@ class NftService {
             return fullNFT
         } catch (e) {
             logger.error('Failed to find a full nft by id ', id)
-            throw new NftError({key: 'nft_find_fullby_id_failed', params:[id, e]})
+            throw new NftError({key: 'nft_addextra_failed', params:[id, e]})
         }
     }
 
@@ -150,7 +150,7 @@ class NftService {
                 const fullNft = await this.#addExtraInfo(rawNft)
                 nfts.push(fullNft)
             } catch (e) {
-                logger.error(messageHelper.getMessage('nft_find_fullby_id_failed', rawNft._id, e)) // the code should not hit here. If that happened, fix it to make it not happen again
+                logger.error(messageHelper.getMessage('nft_addextra_failed', rawNft._id, e)) // the code should not hit here. If that happened, fix it to make it not happen again
             }
         }
         return nfts

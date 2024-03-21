@@ -35,7 +35,7 @@ module.exports = {
     nft_by_id_failed: 'Failed to find the nft with id(_id) {0} (userId = {1}) due to {2}',
     nft_query_all_success: 'Query all nfts by userId {0} successfully',
     nft_query_all_failed: 'Failed to query all nfts with userId = {0} due to {1}',
-    nft_find_fullby_id_failed: 'Failed to find full nft with id(_id) {0} due to {1}',
+    nft_addextra_failed: 'Failed to add extra contract infor for nft with id(_id) {0} due to {1}',
     nft_query_for_user_success: 'Query nfts under the user with userId being {0} successfully',
     nft_query_favorite_for_user_success: 'Query the favorite nfts for the user with userId being {0} successfully',
     nft_updateMany_failed: 'Failed to execute updateMany due to {0}. filter={1}, update={2}, option={3}',
@@ -99,6 +99,7 @@ module.exports = {
     order_createInBatch_invalid_arrays:'nftIds and froms shoud have the same length',
     order_query_by_userId_failed: 'Failed to query orders by userId {0} due to {1}',
     order_count_by_userId_failed: 'Failed to count orders by userId {0} due to {1}',
+    order_addextra_failed: 'Failed to add extra contract info for order {0} due to {1}',
     
     // siwe
     siwe_none: 'Generate a random none successfully',
