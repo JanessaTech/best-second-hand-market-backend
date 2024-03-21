@@ -2,8 +2,7 @@ const logger = require('../helpers/logger')
 const messageHelper = require('../helpers/internationaliztion/messageHelper')
 const {sendSuccess} = require('../routes/reponseHandler')
 const orderService = require('../services/order.service')
-const fullOrderViewService = require('../services/fullorder.view.service')
-const nftService = require('../services/nft.service')
+const orderViewService = require('../services/order.view.service')
 const {OrderError} = require('../routes/order/OrderErrors')
 const httpHelper = require('../helpers/httpHelper')
 
@@ -97,7 +96,7 @@ class OrderController {
         const prices = req.query.prices
         const query = httpHelper.getQueryObject({page, limit, sortBy, chainId, status, category, prices})
         try {
-            const payload = await fullOrderViewService.queryOrdersByUserId(userId, query)
+            const payload = await orderViewService.queryOrdersByUserId(userId, query)
             sendSuccess(res, messageHelper.getMessage('order_query_success', userId), payload)
         } catch(e) {
             next(e)

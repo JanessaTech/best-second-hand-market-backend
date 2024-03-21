@@ -1,5 +1,5 @@
-const FullOrderView = require('./fullorder.view.model')
+const OrderView = require('./order.view.model')
 
 module.exports = {
-    FullOrderView
+    OrderView
 }

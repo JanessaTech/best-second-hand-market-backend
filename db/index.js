@@ -14,8 +14,6 @@ conn.on('error', (err) => {
     process.exit()
 });
 
-
-
 module.exports = {
     cartDao: require('./dao/cart'),
     commentDao: require('./dao/comment'),
@@ -23,5 +21,5 @@ module.exports = {
     nftDao: require('./dao/nft'),
     orderDao: require('./dao/order'),
     userDao: require('./dao/user'),
-    fullOrderViewDao: require('./dao/fullOrderView')
+    orderViewDao: require('./dao/orderView')
 }

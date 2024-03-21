@@ -1,5 +1,5 @@
 const yup = require('yup')
-const {FullOrderView} = require('../../db/views')
+const {OrderView} = require('../../db/views')
 const config = require('../../config/configuration')
 const {getAttrs} = require('../../db/utils')
 
@@ -66,7 +66,7 @@ const schemas = {
             sortBy: yup.string().optional()
                     .test({
                         name: 'validation for sortBy',
-                        message: `sortBy is a comma delimited list in which each item should follow the format: attr:(asc|desc). attr is one of (${getAttrs(FullOrderView)}). eg: ${getAttrs(FullOrderView)[0]}:asc,${getAttrs(FullOrderView)[1]}:desc`,
+                        message: `sortBy is a comma delimited list in which each item should follow the format: attr:(asc|desc). attr is one of (${getAttrs(OrderView)}). eg: ${getAttrs(OrderView)[0]}:asc,${getAttrs(OrderView)[1]}:desc`,
                         test: sortBy => {
                             if (sortBy) {
                                 const sortOptions = sortBy.split(',')
@@ -75,7 +75,7 @@ const schemas = {
                                     if (!order) {
                                         return false
                                     }
-                                    if (!getAttrs(FullOrderView).includes(key)) {
+                                    if (!getAttrs(OrderView).includes(key)) {
                                         return false
                                     }
                                     if (!['asc', 'desc'].includes(order)) {

@@ -6,12 +6,12 @@ class OrderError extends BaseError {
     }
 }
 
-class FullOrderViewError extends BaseError {
+class OrderViewError extends BaseError {
     constructor(props) {
         super(props);
     }
 }
 
 module.exports = {
-    OrderError, FullOrderViewError
+    OrderError, OrderViewError
 }

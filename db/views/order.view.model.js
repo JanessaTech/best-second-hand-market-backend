@@ -3,7 +3,7 @@ const { Schema } = mongoose
 const {toJSON, paginate} = require('../models/plugins')
 require('../models/user.model')
 
-const fullOrderViewSchema = new Schema({
+const orderViewSchema = new Schema({
     _id: Number,
     user: {
         type: Number,
@@ -21,11 +21,11 @@ const fullOrderViewSchema = new Schema({
     description: String,
     status: String,
     view: Number
-}, { collection: 'full_order_view', versionKey: false })
+}, { collection: 'orders_view', versionKey: false })
 
-fullOrderViewSchema.plugin(toJSON)
-fullOrderViewSchema.plugin(paginate)
+orderViewSchema.plugin(toJSON)
+orderViewSchema.plugin(paginate)
 
-const fullOrderView = mongoose.model('fullOrderView', fullOrderViewSchema)
+const orderView = mongoose.model('orderView', orderViewSchema)
 
-module.exports = fullOrderView
+module.exports = orderView

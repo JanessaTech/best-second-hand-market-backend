@@ -1,6 +1,6 @@
 
 //in commandline
-db.createView("full_order_view", "orders",[
+db.createView("orders_view", "orders",[
 	{
 		$lookup: 
 			{
