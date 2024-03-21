@@ -135,7 +135,7 @@ class ConfigChainParser {
         return tokenStandard
     }
 
-    async getFilterByChains({owner, chainId, category, prices, status, nftIds}) {
+    async getFilterByChains({owner, chainId, category, prices, status, title, nftIds}) {
         let merged = []
         for (const [_chainId, chain] of this.#chains.entries()) {
             if (chainId && chainId !== _chainId) continue
@@ -166,6 +166,9 @@ class ConfigChainParser {
                                 const [, min] = minPart.split(':')
                                 const [, max] = maxPart.split(':')
                                 ands.push({price: {$gte : Number(min), $lte : Number(max)}})
+                            }
+                            if (title) {
+                                ands.push({title: {$regex: `.*${title}.*`, $options: 'i'}})
                             }
                             merged.push({$and: ands})
                         }

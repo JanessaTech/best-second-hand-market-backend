@@ -97,7 +97,8 @@ class NFTcontroller {
         const chainId = req.query.chainId
         const category = req.query.category
         const prices = req.query.prices
-        const query = httpHelper.getQueryObject({page, limit, sortBy, chainId, category, prices})
+        const title = req.query.title
+        const query = httpHelper.getQueryObject({page, limit, sortBy, chainId, category, prices, title})
         try {
             const nftsWithPagination = await nftService.queryNFTs(query)
             const nftIdsInCart = userId ? await cartService.queryByUser(userId): []

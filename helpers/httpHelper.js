@@ -12,7 +12,7 @@ function getRoles(originalUrl) {
     return []
 }
 
-function getQueryObject({page, limit, sortBy, chainId, status, category, prices}) {
+function getQueryObject({page, limit, sortBy, chainId, status, category, prices, title}) {
     const query = {}
     if (page) {
         query.page = Number(page)
@@ -34,6 +34,9 @@ function getQueryObject({page, limit, sortBy, chainId, status, category, prices}
     }
     if (prices) {
         query.prices = prices
+    }
+    if (title) {
+        query.title = title 
     }
     return query
 }

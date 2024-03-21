@@ -19,8 +19,7 @@ const orderViewSchema = new Schema({
     chainId: Number,
     address: String,
     description: String,
-    status: String,
-    view: Number
+    status: String
 }, { collection: 'orders_view', versionKey: false })
 
 orderViewSchema.plugin(toJSON)

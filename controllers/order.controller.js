@@ -67,23 +67,6 @@ class OrderController {
         }
     }
 
-    /*
-    async queryOrdersByUserId(req, res, next) {
-        logger.info('OrderController.queryOrdersByUserId. userId=', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy)
-        const userId = req.params.userId
-        const page = req.query.page
-        const limit = req.query.limit
-        const sortBy = req.query.sortBy
-
-        try {
-            let payload = await orderService.queryOrdersByUserId(userId, page, limit, sortBy)
-            const nfts = await nftService.queryNFTsByIds(payload.orders.map((order) => order.nftId))
-            payload.orders = merge(nfts, payload.orders)
-            sendSuccess(res, messageHelper.getMessage('order_query_success',userId), payload)
-        } catch(e) {
-            next(e)
-        }
-    }*/
     async queryOrdersByUserId(req, res, next) {
         logger.info('OrderController.queryOrdersByUserId userId =', req.params.userId, ' page = ', req.query.page, ' limit = ', req.query.limit, ' sortBy = ', req.query.sortBy, ' chainId =', req.query.chainId, ' status =', req.query.status, ' category =', req.query.category, ' prices =', req.query.prices)
         const userId = Number(req.params.userId)

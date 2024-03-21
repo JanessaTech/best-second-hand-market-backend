@@ -26,8 +26,7 @@ db.createView("orders_view", "orders",[
 				chainId: "$nft_details.chainId",
 				address: "$nft_details.address",
 				description: "$nft_details.description",
-				status: "$nft_details.status",
-				view: "$nft_details.view"
+				status: "$nft_details.status"
 			}
 	}
 ])
