@@ -128,7 +128,7 @@ class ConfigChainParser {
         const contractInstance = this.getContractInstance(chainId, address)
         const tokenStandard = contractInstance.tokenStandard
         if (!tokenStandard) {
-            const errMsg = messageHelper.getMessage('config_tokenStandard_not_found', chain.chainId, address)
+            const errMsg = messageHelper.getMessage('config_tokenStandard_not_found', chainId, address)
             logger.error(errMsg)
             throw new ConfigChainError({message: errMsg, code: 400})
         }
