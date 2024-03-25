@@ -5,7 +5,12 @@ class ConfigChainError extends BaseError {
         super(props);
     }
 }
+class ConfigContractError extends BaseError {
+    constructor(props) {
+        super(props);
+    }
+}
 
 module.exports = {
-    ConfigChainError
+    ConfigChainError, ConfigContractError
 }

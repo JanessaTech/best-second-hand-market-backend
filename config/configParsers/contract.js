@@ -1,6 +1,7 @@
 const logger = require('../../helpers/logger')
 const {ethers} = require('ethers')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
+const {ConfigContractError} = require('./ConfigErrors')
 
 module.exports = class Contract {
     #chainId
@@ -62,24 +63,34 @@ module.exports = class Contract {
     }
 
     async getOwnerOfToken(tokenId) {
+        logger.debug(messageHelper.getMessage('config_contract_get_owner', tokenId, this.#chainId, this.#address))
         const owner = await this.#instance.ownerOfToken(tokenId)
+        logger.debug('The owner of tokenId ', tokenId, ' is :', owner)
+        if (owner === ethers.ZeroAddress) {
+            throw new ConfigContractError({key: 'config_contract_token_not_found', params:[tokenId, this.#chainId, this.#address], code:404})
+        }
         return owner
     }
 
     async getUri(tokenId) {
+        logger.debug(messageHelper.getMessage('config_contract_get_uri', tokenId, this.#chainId, this.#address))
         const uri = await this.#instance.getUri(tokenId)
+        logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
+        if (!uri) {
+            throw new ConfigContractError({key: 'config_contract_invalid_uri', params:[tokenId, this.#chainId, this.#address], code:400})
+        }
         return uri
     }
 
     async getAllTokenIds() {
-        logger.debug(messageHelper.getMessage('contract_get_tokenIds', this.#chainId, this.#address))
+        logger.debug(messageHelper.getMessage('contract_contract_get_alltokenIds', this.#chainId, this.#address))
         const tokenIds = await this.#instance.getAllTokenIds()
         logger.debug('tokenIds:', tokenIds)
         return tokenIds.map((t) => Number(t))
     }
 
     async tokensOfAddress(address) {
-        logger.debug(messageHelper.getMessage('contract_get_tokenIds_byAddress', address, this.#chainId, this.#address))
+        logger.debug(messageHelper.getMessage('contract_contract_get_tokenIds_byAddress', address, this.#chainId, this.#address))
         const tokenIds = await this.#instance.tokensOfAddress(address)
         logger.debug('tokenIds:', tokenIds)
         return tokenIds.map((t) => Number(t))

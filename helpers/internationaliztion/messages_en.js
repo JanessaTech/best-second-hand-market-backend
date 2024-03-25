@@ -45,13 +45,24 @@ module.exports = {
     config_chain_not_found: 'The chain with chainId {0} is not found. Please check the correctness of config.chains in config.common.js',
     config_contractInst_not_found: 'The corresponding contract instance is not found by chainId {0} and address {1}. Please check the correctness of config.chains in config.common.js',
     config_tokenStandard_not_found: 'The tokenStandard is not found by chainId {0} and address {1}. Please check the correctness of config.chains in config.common.js',
-    config_contract_token_not_found: 'Token {0} is not found in the contract under the combination of chainId {1} and address {2}',
-    config_contract_invalid_uri: 'Invalid uri for token {0} in the contract under the combination of chainId {1} and address {2}',
+    config_chain_warmup:'All chains took {0} ms to warmup in total',
 
     //contracts
-    contract_get_tokenIds: 'Get getAllTokenIds under the combination of chainId {0} and address {1}',
+    config_contract_get_owner: 'Get owner for tokenId {0} under chainId {1} and address {2}',
+    config_contract_token_not_found: 'Token {0} is not found in the contract for chainId {1} and address {2}',
+    config_contract_get_uri: 'Get uri for tokenId {0} under chainId {1} and address {2}',
+    config_contract_invalid_uri: 'Invalid uri for token {0} in the contract for chainId {1} and address {2}',
+    contract_contract_get_alltokenIds: 'Get getAllTokenIds for chainId {0} and address {1}',
+    contract_contract_get_tokenIds_byAddress: 'Get tokenIds for owner {0} for chainId {1} and address {2}',
     contract_read_failed: 'Failed to read contract due to {0}',
-    contract_get_tokenIds_byAddress: 'Get tokenIds for owner {0} under the combination of chainId {1} and address {2}',
+    
+    // contract cache
+    config_contract_cache_owner: 'Cache owner {0} for tokenId {1} under chainId {2} and address {3}',
+    config_contract_cache_uri: 'Cache uri {0} for tokenId {1} under chainId {2} and address {3}',
+    config_contract_cache_alltokenIds: 'Cache all tokenIds {0} for chainId {1} and address {2}',
+    config_contract_cache_tokens: 'Cache tokens {0} for owner {1} under chainId {2} and address {3}',
+    config_contract_cache_warmup: 'Cacheable contract under chainId {0} and address {1} took {2} ms to warm up',
+
     
     //cart
     cart_add_success: 'Add nftId {0} for userId {1} successfully',

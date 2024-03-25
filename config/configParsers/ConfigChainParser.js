@@ -2,7 +2,7 @@ const config = require('../configuration')
 const logger = require('../../helpers/logger')
 const {ethers} = require('ethers')
 const Chain = require('./chain')
-const Contract = require('./contract')
+const CacheableContract = require('./CacheableContract')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const {ConfigChainError} = require('./ConfigErrors')
 
@@ -45,13 +45,26 @@ class ConfigChainParser {
                 const address = c.address
                 const abi = c.abi
                 const tokenStandard = c.tokenStandard
-                const contract = new Contract(chainId, address, abi, provider, tokenStandard)
-                logger.debug('Created a contractInstance by address', address, 'abi:', abi)
+                const contract = new CacheableContract(chainId, address, abi, provider, tokenStandard)
+                logger.debug('Created a cacheableContract by address', address, 'abi:', abi)
                 chain.addContractInstance(address, contract)
             })
             chains.set(chainId, chain)
         })
         this.#chains = chains
+    }
+
+    async warmUp() {  // warmup
+        const startTime = performance.now()
+        for (const [chainId, chain] of this.#chains) {
+            for (const [address, instance] of chain.getAllContractInstances()) {
+                logger.info(`Start warmup cacheable contract for chainId ${chainId} and address ${address}`)
+                await instance.warmUp()
+                logger.info(`Finish warmup cacheable contract for chainId ${chainId} and address ${address}`)
+            }
+        }
+        const endTime = performance.now()
+        logger.info(messageHelper.getMessage('config_chain_warmup', endTime - startTime))
     }
 
     /**
@@ -95,12 +108,8 @@ class ConfigChainParser {
         logger.debug('ConfigChainParser.getOwner. chainId =', chainId, ' address =', address, ' tokenId =', tokenId)
 
         const contractInstance = this.getContractInstance(chainId, address)
-        
         const owner = await contractInstance.getOwnerOfToken(tokenId)
-        logger.debug('The owner of tokenId ', tokenId, ' is :', owner)
-        if (owner === ethers.ZeroAddress) {
-            throw new ConfigChainError({key: 'config_contract_token_not_found', params:[tokenId, chain.chainId, address], code:404})
-        }
+        
         return owner
     }
 
@@ -112,7 +121,7 @@ class ConfigChainParser {
         const uri = await contractInstance.getUri(tokenId)
         logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
         if (!uri) {
-            throw new ConfigChainError({key: 'config_contract_invalid_uri', params:[tokenId, chain.chainId, address], code:400})
+            throw new ConfigChainError({key: 'config_contract_invalid_uri', params:[tokenId, chainId, address], code:400})
         }
         return uri
     }
@@ -186,4 +195,11 @@ class ConfigChainParser {
 
 logger.debug(`config.env: ${config.env}`)
 const chainParser = new ConfigChainParser(config.env)
+//start warmup
+chainParser.warmUp(() => {
+    logger.info('All warmups are done')
+})
+.catch((err) => {
+    logger.debug('Failed to warmup due to ', err)
+})
 module.exports = chainParser
