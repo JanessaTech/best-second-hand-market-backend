@@ -121,6 +121,9 @@ module.exports = {
     redis_delete_failed: 'Failed to delete item for key {0} and field {1} due to {2}',
     redis_get_failed: 'Failed to get item for key {0} and field {1} due to {2}',
 
+    //listeners
+    listener_mint_cache_failed: 'Failed to update cache when mint: to={0}, tokenId={1}, uri={2}, chainId={3}, address={4}, err={5}',
+
     // global
     UnSupportedAuthError : 'We only support Bearer token in Authorization',
     UnauthorizedError : 'You do not have enough permission(s) to visit {0}',

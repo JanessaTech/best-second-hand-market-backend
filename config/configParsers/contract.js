@@ -2,6 +2,7 @@ const logger = require('../../helpers/logger')
 const {ethers} = require('ethers')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const {ConfigContractError} = require('./ConfigErrors')
+const {hSet, hGet, hDel} = require('../../infra/redis/ops')
 
 module.exports = class Contract {
     #chainId
@@ -18,24 +19,14 @@ module.exports = class Contract {
         this.#provider = provider
         this.#tokenStandard = tokenStandard
         this.#instance = new ethers.Contract(address, abi, provider)
-        this.#instance.on('mint_tracer', (to, uri) => {
-            logger.debug('Received from mint_tracer event: ', 'to =', to, ' uri =', uri)
-        })
-        this.#instance.on('mintBatch_tracer', (to, uris) => {
-            logger.debug('Received from mintBatch_tracer event: ', 'to =', to, ' uri =', uris)
-        })
-        this.#instance.on('buy_tracer', (from, to, ids) => {
-            logger.debug('Received from buy_tracer event: ', 'from =', from, 'to =', to, ' ids =', ids)
-        })
-        this.#instance.on('doSafeBuy_tracer', (from, to, ids) => {
-            logger.debug('Received from doSafeBuy_tracer event: ', 'from =', from, 'to =', to, ' ids =', ids)
-        })
-        this.#instance.on('buyBatch_tracer', (froms, to, idss) => {
-            logger.debug('Received from buyBatch_tracer event: ', 'from =', froms, 'to =', to, ' idss =', idss)
-        })
-        this.#instance.on('doSafeBuyBatch_tracer', (froms, to, idss) => {
-            logger.debug('Received from doSafeBuyBatch_tracer event: ', 'from =', froms, 'to =', to, ' idss =', idss)
-        })
+
+        // add some event listeners
+        this.#instance.on('mint_tracer', async (to, tokenId, uri) => await this.mintListener(to, tokenId, uri, chainId, address))
+        this.#instance.on('mintBatch_tracer', async (to, tokenIds, uris) => await this.mintBatchListener(to, tokenIds, uris, chainId, address))
+        this.#instance.on('buy_tracer', async (from, to, ids) => await this.buyListener(from, to, ids, chainId, address))
+        this.#instance.on('doSafeBuy_tracer', async (from, to, ids) => await this.doSafeBuyListener(from, to, ids, chainId, address))
+        this.#instance.on('buyBatch_tracer', async (froms, to, idss) => await this.buyBatchListener(froms, to, idss, chainId, address))
+        this.#instance.on('doSafeBuyBatch_tracer', async (froms, to, idss) => await this.doSafeBuyBatchListener(froms, to, idss, chainId, address))
     }
 
     get chainId() {
@@ -60,6 +51,99 @@ module.exports = class Contract {
 
     get instance() {
         return this.#instance
+    }
+
+    async mintListener(to, tokenId, uri, chainId, address) {
+        logger.debug(`Received from mint_tracer event: to =${to}  tokenId =${tokenId} uri =${uri} under chainId ${chainId} and address ${address}`)
+        //update db
+
+
+        //update cache
+        try {
+            const allTokenIds = await this.getAllTokenIds()
+            await hSet(`${chainId}:${address}`, 'all_tokenids', allTokenIds.join(','))
+            await hSet(`${chainId}:${address}`, `owner_${tokenId}`, to)
+            await hSet(`${chainId}:${address}`, `uri_${tokenId}`, uri)
+            const tokens = await this.tokensOfAddress(to)
+            await hSet(`${chainId}:${address}`, to, tokens.join(','))
+        } catch (err) {
+            const errMsg = messageHelper.getMessage('listener_mint_cache_failed', to, tokenId, uri, chainId, address, err)
+            logger.error(errMsg)
+        }
+    }
+
+    async mintBatchListener(to, tokenIds, uris, chainId, address) {
+        logger.debug(`Received from mint_batch event: to =${to}  tokenIds =${tokenIds} uris =${uris} under chainId ${chainId} and address ${address}`)
+        //TBD
+    }
+
+    async buyListener(from, to, ids, chainId, address) {
+        logger.debug(`Received from buy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
+        //update db
+
+
+
+        //update cache
+        try {
+            /*ids.forEach(async (id) => {
+                await hSet(`${chainId}:${address}`, `owner_${id}`, to)
+            })
+            const tokensFrom = await this.tokensOfAddress(from)
+            const tokensTo = await this.tokensOfAddress(to)
+            if (!tokensFrom || tokensFrom.length === 0) {
+                await hDel(`${chainId}:${address}`, from)
+            } else {
+                await hSet(`${chainId}:${address}`, from, tokensFrom.join(','))
+            }
+            await hSet(`${chainId}:${address}`, to, tokensTo.join(','))*/
+            await this.#updateCache(from, to, ids, chainId, address)
+        } catch (err) {
+            const errMsg = messageHelper.getMessage('listener_buy_cache_failed', from, to, ids, chainId, address, err)
+            logger.error(errMsg)
+        }
+    }
+
+    async #updateCache(from, to, ids, chainId, address) {
+        ids.forEach(async (id) => {
+            await hSet(`${chainId}:${address}`, `owner_${id}`, to)
+        })
+        const tokensFrom = await this.tokensOfAddress(from)
+        const tokensTo = await this.tokensOfAddress(to)
+        if (!tokensFrom || tokensFrom.length === 0) {
+            await hDel(`${chainId}:${address}`, from)
+        } else {
+            await hSet(`${chainId}:${address}`, from, tokensFrom.join(','))
+        }
+        await hSet(`${chainId}:${address}`, to, tokensTo.join(','))
+    }
+
+    async doSafeBuyListener(from, to, ids, chainId, address) {
+        logger.debug(`Received from doSafeBuy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
+        //TBD
+    }
+
+    async buyBatchListener(froms, to, idss, chainId, address) {
+        logger.debug(`Received from buyBatch_tracer event: from =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
+        //update db
+
+        
+        //update cache
+        try {
+            for (let i = 0; i < idss.length; i++) {
+                const from = froms[i]
+                const ids = idss[i]
+                await this.#updateCache(from, to, ids, chainId, address)
+            }
+        }
+        catch (err) {
+            const errMsg = messageHelper.getMessage('listener_buyBatch_cache_failed', froms, to, idss, chainId, address, err)
+            logger.error(errMsg)
+        }
+    }
+
+    async doSafeBuyBatchListener(froms, to, idss, chainId, address) {
+        logger.debug(`Received from doSafeBuyBatch_tracer event: from =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
+        //TBD
     }
 
     async getOwnerOfToken(tokenId) {
