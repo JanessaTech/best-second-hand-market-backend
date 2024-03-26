@@ -109,7 +109,6 @@ class ConfigChainParser {
 
         const contractInstance = this.getContractInstance(chainId, address)
         const owner = await contractInstance.getOwnerOfToken(tokenId)
-        
         return owner
     }
 
@@ -119,10 +118,6 @@ class ConfigChainParser {
         const contractInstance = this.getContractInstance(chainId, address)
 
         const uri = await contractInstance.getUri(tokenId)
-        logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
-        if (!uri) {
-            throw new ConfigChainError({key: 'config_contract_invalid_uri', params:[tokenId, chainId, address], code:400})
-        }
         return uri
     }
 
@@ -182,7 +177,7 @@ class ConfigChainParser {
                             merged.push({$and: ands})
                         }
                     } catch (e) {
-                        logger.error(messageHelper.getMessage('contract_read_failed', e))
+                        logger.error(messageHelper.getMessage('config_chain_contract_read_failed', e))
                     }
                 }
             }

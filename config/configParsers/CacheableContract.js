@@ -1,16 +1,13 @@
 const Contract = require('./contract')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const logger = require('../../helpers/logger')
+const {hSet, hGet, hDel} = require('../../infra/redis/ops')
 
 module.exports = class CacheableContract {
     #chainId
     #address
     #tokenStandard
-    
-    #ownerMap = new Map()
-    #uriMap = new Map()
-    #allTokenIds = undefined
-    #tokens = new Map()
+
     #contract
 
     constructor(chainId, address, abi, provider, tokenStandard) {
@@ -26,10 +23,10 @@ module.exports = class CacheableContract {
 
     async warmUp() {
         const startTime = performance.now()
-        await this.getAllTokenIds()
-        if (this.#allTokenIds) {
+        const allTokenIds = await this.getAllTokenIds()
+        if (allTokenIds && allTokenIds.length > 0) {
             const owners = new Set()
-            for (const token of this.#allTokenIds) {
+            for (const token of allTokenIds) {
                 const owner  = await this.getOwnerOfToken(token)
                 owners.add(owner)
                 await this.getUri(token)
@@ -43,34 +40,44 @@ module.exports = class CacheableContract {
     }
 
     async getOwnerOfToken(tokenId) {
-        if (this.#ownerMap.get(tokenId)) return this.#ownerMap.get(tokenId)
+        const ownerFromCache = await hGet(`${this.#chainId}:${this.#address}`, `owner_${tokenId}`)
+        if (ownerFromCache) return ownerFromCache
         const owner = await this.#contract.getOwnerOfToken(tokenId)
-        this.#ownerMap.set(tokenId, owner)// cache the owner of tokenId
+        await hSet(`${this.#chainId}:${this.#address}`, `owner_${tokenId}`, owner) // cache the owner of tokenId
         logger.debug(messageHelper.getMessage('config_contract_cache_owner', owner, tokenId, this.#chainId, this.#address))
         return owner
     }
 
     async getUri(tokenId) {
-        if (this.#uriMap.get(tokenId)) return this.#uriMap.get(tokenId)
+        const uriFromCache = await hGet(`${this.#chainId}:${this.#address}`, `uri_${tokenId}`)
+        if (uriFromCache) return uriFromCache
         const uri = await this.#contract.getUri(tokenId)
-        this.#uriMap.set(tokenId, uri) //cache the uri of tokenId
+        await hSet(`${this.#chainId}:${this.#address}`, `uri_${tokenId}`, uri) // cache the uri of tokenId
         logger.debug(messageHelper.getMessage('config_contract_cache_uri', uri, tokenId, this.#chainId, this.#address))
         return uri
     }
 
     async getAllTokenIds() {
-        if (this.#allTokenIds) return this.#allTokenIds
+        const allTokenIdsFromCache = await hGet(`${this.#chainId}:${this.#address}`, 'all_tokenids')
+        if (allTokenIdsFromCache) allTokenIdsFromCache.split(',').map((id) => Number(id))
         const allTokenIds = await this.#contract.getAllTokenIds()
-        this.#allTokenIds = allTokenIds  //cache the all token ids
-        logger.debug(messageHelper.getMessage('config_contract_cache_alltokenIds', allTokenIds, this.#chainId, this.#address))
-        return allTokenIds
+        if (allTokenIds && allTokenIds.length > 0) {
+            await hSet(`${this.#chainId}:${this.#address}`, 'all_tokenids', allTokenIds.join(','))
+            logger.debug(messageHelper.getMessage('config_contract_cache_alltokenIds', allTokenIds, this.#chainId, this.#address))
+            return allTokenIds
+        }
+        return []
     }
 
     async tokensOfAddress(address) {
-        if (this.#tokens.get(address)) return this.#tokens.get(address)
+        const tokensFromCache = await hGet(`${this.#chainId}:${this.#address}`, address)
+        if (tokensFromCache) return tokensFromCache.split(',').map((id) => Number(id))
         const tokens = await this.#contract.tokensOfAddress(address)
-        this.#tokens.set(address, tokens)
-        logger.debug(messageHelper.getMessage('config_contract_cache_tokens', tokens, address, this.#chainId, this.#address))
-        return tokens
+        if (tokens && tokens.length > 0) {
+            await hSet(`${this.#chainId}:${this.#address}`, address, tokens.join(','))
+            logger.debug(messageHelper.getMessage('config_contract_cache_tokens', tokens, address, this.#chainId, this.#address))
+            return tokens
+        }
+        return []
     }
 }

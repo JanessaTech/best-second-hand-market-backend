@@ -12,6 +12,12 @@ config.database = {
 config.staticDirs = {
     profiles: 'uploads'
 }
+config.redis = {
+    username: '', 
+    password: 'redis',
+    host: '192.168.0.102',
+    port: 6379
+}
 
 
 module.exports = config

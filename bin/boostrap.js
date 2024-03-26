@@ -2,6 +2,7 @@ const http = require('http')
 require('dotenv').config()
 const banner = require('../helpers/banner')
 const logger = require('../helpers/logger')
+require('../infra/redis')
 
 require('../config/configValidator')  // validate configuration
 require('../config/configParsers')  // parse configuration
