@@ -62,6 +62,7 @@ module.exports = {
     config_contract_cache_alltokenIds: 'Cache all tokenIds {0} for chainId {1} and address {2}',
     config_contract_cache_tokens: 'Cache tokens {0} for owner {1} under chainId {2} and address {3}',
     config_contract_cache_warmup: 'Cacheable contract under chainId {0} and address {1} took {2} ms to warm up',
+    config_contract_cache_clean_failed: 'Failed to clean up cache under chainId {0} and address {1} due to {2}',
 
     //cart
     cart_add_success: 'Add nftId {0} for userId {1} successfully',
@@ -117,12 +118,16 @@ module.exports = {
     siwe_verify_failed: 'Failed to verify siwe signature',
 
     //redis
-    redis_addOrUpdate_failed: 'Failed to add/update value {2} into redis for key {0} and field {1} due to {3}',
-    redis_delete_failed: 'Failed to delete item for key {0} and field {1} due to {2}',
-    redis_get_failed: 'Failed to get item for key {0} and field {1} due to {2}',
+    redis_hSet_failed: 'Failed to add/update value {2} into redis for key {0} and field {1} due to {3}',
+    redis_hDel_failed: 'Failed to delete item for key {0} and field {1} due to {2}',
+    redis_hGet_failed: 'Failed to get item for key {0} and field {1} due to {2}',
+    redis_hKeys_failed: 'Failed to get fields by key {0} due to {1}',
+
 
     //listeners
     listener_mint_cache_failed: 'Failed to update cache when mint: to={0}, tokenId={1}, uri={2}, chainId={3}, address={4}, err={5}',
+    listener_buy_cache_failed: 'Failed to update cache when buy: from={0}, to={1}, ids={2}, chainId={3}, address={4}, err={5}',
+    listener_buyBatch_cache_failed: 'Failed to update cache when buyBatch: froms={0}, to={1}, idss={2}, chainId={3}, address={4}, err={5}',
 
     // global
     UnSupportedAuthError : 'We only support Bearer token in Authorization',

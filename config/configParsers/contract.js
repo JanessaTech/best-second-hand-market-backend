@@ -25,8 +25,8 @@ module.exports = class Contract {
         this.#instance.on('mintBatch_tracer', async (to, tokenIds, uris) => await this.mintBatchListener(to, tokenIds, uris, chainId, address))
         this.#instance.on('buy_tracer', async (from, to, ids) => await this.buyListener(from, to, ids, chainId, address))
         this.#instance.on('doSafeBuy_tracer', async (from, to, ids) => await this.doSafeBuyListener(from, to, ids, chainId, address))
-        this.#instance.on('buyBatch_tracer', async (froms, to, idss) => await this.buyBatchListener(froms, to, idss, chainId, address))
-        this.#instance.on('doSafeBuyBatch_tracer', async (froms, to, idss) => await this.doSafeBuyBatchListener(froms, to, idss, chainId, address))
+        this.#instance.on('buyBatch_tracer', async (to, froms, idss) => await this.buyBatchListener(to, froms, idss, chainId, address))
+        this.#instance.on('doSafeBuyBatch_tracer', async (to, froms, idss) => await this.doSafeBuyBatchListener(to, froms, idss, chainId, address))
     }
 
     get chainId() {
@@ -85,17 +85,6 @@ module.exports = class Contract {
 
         //update cache
         try {
-            /*ids.forEach(async (id) => {
-                await hSet(`${chainId}:${address}`, `owner_${id}`, to)
-            })
-            const tokensFrom = await this.tokensOfAddress(from)
-            const tokensTo = await this.tokensOfAddress(to)
-            if (!tokensFrom || tokensFrom.length === 0) {
-                await hDel(`${chainId}:${address}`, from)
-            } else {
-                await hSet(`${chainId}:${address}`, from, tokensFrom.join(','))
-            }
-            await hSet(`${chainId}:${address}`, to, tokensTo.join(','))*/
             await this.#updateCache(from, to, ids, chainId, address)
         } catch (err) {
             const errMsg = messageHelper.getMessage('listener_buy_cache_failed', from, to, ids, chainId, address, err)
@@ -103,30 +92,18 @@ module.exports = class Contract {
         }
     }
 
-    async #updateCache(from, to, ids, chainId, address) {
-        ids.forEach(async (id) => {
-            await hSet(`${chainId}:${address}`, `owner_${id}`, to)
-        })
-        const tokensFrom = await this.tokensOfAddress(from)
-        const tokensTo = await this.tokensOfAddress(to)
-        if (!tokensFrom || tokensFrom.length === 0) {
-            await hDel(`${chainId}:${address}`, from)
-        } else {
-            await hSet(`${chainId}:${address}`, from, tokensFrom.join(','))
-        }
-        await hSet(`${chainId}:${address}`, to, tokensTo.join(','))
-    }
+
 
     async doSafeBuyListener(from, to, ids, chainId, address) {
         logger.debug(`Received from doSafeBuy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
         //TBD
     }
 
-    async buyBatchListener(froms, to, idss, chainId, address) {
-        logger.debug(`Received from buyBatch_tracer event: from =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
+    async buyBatchListener(to, froms, idss, chainId, address) {
+        logger.debug(`Received from buyBatch_tracer event: froms =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
         //update db
 
-        
+
         //update cache
         try {
             for (let i = 0; i < idss.length; i++) {
@@ -141,8 +118,8 @@ module.exports = class Contract {
         }
     }
 
-    async doSafeBuyBatchListener(froms, to, idss, chainId, address) {
-        logger.debug(`Received from doSafeBuyBatch_tracer event: from =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
+    async doSafeBuyBatchListener(to, froms, idss, chainId, address) {
+        logger.debug(`Received from doSafeBuyBatch_tracer event: froms =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
         //TBD
     }
 
@@ -182,5 +159,20 @@ module.exports = class Contract {
 
     toString() {
         return `chainId = ${this.#chainId} \n address = ${this.#address}\n tokenStandard = ${this.#tokenStandard}\n abi = ${this.#abi}`
+    }
+
+    async #updateCache(from, to, ids, chainId, address) {
+        logger.debug(`updateCache: from=${from}, to=${to}, ids=${ids}, chainId=${chainId}, address=${address}`)
+        ids.forEach(async (id) => {
+            await hSet(`${chainId}:${address}`, `owner_${id}`, to)
+        })
+        const tokensFrom = await this.tokensOfAddress(from)
+        const tokensTo = await this.tokensOfAddress(to)
+        if (!tokensFrom || tokensFrom.length === 0) {
+            await hDel(`${chainId}:${address}`, from)
+        } else {
+            await hSet(`${chainId}:${address}`, from, tokensFrom.join(','))
+        }
+        await hSet(`${chainId}:${address}`, to, tokensTo.join(','))
     }
 }

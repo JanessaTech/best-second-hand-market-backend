@@ -1,7 +1,7 @@
 const Contract = require('./contract')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const logger = require('../../helpers/logger')
-const {hSet, hGet, hDel} = require('../../infra/redis/ops')
+const {hSet, hGet, hDel, hKeys} = require('../../infra/redis/ops')
 
 module.exports = class CacheableContract {
     #chainId
@@ -23,6 +23,9 @@ module.exports = class CacheableContract {
 
     async warmUp() {
         const startTime = performance.now()
+        //logger.info(`cleanup cache under chainId=${this.#chainId} and address=${this.#address}`)
+        //await this.cleanupCache()
+        logger.info(`start filling cache under chainId=${this.#chainId} and address=${this.#address}`)
         const allTokenIds = await this.getAllTokenIds()
         if (allTokenIds && allTokenIds.length > 0) {
             const owners = new Set()
@@ -37,6 +40,19 @@ module.exports = class CacheableContract {
         }
         const endTime = performance.now()
         logger.info(messageHelper.getMessage('config_contract_cache_warmup', this.#chainId, this.#address, endTime - startTime))
+    }
+
+    async cleanupCache() {
+        try {
+            const fields = await hKeys(`${this.#chainId}:${this.#address}`)
+            if (fields) {
+                fields.forEach(async (field) => {
+                    await hDel(`${this.#chainId}:${this.#address}`, fields)
+                })
+            }
+        } catch (err) {
+            logger.error(messageHelper.getMessage('config_contract_cache_clean_failed', this.#chainId, this.#address, err))
+        }
     }
 
     async getOwnerOfToken(tokenId) {
