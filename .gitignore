@@ -39,6 +39,7 @@ dist
 
 ### nodejs ######
 /uploads
+/ipfs
 
 #### logs
 /logs/
