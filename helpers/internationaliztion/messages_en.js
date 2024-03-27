@@ -118,6 +118,7 @@ module.exports = {
     ipfs_upload_metadata: 'Upload file {0} to nft storage successfully. metadata = {1}',
     ipfs_upload_failed: 'Failed to upload file {0} due to {1}',
     ipfs_upload_no_file: 'No file is provided in form data',
+    ipfs_create_validiation_failed: 'Failed to save a new ipfs for file {0} due to {1}',
 
     //http helper
     httpHelper_failed_getData: 'Failed to get data from url {0} due to {1}',

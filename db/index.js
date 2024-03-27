@@ -21,5 +21,6 @@ module.exports = {
     nftDao: require('./dao/nft'),
     orderDao: require('./dao/order'),
     userDao: require('./dao/user'),
-    orderViewDao: require('./dao/orderView')
+    orderViewDao: require('./dao/orderView'),
+    ipfsDao: require('./dao/ipfs')
 }
