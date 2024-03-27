@@ -50,4 +50,6 @@ npm install --save-dev jest
 npm install --save-dev jest-when
 npm install --save multer
 npm install --save redis
+npm install --save nft.storage
+npm install --save axios
 ```

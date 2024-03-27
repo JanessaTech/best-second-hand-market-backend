@@ -7,7 +7,7 @@ const config = require('../config/configuration')
 const path  = require("path")
 const multer = require("multer")
 
-const storage = multer.diskStorage({
+const profileStorage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, `${config.staticDirs.profiles}/${config.env}`)
     },
@@ -17,13 +17,32 @@ const storage = multer.diskStorage({
         cb(null, `${file.fieldname}__${Date.now()}${fileExtension}`)
     }
 })
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: config.multer.fileSize}, // less than 1M
+const uploadProfile = multer({
+    storage: profileStorage,
+    limits: { fileSize: config.multer.profileSize}, // less than 1M
     fileFilter: (req, file, cb) => {
         checkFileType(req, file, cb);
     },
 });
+
+const productStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, `${config.staticDirs.ipfs}/${config.env}`)
+    },
+    filename: function (req, file, cb) {
+        const { originalname } = file;
+        const fileExtension = (originalname.match(/\.+[\S]+$/) || [])[0]
+        cb(null, `${file.fieldname}__${Date.now()}${fileExtension}`)
+    }
+})
+const uploadProduct = multer({
+    storage: productStorage,
+    limits: { fileSize: config.multer.productSize}, // less than 100M
+    fileFilter: (req, file, cb) => {
+        checkFileType(req, file, cb);
+    },
+});
+
 
 function checkFileType(req, file, cb) {
     // Allowed extensions
@@ -107,8 +126,21 @@ const middlewares = {
     },
     upload: (fieldName) => {
         return (req, res, next) => {
-            logger.debug('start to upload file for fieldName = ', fieldName)
-            upload.single(fieldName)(req, res, function(err) {
+            logger.debug('start to upload profile file for fieldName = ', fieldName)
+            uploadProfile.single(fieldName)(req, res, function(err) {
+                if (err) {
+                    logger.debug('err:', err)
+                    next(err)
+                } else{
+                    next()
+                }
+            })
+        }
+    },
+    uploadProduct: (fieldName) => {
+        return (req, res, next) => {
+            logger.debug('start to upload product file for fieldName = ', fieldName)
+            uploadProduct.single(fieldName)(req, res, function(err) {
                 if (err) {
                     logger.debug('err:', err)
                     next(err)

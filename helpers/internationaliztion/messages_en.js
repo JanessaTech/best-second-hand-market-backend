@@ -1,4 +1,5 @@
 const {JsonWebTokenError, TokenExpiredError} = require("jsonwebtoken");
+
 module.exports = {
     account_login : 'Account {0} logined successfully(en)',
     account_register: 'Account {0} is registered successfully',
@@ -112,6 +113,15 @@ module.exports = {
     order_count_by_userId_failed: 'Failed to count orders by userId {0} due to {1}',
     order_addextra_failed: 'Failed to add extra contract info for order {0} due to {1}',
     
+    //ipfs
+    ipfs_upload_success: 'Uploaded file {0} to ipfs storage',
+    ipfs_upload_metadata: 'Upload file {0} to nft storage successfully. metadata = {1}',
+    ipfs_upload_failed: 'Failed to upload file {0} due to {1}',
+    ipfs_upload_no_file: 'No file is provided in form data',
+
+    //http helper
+    httpHelper_failed_getData: 'Failed to get data from url {0} due to {1}',
+
     // siwe
     siwe_none: 'Generate a random none successfully',
     siwe_verify_success: 'Verify siwe signature successfully',
@@ -129,6 +139,7 @@ module.exports = {
     listener_buy_cache_failed: 'Failed to update cache when buy: from={0}, to={1}, ids={2}, chainId={3}, address={4}, err={5}',
     listener_buyBatch_cache_failed: 'Failed to update cache when buyBatch: froms={0}, to={1}, idss={2}, chainId={3}, address={4}, err={5}',
 
+    
     // global
     UnSupportedAuthError : 'We only support Bearer token in Authorization',
     UnauthorizedError : 'You do not have enough permission(s) to visit {0}',

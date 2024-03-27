@@ -7,5 +7,6 @@ module.exports = {
     cartSchema : require('./cart'),
     likeSchema: require('./like'),
     commentSchema: require('./comment'),
-    orderSchema: require('./order')
+    orderSchema: require('./order'),
+    ipfsSchema: require('./ipfs')
 }

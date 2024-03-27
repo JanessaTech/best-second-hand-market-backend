@@ -6,7 +6,9 @@ const likeRouter = require('./like')
 const orderRouter = require('./order')
 const commentRouter = require('./comment')
 const siweRouter = require('./siwe')
+const ipfsRouter = require('./ipfs')
 const apiPrefix = require('../config/configuration').apiPrefix
+
 const routes = app => {
     app.use(apiPrefix + '/accounts', accountRouter)
     app.use(apiPrefix + '/users', userRouter)
@@ -16,6 +18,7 @@ const routes = app => {
     app.use(apiPrefix + '/likes', likeRouter)
     app.use(apiPrefix + '/comments', commentRouter)
     app.use(apiPrefix + '/siwe', siweRouter)
+    app.use(apiPrefix + '/ipfs', ipfsRouter)
 }
 
 module.exports = routes
