@@ -19,8 +19,9 @@ module.exports = {
     commentDao: require('./dao/comment'),
     likeDao: require('./dao/like'),
     nftDao: require('./dao/nft'),
+    nftViewDao: require('./dao/nftView'),
     orderDao: require('./dao/order'),
-    userDao: require('./dao/user'),
     orderViewDao: require('./dao/orderView'),
+    userDao: require('./dao/user'),
     ipfsDao: require('./dao/ipfs')
 }

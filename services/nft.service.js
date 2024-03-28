@@ -1,6 +1,6 @@
 const logger = require("../helpers/logger");
 const {NftError} = require('../routes/nft/NftErrors')
-const {nftDao, userDao, likeDao, ipfsDao} = require('../db')
+const {nftDao, userDao, likeDao, ipfsDao, nftViewDao} = require('../db')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {convertToURL} = require('../helpers/httpHelper')
 const {chainParser} = require('../config/configParsers')
@@ -69,7 +69,10 @@ class NftService {
     async findNFTById(id, updateView = undefined) {
         logger.info('NftService.findNFTById. id=', id)
         try {
-            const nft = updateView ? await nftDao.findOneByFilterWithUpdatedView({_id: id}) : await nftDao.findOneByFilter({_id: id})
+            if (updateView) {
+                await nftDao.findOneByFilterWithUpdatedView({_id: id}) 
+            }
+            const nft = await nftViewDao.findOneByFilter({_id: id})
             if (!nft) {
                 throw new NftError({key: 'nft_not_found', params:[id], code:404})
             }
@@ -91,7 +94,7 @@ class NftService {
         const filter = await chainParser.getFilterByChains({...query})
         const options = {page: query?.page, limit: query?.limit, sortBy: query?.sortBy}
         let nfts = []
-        const resultByFilter = await nftDao.queryByPagination(filter, options)
+        const resultByFilter = await nftViewDao.queryByPagination(filter, options)
         if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
             nfts = await this.#addExtraInfoToRawNFTs(resultByFilter.results)
         }
@@ -108,7 +111,7 @@ class NftService {
         const filter = await chainParser.getFilterByChains({owner: user.address, ...query})
         const options = {page: query?.page, limit: query?.limit, sortBy: query?.sortBy}
         let nfts = []
-        const resultByFilter = await nftDao.queryByPagination(filter, options)
+        const resultByFilter = await nftViewDao.queryByPagination(filter, options)
         if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
             nfts = await this.#addExtraInfoToRawNFTs(resultByFilter.results)
         }
@@ -127,7 +130,7 @@ class NftService {
         const filter = await chainParser.getFilterByChains({...query, nftIds: nftIds})
         const options = {page: query?.page, limit: query?.limit, sortBy: query?.sortBy}
         let nfts = []
-        const resultByFilter = await nftDao.queryByPagination(filter, options)
+        const resultByFilter = await nftViewDao.queryByPagination(filter, options)
         if (resultByFilter && resultByFilter.results && resultByFilter.results.length > 0) {
             nfts = await this.#addExtraInfoToRawNFTs(resultByFilter.results)
         }
@@ -138,7 +141,7 @@ class NftService {
     async queryNFTsByIds(nftIds) {
         logger.info('NftService.queryNFTsByIds. nftIds = ', nftIds)
         const filter = await chainParser.getFilterByChains({nftIds: nftIds} )
-        const rawNfts = await nftDao.queryAllByFilter(filter)
+        const rawNfts = await nftViewDao.queryAllByFilter(filter)
 
         let nfts = await this.#addExtraInfoToRawNFTs(rawNfts)
         return nfts
@@ -148,7 +151,7 @@ class NftService {
         logger.info('NftService.queryNFTsForUser. address = ', address)
         try {
             const filter = await chainParser.getFilterByChains({owner: address, status: config.NFTSTATUS.On.description})
-            const count = await nftDao.countNfts(filter)
+            const count = await nftViewDao.countNfts(filter)
             return count
         } catch (e) {
             const errMsg = messageHelper.getMessage('nft_count_by_address_failed', address, e)
