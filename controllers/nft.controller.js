@@ -17,15 +17,13 @@ class NFTcontroller {
      */
     async mint(req, res, next) {
         logger.info('NFTcontroller.mint')
-        const {tokenId, title, category, chainId, address, description, status, price} = req.body
+        const {tokenId, ipfs, chainId, address, status, price} = req.body
         try {
             const nft = {
                 tokenId : tokenId,
-                title : title,
-                category: category,
+                ipfs : ipfs,
                 chainId: chainId,
                 address: address,
-                description: description,
                 status: status,
                 price: price
             }

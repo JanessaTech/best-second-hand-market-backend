@@ -3,6 +3,8 @@ const { Schema } = mongoose
 const Counter = require('./counter.model')
 const {toJSON, paginate} = require('./plugins/')
 const config = require('../../config/configuration')
+const logger = require('../../helpers/logger')
+require('./ipfs.model')
 
 const nftSchema = new Schema({
     _id: { type: Number,  min: 1 },
@@ -16,18 +18,10 @@ const nftSchema = new Schema({
         },
         required: [true, 'tokenId is required'],
     },
-    title: {
-        type: String,
-        trim: true,
-        minLength: [5, 'title should have at least 5 characters'],
-        maxLength: [20, 'title should have at most 20 characters'], 
-        required: [true, 'title is required'],
-    },
-    category: {
-        type: String,
-        enum: Object.values(config.CATEGORIES).map((c) => c.description),
-        message: '{VALUE} in category not supported',
-        required: [true, 'category is required'],
+    ipfs: {
+        type: Number,
+        required: [true, 'ipfs is required'],
+        ref: 'ipfs',
     },
     chainId: {
         type: Number,
@@ -51,11 +45,6 @@ const nftSchema = new Schema({
             message: props => `${props.value} is invalid cryptocurrency contract address`
         },
         required: [true, 'address is invalid'],
-    },
-    description: {
-        type: String,
-        maxLength: [200, 'description should have at most 200 characters'], 
-        required: [true, 'description is required'],
     },
     status: {
         type: String,

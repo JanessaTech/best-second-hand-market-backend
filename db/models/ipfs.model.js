@@ -15,10 +15,14 @@ const metadataSchema = new Schema({
     data: {
         name : {
             type: String,
+            trim: true,
+            minLength: [5, 'name should have at least 5 characters'],
+            maxLength: [20, 'name should have at most 20 characters'], 
             required: [true, 'name is required'],
         },
         description : {
             type: String,
+            maxLength: [200, 'description should have at most 200 characters'], 
             required: [true, 'description is required'],
         },
         image: {

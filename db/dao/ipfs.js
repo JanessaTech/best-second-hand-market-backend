@@ -28,6 +28,11 @@ class IpfsDAO {
             throw new IPFSError({key: 'ipfs_create_validiation_failed', params:[filename, err], errors: err.errors ? err.errors : err.message, code: 400})
         }
     }
+
+    async findOneByFilter(filter) {
+        const ipfs = await IPFS.findOne(filter)
+        return ipfs
+    }
 }
 
 const ipfsDao = new IpfsDAO()

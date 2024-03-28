@@ -1,6 +1,6 @@
 const logger = require("../helpers/logger");
 const {NftError} = require('../routes/nft/NftErrors')
-const {nftDao, userDao, likeDao} = require('../db')
+const {nftDao, userDao, likeDao, ipfsDao} = require('../db')
 const messageHelper = require("../helpers/internationaliztion/messageHelper")
 const {convertToURL} = require('../helpers/httpHelper')
 const {chainParser} = require('../config/configParsers')
@@ -8,13 +8,27 @@ const config = require('../config/configuration')
 
 class NftService {
 
-    async mint(nft) {
+    async mint({tokenId, ipfs, chainId, address, status, price}) {
         logger.info('NftService.mint')
+        let nft = undefined
         try {
-            await this.#checkOwnerValid(nft.chainId, nft.address, nft.tokenId)
-            const byTokenId = await nftDao.findOneByFilter({chainId:nft.chainId, address: nft.address, tokenId:nft.tokenId})
+            await this.#checkOwnerValid(chainId, address, tokenId)
+            const byTokenId = await nftDao.findOneByFilter({chainId: chainId, address: address, tokenId: tokenId})
             if (byTokenId) {
-                throw new NftError({key: 'nft_mint_duplication', params:[nft.chainId, nft.address, nft.tokenId], code: 400})
+                throw new NftError({key: 'nft_mint_duplication', params:[chainId, address, tokenId], code: 400})
+            }
+            const fileName = ipfs.substring(ipfs.indexOf('product__'))
+            const ipfsByFileName = await ipfsDao.findOneByFilter({filename: fileName})
+            if (!ipfsByFileName) {
+                throw new NftError({key: 'nft_mint_ipfs_not_found', params:[fileName], code: 404})
+            }
+            nft = {
+                tokenId: tokenId,
+                ipfs: ipfsByFileName._id,
+                chainId: chainId,
+                address: address,
+                status: status,
+                price: price
             }
             const created = await nftDao.create(nft)
             return created.toJSON()

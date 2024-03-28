@@ -29,7 +29,7 @@ module.exports = {
     nft_mint_success: 'Nft with tokenId {0} is minted successfully',
     nft_mint_failed: 'Failed to mint a new nft due to {0}',
     nft_mint_duplication: 'The nft with chainId {0} address {1} and tokenId {2} is already saved',
-    nft_save_validation_failed: 'Failed to save a new nft record for the combination of chainId {0} address {1} and tokenId {2} due to validation failure',
+    nft_save_validation_failed: 'Failed to save a new nft record for chainId {0}, address {1} and tokenId {2} due to validation failure',
     nft_update_success: 'The nft with id(_id) {0} is updated successfully',
     nft_not_found: 'The nft with id(_id) {0} is not found',
     nft_by_id_success: 'The nft with id(_id) {0} is found',
@@ -41,6 +41,7 @@ module.exports = {
     nft_query_favorite_for_user_success: 'Query the favorite nfts for the user with userId being {0} successfully',
     nft_updateMany_failed: 'Failed to execute updateMany due to {0}. filter={1}, update={2}, option={3}',
     nft_count_by_address_failed:'Failed to count nfts by address {0} due to {1}',
+    nft_mint_ipfs_not_found: 'Failed to find an ipfs item by filename {0}',
 
     //config
     config_chain_not_found: 'The chain with chainId {0} is not found. Please check the correctness of config.chains in config.common.js',

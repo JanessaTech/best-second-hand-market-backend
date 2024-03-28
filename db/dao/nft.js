@@ -4,24 +4,22 @@ const {NftError} = require('../../routes/nft/NftErrors')
 const {chainParser} = require('../../config/configParsers')
 
 class NftDAO {
-    async create(nft) {
+    async create({tokenId, ipfs, chainId, address, status, price}) {
         try {
             const nftDao = new NFT({
-                tokenId: nft.tokenId,
-                title: nft.title,
-                category: nft.category,
-                chainId: nft.chainId,
-                address: nft.address,
-                description: nft.description,
-                status: nft.status,
-                price: nft.price
+                tokenId: tokenId,
+                ipfs: ipfs,
+                chainId: chainId,
+                address: address, 
+                status: status,
+                price: price
             })
             const savedNft = await nftDao.save()
             logger.debug('NftDAO.create. A new nft record is saved successfully', savedNft)
             return savedNft
         } catch (err) {
-            logger.error('Failed to save user due to ', err)
-            throw new NftError({key: 'nft_save_validation_failed', params: [nft.address, nft.address, nft.tokenId], errors: err.errors ? err.errors : err.message, code: 400})
+            logger.error('Failed to create nft due to ', err)
+            throw new NftError({key: 'nft_save_validation_failed', params: [chainId, address, tokenId], errors: err.errors ? err.errors : err.message, code: 400})
         }
     }
 
