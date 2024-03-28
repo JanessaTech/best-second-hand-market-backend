@@ -19,6 +19,11 @@ class NftViewDAO {
         const nftViews = await NftView.paginate(filter, options)
         return nftViews
     }
+
+    async countNfts(filter) {
+        const count = await NftView.countDocuments(filter)
+        return count
+    }
 }
 
 const nftViewDao = new NftViewDAO()

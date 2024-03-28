@@ -44,9 +44,10 @@ function getQueryObject({page, limit, sortBy, chainId, status, category, prices,
 }
 
 const convertToURL = (ipfs) => {
-    const cid = ipfs.substring('ipfs://'.length)
+    const cid = ipfs.substring('ipfs://'.length, ipfs.indexOf('/product'))
+    const filename = ipfs.substring(ipfs.indexOf('product'))
     const [protocol, domain] = config.gateway.split('://')
-    const url = `${protocol}://${cid}.ipfs.${domain}`
+    const url = `${protocol}://${cid}.ipfs.${domain}/${filename}`
     logger.debug(`ipfs = ${ipfs} to url = ${url}`)
     return url
 }
