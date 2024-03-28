@@ -4,7 +4,7 @@ db.createView("orders_view", "orders",[
 	{
 		$lookup: 
 			{
-				from: "nfts",
+				from: "nfts_view",
 				localField: "nftId",
 				foreignField: "_id",
 				as: "nft_details",
