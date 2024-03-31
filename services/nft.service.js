@@ -17,7 +17,7 @@ class NftService {
             if (byTokenId) {
                 throw new NftError({key: 'nft_mint_duplication', params:[chainId, address, tokenId], code: 400})
             }
-            const fileName = ipfs.substring(ipfs.indexOf('product__'))
+            const fileName = ipfs.substring(ipfs.indexOf(`${config.multer.productFieldPrefix}__`))
             const ipfsByFileName = await ipfsDao.findOneByFilter({filename: fileName})
             if (!ipfsByFileName) {
                 throw new NftError({key: 'nft_mint_ipfs_not_found', params:[fileName], code: 404})

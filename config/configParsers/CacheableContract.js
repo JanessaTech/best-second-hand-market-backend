@@ -47,7 +47,7 @@ module.exports = class CacheableContract {
             const fields = await hKeys(`${this.#chainId}:${this.#address}`)
             if (fields) {
                 fields.forEach(async (field) => {
-                    await hDel(`${this.#chainId}:${this.#address}`, fields)
+                    await hDel(`${this.#chainId}:${this.#address}`, field)
                 })
             }
         } catch (err) {

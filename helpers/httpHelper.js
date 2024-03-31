@@ -44,8 +44,8 @@ function getQueryObject({page, limit, sortBy, chainId, status, category, prices,
 }
 
 const convertToURL = (ipfs) => {
-    const cid = ipfs.substring('ipfs://'.length, ipfs.indexOf('/product'))
-    const filename = ipfs.substring(ipfs.indexOf('product'))
+    const cid = ipfs.substring('ipfs://'.length, ipfs.indexOf(`/${config.multer.productFieldPrefix}`))
+    const filename = ipfs.substring(ipfs.indexOf(`${config.multer.productFieldPrefix}`))
     const [protocol, domain] = config.gateway.split('://')
     const url = `${protocol}://${cid}.ipfs.${domain}/${filename}`
     logger.debug(`ipfs = ${ipfs} to url = ${url}`)
