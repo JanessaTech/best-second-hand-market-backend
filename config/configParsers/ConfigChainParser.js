@@ -112,14 +112,14 @@ class ConfigChainParser {
         return owner
     }
 
-    async getNftUri(chainId, address, tokenId) {
-        logger.debug('ConfigChainParser.getNftUri. chainId =', chainId, ' address =', address, ' tokenId =', tokenId)
+    // async getNftUri(chainId, address, tokenId) {
+    //     logger.debug('ConfigChainParser.getNftUri. chainId =', chainId, ' address =', address, ' tokenId =', tokenId)
 
-        const contractInstance = this.getContractInstance(chainId, address)
+    //     const contractInstance = this.getContractInstance(chainId, address)
 
-        const uri = await contractInstance.getUri(tokenId)
-        return uri
-    }
+    //     const uri = await contractInstance.getUri(tokenId)
+    //     return uri
+    // }
 
     /**
      * Get the tokenStandard by chainId and the smart contract address

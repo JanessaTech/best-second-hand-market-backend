@@ -3,6 +3,11 @@ const {ethers} = require('ethers')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const {ConfigContractError} = require('./ConfigErrors')
 const {hSet, hGet, hDel} = require('../../infra/redis/ops')
+const userDao = require('../../db/dao/user')
+const nftDao= require('../../db/dao/nft')
+const config = require('../../config/configuration')
+const ipfsDao = require('../../db/dao/ipfs')
+//const nftService = require('../../services/nft.service')
 
 module.exports = class Contract {
     #chainId
@@ -53,17 +58,60 @@ module.exports = class Contract {
         return this.#instance
     }
 
+    async #saveNFT({owner, tokenId, ipfs, chainId, address}) {
+        const user = await userDao.findOneByFilter({address: owner})
+        if (!user) {
+            const errMsg = messageHelper.getMessage('user_not_found_address', owner)
+            logger.error(errMsg) // code shouldn't hit here. Fix it if that happened
+            throw new ConfigContractError({message: errMsg, code: 400})
+        }
+        const byTokenId = await nftDao.findOneByFilter({chainId: chainId, address: address, tokenId: tokenId})
+        if (byTokenId) {
+            logger.warn(messageHelper.getMessage('nft_mint_duplication', chainId, address, tokenId))
+            return
+        }
+        const fileName = ipfs.substring(ipfs.indexOf(`${config.multer.productFieldPrefix}__`))
+        const ipfsByFileName = await ipfsDao.findOneByFilter({filename: fileName})
+        if (!ipfsByFileName) {
+            throw new ConfigContractError({key: 'nft_mint_ipfs_not_found', params:[fileName], code: 404})
+        }
+        const nft = {
+            tokenId: tokenId,
+            ipfs: ipfsByFileName._id,
+            chainId: chainId,
+            address: address
+        }
+        const created = await nftDao.create(nft)
+        return created
+    }
+
     async mintListener(to, tokenId, uri, chainId, address) {
         logger.debug(`Received from mint_tracer event: to =${to}  tokenId =${tokenId} uri =${uri} under chainId ${chainId} and address ${address}`)
         //update db
-
+        const nft = {
+            owner: to,
+            tokenId : Number(tokenId),
+            ipfs : uri,
+            chainId: chainId,
+            address: address,
+        }
+        try {
+            const savedNft = await this.#saveNFT(nft)
+            logger.debug(messageHelper.getMessage('listener_mint_nft_success', savedNft))
+        } catch (err) {
+            /**
+             * to-do:  
+             * 1. Report the err to compensator system which could try to save nft record several times
+             * 2. Log err to db so that we could analyse why saving nft is failed and recovery data manually if neccessary
+             */
+            logger.error(messageHelper.getMessage('listener_mint_nft_failed', nft, to, err))
+        }
 
         //update cache
         try {
             const allTokenIds = await this.getAllTokenIds()
             await hSet(`${chainId}:${address}`, 'all_tokenids', allTokenIds.join(','))
             await hSet(`${chainId}:${address}`, `owner_${tokenId}`, to)
-            await hSet(`${chainId}:${address}`, `uri_${tokenId}`, uri)
             const tokens = await this.tokensOfAddress(to)
             await hSet(`${chainId}:${address}`, to, tokens.join(','))
         } catch (err) {
@@ -91,8 +139,6 @@ module.exports = class Contract {
             logger.error(errMsg)
         }
     }
-
-
 
     async doSafeBuyListener(from, to, ids, chainId, address) {
         logger.debug(`Received from doSafeBuy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
@@ -133,15 +179,15 @@ module.exports = class Contract {
         return owner
     }
 
-    async getUri(tokenId) {
-        logger.debug(messageHelper.getMessage('config_contract_get_uri', tokenId, this.#chainId, this.#address))
-        const uri = await this.#instance.getUri(tokenId)
-        logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
-        if (!uri) {
-            throw new ConfigContractError({key: 'config_contract_invalid_uri', params:[tokenId, this.#chainId, this.#address], code:400})
-        }
-        return uri
-    }
+    // async getUri(tokenId) {
+    //     logger.debug(messageHelper.getMessage('config_contract_get_uri', tokenId, this.#chainId, this.#address))
+    //     const uri = await this.#instance.getUri(tokenId)
+    //     logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
+    //     if (!uri) {
+    //         throw new ConfigContractError({key: 'config_contract_invalid_uri', params:[tokenId, this.#chainId, this.#address], code:400})
+    //     }
+    //     return uri
+    // }
 
     async getAllTokenIds() {
         logger.debug(messageHelper.getMessage('config_contract_contract_get_alltokenIds', this.#chainId, this.#address))

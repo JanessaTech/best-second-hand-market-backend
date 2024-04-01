@@ -22,6 +22,7 @@ db.createView("orders_view", "orders",[
 				createdAt: 1,
 				tokenId: "$nft_details.tokenId",
 				title: "$nft_details.title",
+				uri: "$nft_details.uri",
 				category: "$nft_details.category",
 				chainId: "$nft_details.chainId",
 				address: "$nft_details.address",

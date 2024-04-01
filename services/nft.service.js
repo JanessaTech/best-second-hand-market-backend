@@ -15,7 +15,8 @@ class NftService {
             await this.#checkOwnerValid(chainId, address, tokenId)
             const byTokenId = await nftDao.findOneByFilter({chainId: chainId, address: address, tokenId: tokenId})
             if (byTokenId) {
-                throw new NftError({key: 'nft_mint_duplication', params:[chainId, address, tokenId], code: 400})
+                logger.warn(messageHelper.getMessage('nft_mint_duplication', chainId, address, tokenId))
+                return
             }
             const fileName = ipfs.substring(ipfs.indexOf(`${config.multer.productFieldPrefix}__`))
             const ipfsByFileName = await ipfsDao.findOneByFilter({filename: fileName})
@@ -183,13 +184,12 @@ class NftService {
             logger.error(errMsg) // code shouldn't hit here. Fix it if that happened
             throw new NftError({message: errMsg, code: 400})
         }
-        const uri = await chainParser.getNftUri(nft.chainId, nft.address, nft.tokenId)
         const tokenStandard = chainParser.getTokenStandard(nft.chainId, nft.address)
 
         let jsonNFT = nft.toJSON()
         jsonNFT.owner = user.toJSON()
-        jsonNFT.uri = uri
-        jsonNFT.url = convertToURL(uri)
+        jsonNFT.uri = nft.uri
+        jsonNFT.url = convertToURL(nft.uri)
         jsonNFT.chainName = chainName
         jsonNFT.tokenStandard = tokenStandard
         

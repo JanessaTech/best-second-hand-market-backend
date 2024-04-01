@@ -7,6 +7,7 @@ const nftViewSchema = new Schema({
     tokenId: Number,
     chainId: Number,
     address: String,
+    uri: String,
     status: String,
     price: Number,
     view: Number,

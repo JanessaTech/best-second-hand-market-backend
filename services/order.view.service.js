@@ -17,13 +17,12 @@ class OrderViewService {
             logger.error(errMsg) // code shouldn't hit here. Fix it if that happened
             throw new OrderViewError({message: errMsg, code: 400})
         }
-        const uri = await chainParser.getNftUri(order.chainId, order.address, order.tokenId)
         const tokenStandard = chainParser.getTokenStandard(order.chainId, order.address)
 
         let jsonOrder = order.toJSON()
         jsonOrder.owner = user.toJSON()
-        jsonOrder.uri = uri
-        jsonOrder.url = convertToURL(uri)
+        jsonOrder.uri = order.uri
+        jsonOrder.url = convertToURL(order.uri)
         jsonOrder.chainName = chainName
         jsonOrder.tokenStandard = tokenStandard
         

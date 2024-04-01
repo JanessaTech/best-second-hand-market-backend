@@ -53,8 +53,6 @@ module.exports = {
     //contracts
     config_contract_get_owner: 'Get owner for tokenId {0} under chainId {1} and address {2}',
     config_contract_token_not_found: 'Token {0} is not found in the contract for chainId {1} and address {2}',
-    config_contract_get_uri: 'Get uri for tokenId {0} under chainId {1} and address {2}',
-    config_contract_invalid_uri: 'Invalid uri for token {0} in the contract for chainId {1} and address {2}',
     config_contract_contract_get_alltokenIds: 'Get getAllTokenIds for chainId {0} and address {1}',
     config_contract_get_tokenIds_byAddress: 'Get tokenIds for owner {0} for chainId {1} and address {2}',
    
@@ -137,6 +135,8 @@ module.exports = {
 
 
     //listeners
+    listener_mint_nft_success: 'Saved a nft record {0} successfully when receiving a mint_tracer event',
+    listener_mint_nft_failed: 'Failed to save a nft record {0} for owner {1} due to {2} when receiving a mint_tracer event',
     listener_mint_cache_failed: 'Failed to update cache when mint: to={0}, tokenId={1}, uri={2}, chainId={3}, address={4}, err={5}',
     listener_buy_cache_failed: 'Failed to update cache when buy: from={0}, to={1}, ids={2}, chainId={3}, address={4}, err={5}',
     listener_buyBatch_cache_failed: 'Failed to update cache when buyBatch: froms={0}, to={1}, idss={2}, chainId={3}, address={4}, err={5}',

@@ -17,6 +17,7 @@ db.createView("nfts_view", "nfts",[
             title: "$ipfs.metadata.data.name",
             description: "$ipfs.metadata.data.description",
             category: "$ipfs.metadata.data.properties.category",
+            uri: "$ipfs.metadata.data.image",
             tokenId: 1,
             chainId: 1,
             address: 1,
