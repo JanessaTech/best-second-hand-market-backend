@@ -7,7 +7,6 @@ const userDao = require('../../db/dao/user')
 const nftDao= require('../../db/dao/nft')
 const config = require('../../config/configuration')
 const ipfsDao = require('../../db/dao/ipfs')
-//const nftService = require('../../services/nft.service')
 
 module.exports = class Contract {
     #chainId
@@ -178,16 +177,6 @@ module.exports = class Contract {
         }
         return owner
     }
-
-    // async getUri(tokenId) {
-    //     logger.debug(messageHelper.getMessage('config_contract_get_uri', tokenId, this.#chainId, this.#address))
-    //     const uri = await this.#instance.getUri(tokenId)
-    //     logger.debug('The uri of tokenId ', tokenId, ' is :', uri)
-    //     if (!uri) {
-    //         throw new ConfigContractError({key: 'config_contract_invalid_uri', params:[tokenId, this.#chainId, this.#address], code:400})
-    //     }
-    //     return uri
-    // }
 
     async getAllTokenIds() {
         logger.debug(messageHelper.getMessage('config_contract_contract_get_alltokenIds', this.#chainId, this.#address))

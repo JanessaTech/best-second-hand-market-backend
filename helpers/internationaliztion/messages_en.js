@@ -58,7 +58,6 @@ module.exports = {
    
     // contract cache
     config_contract_cache_owner: 'Cache owner {0} for tokenId {1} under chainId {2} and address {3}',
-    config_contract_cache_uri: 'Cache uri {0} for tokenId {1} under chainId {2} and address {3}',
     config_contract_cache_alltokenIds: 'Cache all tokenIds {0} for chainId {1} and address {2}',
     config_contract_cache_tokens: 'Cache tokens {0} for owner {1} under chainId {2} and address {3}',
     config_contract_cache_warmup: 'Cacheable contract under chainId {0} and address {1} took {2} ms to warm up',

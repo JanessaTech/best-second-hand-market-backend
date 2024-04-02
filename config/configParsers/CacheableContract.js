@@ -32,7 +32,6 @@ module.exports = class CacheableContract {
             for (const token of allTokenIds) {
                 const owner  = await this.getOwnerOfToken(token)
                 owners.add(owner)
-                await this.getUri(token)
             }
             for (const owner of owners) {
                 await this.tokensOfAddress(owner)
@@ -62,15 +61,6 @@ module.exports = class CacheableContract {
         await hSet(`${this.#chainId}:${this.#address}`, `owner_${tokenId}`, owner) // cache the owner of tokenId
         logger.debug(messageHelper.getMessage('config_contract_cache_owner', owner, tokenId, this.#chainId, this.#address))
         return owner
-    }
-
-    async getUri(tokenId) {
-        const uriFromCache = await hGet(`${this.#chainId}:${this.#address}`, `uri_${tokenId}`)
-        if (uriFromCache) return uriFromCache
-        const uri = await this.#contract.getUri(tokenId)
-        await hSet(`${this.#chainId}:${this.#address}`, `uri_${tokenId}`, uri) // cache the uri of tokenId
-        logger.debug(messageHelper.getMessage('config_contract_cache_uri', uri, tokenId, this.#chainId, this.#address))
-        return uri
     }
 
     async getAllTokenIds() {
