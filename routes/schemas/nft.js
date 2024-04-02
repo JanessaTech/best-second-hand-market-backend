@@ -2,6 +2,7 @@ const yup = require('yup')
 const config = require('../../config/configuration')
 const {getAttrs} = require('../../db/utils')
 const {NFT} = require('../../db/models')
+const {NftView} = require('../../db/views')
 
 const schemas = {
     mint: yup.object({
@@ -60,7 +61,7 @@ const schemas = {
             sortBy: yup.string().optional()
                     .test({
                         name: 'validation for sortBy',
-                        message: `sortBy is a comma delimited list in which each item should follow the format: attr:(asc|desc). attr is one of (${getAttrs(NFT)}). eg: ${getAttrs(NFT)[0]}:asc,${getAttrs(NFT)[1]}:desc`,
+                        message: `sortBy is a comma delimited list in which each item should follow the format: attr:(asc|desc). attr is one of (${getAttrs(NftView)}). eg: ${getAttrs(NftView)[0]}:asc,${getAttrs(NftView)[1]}:desc`,
                         test: sortBy => {
                             if (sortBy) {
                                 const sortOptions = sortBy.split(',')
@@ -69,7 +70,7 @@ const schemas = {
                                     if (!order) {
                                         return false
                                     }
-                                    if (!getAttrs(NFT).includes(key)) {
+                                    if (!getAttrs(NftView).includes(key)) {
                                         return false
                                     }
                                     if (!['asc', 'desc'].includes(order)) {
@@ -121,7 +122,7 @@ const schemas = {
             sortBy: yup.string().optional()
                     .test({
                         name: 'validation for sortBy',
-                        message: `sortBy is a comma delimited list in which each item should follow the format: attr:(asc|desc). attr is one of (${getAttrs(NFT)}). eg: ${getAttrs(NFT)[0]}:asc,${getAttrs(NFT)[1]}:desc`,
+                        message: `sortBy is a comma delimited list in which each item should follow the format: attr:(asc|desc). attr is one of (${getAttrs(NftView)}). eg: ${getAttrs(NftView)[0]}:asc,${getAttrs(NftView)[1]}:desc`,
                         test: sortBy => {
                             if (sortBy) {
                                 const sortOptions = sortBy.split(',')
@@ -130,7 +131,7 @@ const schemas = {
                                     if (!order) {
                                         return false
                                     }
-                                    if (!getAttrs(NFT).includes(key)) {
+                                    if (!getAttrs(NftView).includes(key)) {
                                         return false
                                     }
                                     if (!['asc', 'desc'].includes(order)) {
@@ -187,7 +188,7 @@ const schemas = {
             sortBy: yup.string().optional()
                     .test({
                         name: 'validation for sortBy',
-                        message: `sortBy is a comma delimited list in which each item should follow the format: attr:(asc|desc). attr is one of (${getAttrs(NFT)}). eg: ${getAttrs(NFT)[0]}:asc,${getAttrs(NFT)[1]}:desc`,
+                        message: `sortBy is a comma delimited list in which each item should follow the format: attr:(asc|desc). attr is one of (${getAttrs(NftView)}). eg: ${getAttrs(NftView)[0]}:asc,${getAttrs(NftView)[1]}:desc`,
                         test: sortBy => {
                             if (sortBy) {
                                 const sortOptions = sortBy.split(',')
@@ -196,7 +197,7 @@ const schemas = {
                                     if (!order) {
                                         return false
                                     }
-                                    if (!getAttrs(NFT).includes(key)) {
+                                    if (!getAttrs(NftView).includes(key)) {
                                         return false
                                     }
                                     if (!['asc', 'desc'].includes(order)) {
