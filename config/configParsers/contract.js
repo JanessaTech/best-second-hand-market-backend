@@ -156,7 +156,7 @@ module.exports = class Contract {
         logger.debug(`Received from buy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
         //update db
         try {
-            await this.#buyNFTs(from, to, ids.map((id) => Number(id)), chainId, address)
+            //await this.#buyNFTs(from, to, ids.map((id) => Number(id)), chainId, address)
         } catch (err) {
             /**
              * to-do:  

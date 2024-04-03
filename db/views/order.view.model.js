@@ -12,6 +12,7 @@ const orderViewSchema = new Schema({
     nftId: Number,
     price: Number,
     from: String,
+    uri: String,
     createdAt: Date,
     tokenId: Number,
     title: String,
