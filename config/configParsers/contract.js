@@ -9,7 +9,6 @@ const orderDao = require('../../db/dao/order')
 const cartDao = require('../../db/dao/cart')
 const config = require('../../config/configuration')
 const ipfsDao = require('../../db/dao/ipfs')
-const config = require('../../config/configuration')
 
 module.exports = class Contract {
     #chainId
