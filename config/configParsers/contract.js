@@ -5,8 +5,11 @@ const {ConfigContractError} = require('./ConfigErrors')
 const {hSet, hGet, hDel} = require('../../infra/redis/ops')
 const userDao = require('../../db/dao/user')
 const nftDao= require('../../db/dao/nft')
+const orderDao = require('../../db/dao/order')
+const cartDao = require('../../db/dao/cart')
 const config = require('../../config/configuration')
 const ipfsDao = require('../../db/dao/ipfs')
+const config = require('../../config/configuration')
 
 module.exports = class Contract {
     #chainId
@@ -84,6 +87,31 @@ module.exports = class Contract {
         return created
     }
 
+    async #buyNFTs(from, to, ids, chainId, address) {
+        const userByFrom = await userDao.findOneByFilter({address: from})
+        if (!userByFrom) {
+            const errMsg = messageHelper.getMessage('user_not_found_address', from)
+            logger.error(errMsg) // code shouldn't hit here. Fix it if that happened
+            throw new ConfigContractError({message: errMsg, code: 400})
+        }
+        const userByTo = await userDao.findOneByFilter({address: to})
+        if (!userByTo) {
+            const errMsg = messageHelper.getMessage('user_not_found_address', to)
+            logger.error(errMsg) // code shouldn't hit here. Fix it if that happened
+            throw new ConfigContractError({message: errMsg, code: 400})
+        }
+        const toUpdates = await nftDao.queryAllByFilter({chainId: chainId, address: address, tokenId: {$in: ids}})
+        const nftIds = toUpdates.map((nft) => nft._id)
+        const prices = toUpdates.map((nft) => nft.price)
+        if (nftIds.length !== ids.length) {
+            throw Error('The length of ids is not equal to the length of nftIds') // the code shouldn't hit here
+        }
+        await nftDao.updateMany({_id: {$in: nftIds}}, {$set: {status: config.NFTSTATUS.Off.description, price: 0}})
+        await cartDao.delete(userByTo._id, nftIds) // delete nfts in cart if neccesary
+        const froms = Array(nftIds.length).fill(from)
+        await orderDao.createInBatch(userByTo._id, nftIds, froms, prices)
+    }
+
     async mintListener(to, tokenId, uri, chainId, address) {
         logger.debug(`Received from mint_tracer event: to =${to}  tokenId =${tokenId} uri =${uri} under chainId ${chainId} and address ${address}`)
         //update db
@@ -104,6 +132,7 @@ module.exports = class Contract {
              * 2. Log err to db so that we could analyse why saving nft is failed and recovery data manually if neccessary
              */
             logger.error(messageHelper.getMessage('listener_mint_nft_failed', nft, to, err))
+            throw err
         }
 
         //update cache
@@ -127,9 +156,17 @@ module.exports = class Contract {
     async buyListener(from, to, ids, chainId, address) {
         logger.debug(`Received from buy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
         //update db
-
-
-
+        try {
+            await this.#buyNFTs(from, to, ids.map((id) => Number(id)), chainId, address)
+        } catch (err) {
+            /**
+             * to-do:  
+             * 1. Report the err to compensator system which could try to do the same thing several times
+             * 2. Log err to db so that we could analyse why buying nfts is failed and recovery data manually if neccessary
+             */
+            logger.error(messageHelper.getMessage('listener_buy_nft_failed', from, to, ids, chainId, address, err))
+            throw err
+        }
         //update cache
         try {
             await this.#updateCache(from, to, ids, chainId, address)

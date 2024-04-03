@@ -139,8 +139,8 @@ module.exports = {
     listener_mint_cache_failed: 'Failed to update cache when mint: to={0}, tokenId={1}, uri={2}, chainId={3}, address={4}, err={5}',
     listener_buy_cache_failed: 'Failed to update cache when buy: from={0}, to={1}, ids={2}, chainId={3}, address={4}, err={5}',
     listener_buyBatch_cache_failed: 'Failed to update cache when buyBatch: froms={0}, to={1}, idss={2}, chainId={3}, address={4}, err={5}',
+    listener_buy_nft_failed: 'Failed to update nft record when buy. from={0}, to={1}, ids={2}, chainId={3}, address={4}, err={5}',
 
-    
     // global
     UnSupportedAuthError : 'We only support Bearer token in Authorization',
     UnauthorizedError : 'You do not have enough permission(s) to visit {0}',
