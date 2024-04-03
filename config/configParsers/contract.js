@@ -105,9 +105,12 @@ module.exports = class Contract {
         if (nftIds.length !== ids.length) {
             throw Error('The length of ids is not equal to the length of nftIds') // the code shouldn't hit here
         }
+        logger.debug('Change the status of nfts to off. nftIds=', nftIds)
         await nftDao.updateMany({_id: {$in: nftIds}}, {$set: {status: config.NFTSTATUS.Off.description, price: 0}})
+        logger.debug('Delete carts: userId =', userByTo._id, ' nftIds=', nftIds)
         await cartDao.delete(userByTo._id, nftIds) // delete nfts in cart if neccesary
         const froms = Array(nftIds.length).fill(from)
+        logger.debug('Create orders in batch. userId=', userByTo._id, ' nftIds =', nftIds, ' froms =', froms, 'prices =', prices)
         await orderDao.createInBatch(userByTo._id, nftIds, froms, prices)
     }
 
@@ -156,7 +159,7 @@ module.exports = class Contract {
         logger.debug(`Received from buy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
         //update db
         try {
-            //await this.#buyNFTs(from, to, ids.map((id) => Number(id)), chainId, address)
+            await this.#buyNFTs(from, to, ids.map((id) => Number(id)), chainId, address)
         } catch (err) {
             /**
              * to-do:  

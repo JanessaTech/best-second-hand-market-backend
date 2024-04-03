@@ -22,15 +22,32 @@ class OrderDAO {
     }
 
     async createInBatch(userId, nftIds, froms, prices) {
-        const orders = []
+        // in order to insert successfully, we need filter out pairs of nftId&from which are already inserted
+        // newOrders are the ones we need to insert into db finally
+        const ands = []
         for (let i = 0; i < nftIds.length; i++) {
-            orders.push({user: userId, nftId: nftIds[i], from: froms[i], price: prices[i]})
+            ands.push({$and: [{nftId: nftIds[i]}, {from: froms[i]}]})
         }
+        const query = {$or: ands}
+        const savedNFTs = await Order.find(query)
+        const pairs = new Set()
+        savedNFTs.forEach((nft) => pairs.add(`${nft.from}-${nft.nftId}`))
+        logger.debug('OrderDAO.createInBatch. pairs=', pairs)
+        const newOrders = []
+        for (let i = 0; i < nftIds.length; i++) {
+            const pair = `${froms[i]}-${nftIds[i]}`
+            if (!pairs.has(pair)) {
+                newOrders.push({user: userId, nftId: nftIds[i], from: froms[i], price: prices[i]})
+            }
+        }
+        logger.debug('OrderDAO.createInBatch. newOrders=', newOrders)
         try {
-            const res = await Order.insertMany(orders, { ordered: false, rawResult: false})
+            const res = await Order.insertMany(newOrders, { ordered: false, rawResult: false})
+            logger.debug('Order.insertMany. res = ', res)
             logger.debug('Executed insertMany successfully for userId ', userId)
             return res
         } catch (err) {
+            logger.debug('Failed to insertMany for order due to ', err)
             throw err
         }
     }
