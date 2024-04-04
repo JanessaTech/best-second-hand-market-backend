@@ -41,7 +41,7 @@ module.exports = class CacheableContract {
         logger.info(messageHelper.getMessage('config_contract_cache_warmup', this.#chainId, this.#address, endTime - startTime))
     }
 
-    async cleanupCache() {
+    async cleanUpCache() {
         try {
             const fields = await hKeys(`${this.#chainId}:${this.#address}`)
             if (fields) {

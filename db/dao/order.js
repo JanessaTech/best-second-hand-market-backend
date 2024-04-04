@@ -30,6 +30,7 @@ class OrderDAO {
         }
         const query = {$or: ands}
         const savedNFTs = await Order.find(query)
+        logger.debug('OrderDAO.createInBatch. query =', query)
         const pairs = new Set()
         savedNFTs.forEach((nft) => pairs.add(`${nft.from}-${nft.nftId}`))
         logger.debug('OrderDAO.createInBatch. pairs=', pairs)
@@ -42,12 +43,12 @@ class OrderDAO {
         }
         logger.debug('OrderDAO.createInBatch. newOrders=', newOrders)
         try {
-            const res = await Order.insertMany(newOrders, { ordered: false, rawResult: false})
-            logger.debug('Order.insertMany. res = ', res)
-            logger.debug('Executed insertMany successfully for userId ', userId)
-            return res
+            const ordersInserted = await Order.insertMany(newOrders, { ordered: false, rawResult: false})
+            logger.debug('OrderDAO.createInBatch. Order.insertMany. orders inserted = ', ordersInserted)
+            logger.debug('OrderDAO.createInBatch. Executed insertMany successfully for userId ', userId)
+            return ordersInserted
         } catch (err) {
-            logger.debug('Failed to insertMany for order due to ', err)
+            logger.debug('OrderDAO.createInBatch. Failed to orders by executing insertMany for order due to ', err)
             throw err
         }
     }

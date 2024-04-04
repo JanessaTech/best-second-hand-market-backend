@@ -53,6 +53,15 @@ class ConfigChainParser {
         })
         this.#chains = chains
     }
+    async cleanUp() {
+        for (const [chainId, chain] of this.#chains) {
+            for (const [address, instance] of chain.getAllContractInstances()) {
+                logger.info(`Start cleaning cacheable contract for chainId ${chainId} and address ${address}`)
+                await instance.cleanUpCache()
+                logger.info(`Finish cleaning cacheable contract for chainId ${chainId} and address ${address}`)
+            }
+        }  
+    }
 
     async warmUp() {  // warmup
         const startTime = performance.now()
@@ -111,15 +120,6 @@ class ConfigChainParser {
         const owner = await contractInstance.getOwnerOfToken(tokenId)
         return owner
     }
-
-    // async getNftUri(chainId, address, tokenId) {
-    //     logger.debug('ConfigChainParser.getNftUri. chainId =', chainId, ' address =', address, ' tokenId =', tokenId)
-
-    //     const contractInstance = this.getContractInstance(chainId, address)
-
-    //     const uri = await contractInstance.getUri(tokenId)
-    //     return uri
-    // }
 
     /**
      * Get the tokenStandard by chainId and the smart contract address
@@ -190,6 +190,13 @@ class ConfigChainParser {
 
 logger.debug(`config.env: ${config.env}`)
 const chainParser = new ConfigChainParser(config.env)
+//start cleanUp
+chainParser.cleanUp(() => {
+    logger.info('All cleanUps are done')
+})
+.catch((err) => {
+    logger.debug('Failed to cleanUp due to ', err)
+})
 //start warmup
 chainParser.warmUp(() => {
     logger.info('All warmups are done')

@@ -105,17 +105,17 @@ module.exports = class Contract {
         if (nftIds.length !== ids.length) {
             throw Error('The length of ids is not equal to the length of nftIds') // the code shouldn't hit here
         }
-        logger.debug('Change the status of nfts to off. nftIds=', nftIds)
+        logger.debug('Contract.buyNFTs. Change the status of nfts to off. nftIds=', nftIds)
         await nftDao.updateMany({_id: {$in: nftIds}}, {$set: {status: config.NFTSTATUS.Off.description, price: 0}})
-        logger.debug('Delete carts: userId =', userByTo._id, ' nftIds=', nftIds)
+        logger.debug('Contract.buyNFTs. Delete carts: userId =', userByTo._id, ' nftIds=', nftIds)
         await cartDao.delete(userByTo._id, nftIds) // delete nfts in cart if neccesary
         const froms = Array(nftIds.length).fill(from)
-        logger.debug('Create orders in batch. userId=', userByTo._id, ' nftIds =', nftIds, ' froms =', froms, 'prices =', prices)
+        logger.debug('Contract.buyNFTs. Create orders in batch. userId=', userByTo._id, ' nftIds =', nftIds, ' froms =', froms, 'prices =', prices)
         await orderDao.createInBatch(userByTo._id, nftIds, froms, prices)
     }
 
     async mintListener(to, tokenId, uri, chainId, address) {
-        logger.debug(`Received from mint_tracer event: to =${to}  tokenId =${tokenId} uri =${uri} under chainId ${chainId} and address ${address}`)
+        logger.debug(`Contract.mintListener. Received from mint_tracer event: to =${to}  tokenId =${tokenId} uri =${uri} under chainId ${chainId} and address ${address}`)
         //update db
         const nft = {
             owner: to,
@@ -151,12 +151,12 @@ module.exports = class Contract {
     }
 
     async mintBatchListener(to, tokenIds, uris, chainId, address) {
-        logger.debug(`Received from mint_batch event: to =${to}  tokenIds =${tokenIds} uris =${uris} under chainId ${chainId} and address ${address}`)
+        logger.debug(`Contract.mintBatchListener. Received from mint_batch event: to =${to}  tokenIds =${tokenIds} uris =${uris} under chainId ${chainId} and address ${address}`)
         //TBD
     }
 
     async buyListener(from, to, ids, chainId, address) {
-        logger.debug(`Received from buy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
+        logger.debug(`Contract.buyListener. Received from buy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
         //update db
         try {
             await this.#buyNFTs(from, to, ids.map((id) => Number(id)), chainId, address)
@@ -179,12 +179,12 @@ module.exports = class Contract {
     }
 
     async doSafeBuyListener(from, to, ids, chainId, address) {
-        logger.debug(`Received from doSafeBuy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
+        logger.debug(`Contract.doSafeBuyListener. Received from doSafeBuy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
         //TBD
     }
 
     async buyBatchListener(to, froms, idss, chainId, address) {
-        logger.debug(`Received from buyBatch_tracer event: froms =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
+        logger.debug(`Contract.buyBatchListener. Received from buyBatch_tracer event: froms =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
         //update db
 
 
@@ -203,7 +203,7 @@ module.exports = class Contract {
     }
 
     async doSafeBuyBatchListener(to, froms, idss, chainId, address) {
-        logger.debug(`Received from doSafeBuyBatch_tracer event: froms =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
+        logger.debug(`Contract.doSafeBuyBatchListener. Received from doSafeBuyBatch_tracer event: froms =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
         //TBD
     }
 
@@ -236,7 +236,7 @@ module.exports = class Contract {
     }
 
     async #updateCache(from, to, ids, chainId, address) {
-        logger.debug(`updateCache: from=${from}, to=${to}, ids=${ids}, chainId=${chainId}, address=${address}`)
+        logger.debug(`Contract.updateCache. from=${from}, to=${to}, ids=${ids}, chainId=${chainId}, address=${address}`)
         ids.forEach(async (id) => {
             await hSet(`${chainId}:${address}`, `owner_${id}`, to)
         })

@@ -10,12 +10,19 @@ const isArray = (obj) => {
     return !!obj && obj.constructor === Array;
 }
 
+const isSet = (obj) => {
+    return !!obj && obj.constructor === Set;
+}
+
 const convert = (obj) => {
     if (isJson(obj)) {
        return  '\n' + JSON.stringify(obj, null, 4)
     }
     if (isArray(obj)) {
         return obj.map((o) => convert(o))
+    }
+    if (isSet(obj)) {
+        return [...obj].map((o) => convert(o))
     }
     return obj
 }
