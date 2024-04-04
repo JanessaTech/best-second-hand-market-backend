@@ -139,7 +139,7 @@ class ConfigChainParser {
         return tokenStandard
     }
 
-    async getFilterByChains({owner, chainId, category, prices, status, title, nftIds}) {
+    async getFilterByChains({owner, chainId, category, prices, status, title, nftIds, user}) {
         let merged = []
         for (const [_chainId, chain] of this.#chains.entries()) {
             if (chainId && chainId !== _chainId) continue
@@ -173,6 +173,10 @@ class ConfigChainParser {
                             }
                             if (title) {
                                 ands.push({title: {$regex: `.*${title}.*`, $options: 'i'}})
+                            }
+                            if (user) {
+                                // only for orders_view
+                                ands.push({user: user})
                             }
                             merged.push({$and: ands})
                         }

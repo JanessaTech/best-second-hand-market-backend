@@ -48,6 +48,7 @@ class OrderViewService {
         if (!user) {
             throw new OrderViewError({key: 'user_not_found_id', params:[userId], code: 404})
         }
+        query.user = userId
         const filter = await chainParser.getFilterByChains({...query})
         const options = {page: query?.page, limit: query?.limit, sortBy: query?.sortBy}
         let orders = []
