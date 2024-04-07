@@ -220,14 +220,14 @@ module.exports = class Contract {
     async getAllTokenIds() {
         logger.debug(messageHelper.getMessage('config_contract_contract_get_alltokenIds', this.#chainId, this.#address))
         const tokenIds = await this.#instance.getAllTokenIds()
-        logger.debug('tokenIds:', tokenIds)
+        logger.debug('Contract.getAllTokenIds. tokenIds:', tokenIds)
         return tokenIds.map((t) => Number(t))
     }
 
     async tokensOfAddress(address) {
         logger.debug(messageHelper.getMessage('config_contract_get_tokenIds_byAddress', address, this.#chainId, this.#address))
         const tokenIds = await this.#instance.tokensOfAddress(address)
-        logger.debug('tokenIds:', tokenIds)
+        logger.debug('Contract.tokensOfAddress. tokenIds:', tokenIds)
         return tokenIds.map((t) => Number(t))
     }
 
