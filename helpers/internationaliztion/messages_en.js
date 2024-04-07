@@ -16,7 +16,7 @@ module.exports = {
     user_register_duplication_address: 'The address {0} is already registered',
     user_register_validiation_failed: 'Failed to register user {0} due to validation failure',
     user_not_found_address:'User is not found by address {0}',
-    user_not_found_id: 'User is not found by id(_id){0}',
+    user_not_found_id: 'User is not found by id(_id={0})',
     user_find_by_address:'Found an user by address {0}', 
     user_login_success: 'User login by address {0} successfully',
     user_logout_success: 'User logout by address {0} successfully',
@@ -121,6 +121,9 @@ module.exports = {
     //http helper
     httpHelper_failed_getData: 'Failed to get data from url {0} due to {1}',
 
+    //chain helper
+    'chainHelper_chain_not_found': 'Failed to find chain by id {0} in config.common.js',
+
     // siwe
     siwe_none: 'Generate a random none successfully',
     siwe_verify_success: 'Verify siwe signature successfully',
@@ -141,6 +144,13 @@ module.exports = {
     listener_buyBatch_cache_failed: 'Failed to update cache when buyBatch: froms={0}, to={1}, idss={2}, chainId={3}, address={4}, err={5}',
     listener_buy_nft_failed: 'Failed to update nft record when buy. from={0}, to={1}, ids={2}, chainId={3}, address={4}, err={5}',
 
+    //balance
+    balance_update_success: 'Updated balance for user (id={0}) by {1} successfully',
+    balance_query_success: 'Query balance for user (id={0}) successfully',
+    balance_findOneAndUpdate_validiation_failed: 'Failed to find balance for user (id ={0}) due to {1}',
+    balance_update_failed: 'Failed to update balance for user(id={0}) by increasing value {1} under chainId {2}',
+    balance_query_failed: 'Failed to query balance for user(id={0}) under chainId {1}',
+    
     // global
     UnSupportedAuthError : 'We only support Bearer token in Authorization',
     UnauthorizedError : 'You do not have enough permission(s) to visit {0}',

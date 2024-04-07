@@ -7,6 +7,7 @@ const orderRouter = require('./order')
 const commentRouter = require('./comment')
 const siweRouter = require('./siwe')
 const ipfsRouter = require('./ipfs')
+const balanceRouter = require('./balance')
 const apiPrefix = require('../config/configuration').apiPrefix
 
 const routes = app => {
@@ -19,6 +20,7 @@ const routes = app => {
     app.use(apiPrefix + '/comments', commentRouter)
     app.use(apiPrefix + '/siwe', siweRouter)
     app.use(apiPrefix + '/ipfs', ipfsRouter)
+    app.use(apiPrefix + '/balances', balanceRouter)
 }
 
 module.exports = routes

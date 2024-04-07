@@ -32,6 +32,7 @@ config.chains = {
       chainName: 'hardhat',
       currency: 'HardHatETH',
       rpcUrl:'http://127.0.0.1:8545/',
+      exchange: 100,
       contracts: [  // configure at least one
           {
             address: '0x5FbDB2315678afecb367f032d93F642f64180aa3', 
@@ -91,6 +92,7 @@ config.chains = {
         chainName: 'sepolia',
         currency: 'SepoliaETH',
         rpcUrl:'https://rpc.sepolia.org',
+        exchange: 200,
         contracts:[
           {
             address: '0x5FbDB2315678afecb367f032d93F642f64180aa3', 
@@ -148,6 +150,7 @@ config.chains = {
         chainName: 'mumbai',
         currency: 'MATIC',
         rpcUrl:'https://rpc-mumbai.maticvigil.com',
+        exchange: 300,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf4', 
@@ -167,6 +170,7 @@ config.chains = {
         chainName: 'fuji',
         currency: 'AVAX',
         rpcUrl:'https://api.avax-test.network/ext/bc/C/rpc',
+        exchange: 400,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf6', 
@@ -186,6 +190,7 @@ config.chains = {
         chainName: 'chiado',
         currency: 'XDAI',
         rpcUrl:'https://rpc.chiadochain.net',
+        exchange: 500,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf8', 
@@ -207,6 +212,7 @@ config.chains = {
         chainName: 'ethereum',
         currency: 'ETH',
         rpcUrl:'https://mainnet.infura.io/v3/',
+        exchange: 600,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb18', 
@@ -264,6 +270,7 @@ config.chains = {
         chainName: 'polygon',
         currency: 'MATIC',
         rpcUrl:'https://polygon-rpc.com',
+        exchange: 700,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb38', 
@@ -283,6 +290,7 @@ config.chains = {
         chainName: 'avalanche',
         currency: 'AVAX',
         rpcUrl:'https://avalanche-mainnet.infura.io',
+        exchange: 200,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb58', 
@@ -302,6 +310,7 @@ config.chains = {
         chainName: 'gnosis',
         currency: 'XDAI',
         rpcUrl:'https://rpc.gnosischain.com',
+        exchange: 800,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb78', 

@@ -8,5 +8,6 @@ module.exports = {
     likeSchema: require('./like'),
     commentSchema: require('./comment'),
     orderSchema: require('./order'),
-    ipfsSchema: require('./ipfs')
+    ipfsSchema: require('./ipfs'),
+    balanceSchema: require('./balance')
 }
