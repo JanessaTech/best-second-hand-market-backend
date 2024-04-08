@@ -121,9 +121,6 @@ module.exports = {
     //http helper
     httpHelper_failed_getData: 'Failed to get data from url {0} due to {1}',
 
-    //chain helper
-    'chainHelper_chain_not_found': 'Failed to find chain by id {0} in config.common.js',
-
     // siwe
     siwe_none: 'Generate a random none successfully',
     siwe_verify_success: 'Verify siwe signature successfully',
@@ -135,7 +132,6 @@ module.exports = {
     redis_hGet_failed: 'Failed to get item for key {0} and field {1} due to {2}',
     redis_hKeys_failed: 'Failed to get fields by key {0} due to {1}',
 
-
     //listeners
     listener_mint_nft_success: 'Saved a nft record {0} successfully when receiving a mint_tracer event',
     listener_mint_nft_failed: 'Failed to save a nft record {0} for owner {1} due to {2} when receiving a mint_tracer event',
@@ -143,13 +139,6 @@ module.exports = {
     listener_buy_cache_failed: 'Failed to update cache when buy: from={0}, to={1}, ids={2}, chainId={3}, address={4}, err={5}',
     listener_buyBatch_cache_failed: 'Failed to update cache when buyBatch: froms={0}, to={1}, idss={2}, chainId={3}, address={4}, err={5}',
     listener_buy_nft_failed: 'Failed to update nft record when buy. from={0}, to={1}, ids={2}, chainId={3}, address={4}, err={5}',
-
-    //balance
-    balance_update_success: 'Updated balance for user (id={0}) by {1} successfully',
-    balance_query_success: 'Query balance for user (id={0}) successfully',
-    balance_findOneAndUpdate_validiation_failed: 'Failed to find balance for user (id ={0}) due to {1}',
-    balance_update_failed: 'Failed to update balance for user(id={0}) by increasing value {1} under chainId {2}',
-    balance_query_failed: 'Failed to query balance for user(id={0}) under chainId {1}',
     
     // global
     UnSupportedAuthError : 'We only support Bearer token in Authorization',

@@ -83,9 +83,9 @@ config.chains = {
             tokenStandard: 'ERC1155'
           },
           {
-            address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0513', 
+            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
             abi: [
-                'function mint(address to, uint256 amount) public',
+                'function mint(address to, uint256 amount) public payable',
                 'function transferInBatch(address[] tos, uint256[] values) public',
                 'function transfer(address to, uint256 value) public virtual returns(bool)',
                 'event transferInBatch_tracer(address[] tos, uint256[] values)'

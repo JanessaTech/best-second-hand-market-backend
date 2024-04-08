@@ -23,6 +23,5 @@ module.exports = {
     orderDao: require('./dao/order'),
     orderViewDao: require('./dao/orderView'),
     userDao: require('./dao/user'),
-    ipfsDao: require('./dao/ipfs'),
-    balanceDao: require('./dao/balance')
+    ipfsDao: require('./dao/ipfs')
 }
