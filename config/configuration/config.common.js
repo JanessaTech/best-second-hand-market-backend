@@ -56,7 +56,7 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: '1155'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512', 
@@ -80,7 +80,17 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: '1155'
+            tokenStandard: 'ERC1155'
+          },
+          {
+            address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0513', 
+            abi: [
+                'function mint(address to, uint256 amount) public',
+                'function transferInBatch(address[] tos, uint256[] values) public',
+                'function transfer(address to, uint256 value) public virtual returns(bool)',
+                'event transferInBatch_tracer(address[] tos, uint256[] values)'
+            ],
+            tokenStandard: 'ERC20'
           }
         ]
       }
@@ -116,7 +126,7 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: 'aaaa'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512', 
@@ -140,7 +150,7 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: 'bbbb'
+            tokenStandard: 'ERC1155'
           },
         ]
       },
@@ -155,12 +165,12 @@ config.chains = {
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf4', 
             abi: [],
-            tokenStandard: 'cccc'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf5', 
             abi: [],
-            tokenStandard: 'dddd'
+            tokenStandard: 'ERC1155'
           }
         ]
       },
@@ -175,12 +185,12 @@ config.chains = {
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf6', 
             abi: [],
-            tokenStandard: 'eeee'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf7', 
             abi: [],
-            tokenStandard: 'ffff'
+            tokenStandard: 'ERC1155'
           }
         ]
       },
@@ -195,12 +205,12 @@ config.chains = {
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf8', 
             abi: [],
-            tokenStandard: 'gggg'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf9', 
             abi: [],
-            tokenStandard: 'hhhh'
+            tokenStandard: 'ERC1155'
           }
         ]
       }
@@ -236,7 +246,7 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: 'iiii'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb28', 
@@ -260,7 +270,7 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: 'jjjj'
+            tokenStandard: 'ERC1155'
           },
         ]
       },
@@ -275,12 +285,12 @@ config.chains = {
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb38', 
             abi: [],
-            tokenStandard: 'kkkk'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb48', 
             abi: [],
-            tokenStandard: '1llll'
+            tokenStandard: 'ERC1155'
           },
         ]
       },
@@ -295,12 +305,12 @@ config.chains = {
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb58', 
             abi: [],
-            tokenStandard: 'mmmm'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb68',
             abi: [], 
-            tokenStandard: 'nnnn'
+            tokenStandard: 'ERC1155'
           },
         ]
       },
@@ -315,12 +325,12 @@ config.chains = {
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb78', 
             abi: [],
-            tokenStandard: 'oooo'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb88', 
             abi: [],
-            tokenStandard: 'pppp'
+            tokenStandard: 'ERC1155'
           },
         ]
       }

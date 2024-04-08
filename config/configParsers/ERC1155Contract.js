@@ -7,10 +7,10 @@ const userDao = require('../../db/dao/user')
 const nftDao= require('../../db/dao/nft')
 const orderDao = require('../../db/dao/order')
 const cartDao = require('../../db/dao/cart')
-const config = require('../../config/configuration')
+const config = require('../configuration')
 const ipfsDao = require('../../db/dao/ipfs')
 
-module.exports = class Contract {
+module.exports = class ERC1155Contract {
     #chainId
     #address
     #abi

@@ -44,6 +44,11 @@ module.exports = class Chain {
         return this.#contractInstances
     }
 
+    getContractInstancesByStandard(tokenStandard) {
+        const newMap = new Map([...this.#contractInstances].filter(([k, v]) => v.tokenStandard === tokenStandard))
+        return newMap
+    }
+
     toString () {
         return `chainId = ${this.#chainId}, chainName = ${this.#chainName}, rpcUrl = ${this.#rpcUrl}, currency = ${this.#currency}. ${this.#contractInstances.size} contractInstances`
     }

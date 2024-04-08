@@ -2,7 +2,7 @@ const config = require('../configuration')
 const logger = require('../../helpers/logger')
 const {ethers} = require('ethers')
 const Chain = require('./chain')
-const CacheableContract = require('./CacheableContract')
+const CacheableERC1155Contract = require('./CacheableERC1155Contract')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const {ConfigChainError} = require('./ConfigErrors')
 
@@ -45,9 +45,11 @@ class ConfigChainParser {
                 const address = c.address
                 const abi = c.abi
                 const tokenStandard = c.tokenStandard
-                const contract = new CacheableContract(chainId, address, abi, provider, tokenStandard)
-                logger.debug('Created a cacheableContract by address', address, 'abi:', abi)
-                chain.addContractInstance(address, contract)
+                if (tokenStandard === 'ERC1155') {
+                    const contract = new CacheableERC1155Contract(chainId, address, abi, provider, tokenStandard)
+                    logger.debug('Created a CacheableERC1155Contract by address', address, 'abi:', abi)
+                    chain.addContractInstance(address, contract)
+                }
             })
             chains.set(chainId, chain)
         })
@@ -55,7 +57,7 @@ class ConfigChainParser {
     }
     async cleanUp() {
         for (const [chainId, chain] of this.#chains) {
-            for (const [address, instance] of chain.getAllContractInstances()) {
+            for (const [address, instance] of chain.getContractInstancesByStandard('ERC1155')) {
                 logger.info(`Start cleaning cacheable contract for chainId ${chainId} and address ${address}`)
                 await instance.cleanUpCache()
                 logger.info(`Finish cleaning cacheable contract for chainId ${chainId} and address ${address}`)
@@ -66,7 +68,7 @@ class ConfigChainParser {
     async warmUp() {  // warmup
         const startTime = performance.now()
         for (const [chainId, chain] of this.#chains) {
-            for (const [address, instance] of chain.getAllContractInstances()) {
+            for (const [address, instance] of chain.getContractInstancesByStandard('ERC1155')) {
                 logger.info(`Start warmup cacheable contract for chainId ${chainId} and address ${address}`)
                 await instance.warmUp()
                 logger.info(`Finish warmup cacheable contract for chainId ${chainId} and address ${address}`)
@@ -143,8 +145,8 @@ class ConfigChainParser {
         let merged = []
         for (const [_chainId, chain] of this.#chains.entries()) {
             if (chainId && chainId !== _chainId) continue
-            if (chain.getAllContractInstances().size) {
-                for(const [address, instance] of chain.getAllContractInstances()) {
+            if (chain.getContractInstancesByStandard('ERC1155').size) {
+                for(const [address, instance] of chain.getContractInstancesByStandard('ERC1155')) {
                     try {
                         const tokenIds = owner ? await instance.tokensOfAddress(owner) : await instance.getAllTokenIds()
                         if (tokenIds && tokenIds.length > 0) {

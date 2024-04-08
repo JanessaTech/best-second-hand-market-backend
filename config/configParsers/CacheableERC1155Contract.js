@@ -1,9 +1,9 @@
-const Contract = require('./contract')
+const ERC1155Contract = require('./ERC1155Contract')
 const messageHelper = require('../../helpers/internationaliztion/messageHelper')
 const logger = require('../../helpers/logger')
 const {hSet, hGet, hDel, hKeys} = require('../../infra/redis/ops')
 
-module.exports = class CacheableContract {
+module.exports = class CacheableERC1155Contract {
     #chainId
     #address
     #tokenStandard
@@ -14,7 +14,7 @@ module.exports = class CacheableContract {
         this.#chainId = chainId
         this.#address = address
         this.#tokenStandard = tokenStandard
-        this.#contract = new Contract(chainId, address, abi, provider, tokenStandard)
+        this.#contract = new ERC1155Contract(chainId, address, abi, provider, tokenStandard)
     }
 
     get tokenStandard() {
