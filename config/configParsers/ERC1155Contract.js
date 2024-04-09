@@ -187,6 +187,21 @@ module.exports = class ERC1155Contract {
         logger.debug(`Contract.buyBatchListener. Received from buyBatch_tracer event: froms =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
         //update db
 
+        for (let i = 0; i < froms.length; i++) {
+            const from = froms[i]
+            const ids = idss[i]
+            try {
+                await this.#buyNFTs(from, to, ids.map((id) => Number(id)), chainId, address)
+            } catch (err) {
+                /**
+                 * to-do:  
+                 * 1. Report the err to compensator system which could try to do the same thing several times
+                 * 2. Log err to db so that we could analyse why buying nfts is failed and recovery data manually if neccessary
+                 */
+                logger.error(messageHelper.getMessage('listener_buy_nft_failed', from, to, ids, chainId, address, err))
+                throw err
+            }
+        }
 
         //update cache
         try {
