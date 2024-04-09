@@ -31,8 +31,6 @@ module.exports = class ERC1155Contract {
         this.#instance.on('mintBatch_tracer', async (to, tokenIds, uris) => await this.mintBatchListener(to, tokenIds, uris, chainId, address))
         this.#instance.on('buy_tracer', async (from, to, ids) => await this.buyListener(from, to, ids, chainId, address))
         this.#instance.on('doSafeBuy_tracer', async (from, to, ids) => await this.doSafeBuyListener(from, to, ids, chainId, address))
-        this.#instance.on('buyBatch_tracer', async (to, froms, idss) => await this.buyBatchListener(to, froms, idss, chainId, address))
-        this.#instance.on('doSafeBuyBatch_tracer', async (to, froms, idss) => await this.doSafeBuyBatchListener(to, froms, idss, chainId, address))
     }
 
     get chainId() {
@@ -86,7 +84,7 @@ module.exports = class ERC1155Contract {
         return created
     }
 
-    async #buyNFTs(from, to, ids, chainId, address) {
+    async #updateDatabase(from, to, ids, chainId, address) {
         const userByFrom = await userDao.findOneByFilter({address: from})
         if (!userByFrom) {
             const errMsg = messageHelper.getMessage('user_not_found_address', from)
@@ -155,11 +153,11 @@ module.exports = class ERC1155Contract {
         //TBD
     }
 
-    async buyListener(from, to, ids, chainId, address) {
-        logger.debug(`Contract.buyListener. Received from buy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
+    async #buyNFTs(from, to, ids, chainId, address) {
+        logger.debug(`Contract.buyNFTs: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
         //update db
         try {
-            await this.#buyNFTs(from, to, ids.map((id) => Number(id)), chainId, address)
+            await this.#updateDatabase(from, to, ids.map((id) => Number(id)), chainId, address)
         } catch (err) {
             /**
              * to-do:  
@@ -178,49 +176,35 @@ module.exports = class ERC1155Contract {
         }
     }
 
+    async buyListener(from, to, ids, chainId, address) {
+        logger.debug(`Contract.buyListener. Received from buy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
+        // //update db
+        // try {
+        //     await this.#updateDatabase(from, to, ids.map((id) => Number(id)), chainId, address)
+        // } catch (err) {
+        //     /**
+        //      * to-do:  
+        //      * 1. Report the err to compensator system which could try to do the same thing several times
+        //      * 2. Log err to db so that we could analyse why buying nfts is failed and recovery data manually if neccessary
+        //      */
+        //     logger.error(messageHelper.getMessage('listener_buy_nft_failed', from, to, ids, chainId, address, err))
+        //     throw err
+        // }
+        // //update cache
+        // try {
+        //     await this.#updateCache(from, to, ids, chainId, address)
+        // } catch (err) {
+        //     const errMsg = messageHelper.getMessage('listener_buy_cache_failed', from, to, ids, chainId, address, err)
+        //     logger.error(errMsg)
+        // }
+        this.#buyNFTs(from, to, ids, chainId, address)
+    }
+
     async doSafeBuyListener(from, to, ids, chainId, address) {
         logger.debug(`Contract.doSafeBuyListener. Received from doSafeBuy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
         //TBD
     }
 
-    async buyBatchListener(to, froms, idss, chainId, address) {
-        logger.debug(`Contract.buyBatchListener. Received from buyBatch_tracer event: froms =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
-        //update db
-
-        for (let i = 0; i < froms.length; i++) {
-            const from = froms[i]
-            const ids = idss[i]
-            try {
-                await this.#buyNFTs(from, to, ids.map((id) => Number(id)), chainId, address)
-            } catch (err) {
-                /**
-                 * to-do:  
-                 * 1. Report the err to compensator system which could try to do the same thing several times
-                 * 2. Log err to db so that we could analyse why buying nfts is failed and recovery data manually if neccessary
-                 */
-                logger.error(messageHelper.getMessage('listener_buy_nft_failed', from, to, ids, chainId, address, err))
-                throw err
-            }
-        }
-
-        //update cache
-        try {
-            for (let i = 0; i < idss.length; i++) {
-                const from = froms[i]
-                const ids = idss[i]
-                await this.#updateCache(from, to, ids, chainId, address)
-            }
-        }
-        catch (err) {
-            const errMsg = messageHelper.getMessage('listener_buyBatch_cache_failed', froms, to, idss, chainId, address, err)
-            logger.error(errMsg)
-        }
-    }
-
-    async doSafeBuyBatchListener(to, froms, idss, chainId, address) {
-        logger.debug(`Contract.doSafeBuyBatchListener. Received from doSafeBuyBatch_tracer event: froms =${froms} to =${to}  idss =${idss} under chainId ${chainId} and address ${address}`)
-        //TBD
-    }
 
     async getOwnerOfToken(tokenId) {
         logger.debug(messageHelper.getMessage('config_contract_get_owner', tokenId, this.#chainId, this.#address))
