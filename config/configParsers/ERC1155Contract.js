@@ -132,7 +132,6 @@ module.exports = class ERC1155Contract {
              * 2. Log err to db so that we could analyse why saving nft is failed and recovery data manually if neccessary
              */
             logger.error(messageHelper.getMessage('listener_mint_nft_failed', nft, to, err))
-            throw err
         }
 
         //update cache
@@ -153,8 +152,8 @@ module.exports = class ERC1155Contract {
         //TBD
     }
 
-    async #buyNFTs(from, to, ids, chainId, address) {
-        logger.debug(`Contract.buyNFTs: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
+    async buyListener(from, to, ids, chainId, address) {
+        logger.debug(`Contract.buyListener. Received from buy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
         //update db
         try {
             await this.#updateDatabase(from, to, ids.map((id) => Number(id)), chainId, address)
@@ -165,7 +164,6 @@ module.exports = class ERC1155Contract {
              * 2. Log err to db so that we could analyse why buying nfts is failed and recovery data manually if neccessary
              */
             logger.error(messageHelper.getMessage('listener_buy_nft_failed', from, to, ids, chainId, address, err))
-            throw err
         }
         //update cache
         try {
@@ -174,30 +172,6 @@ module.exports = class ERC1155Contract {
             const errMsg = messageHelper.getMessage('listener_buy_cache_failed', from, to, ids, chainId, address, err)
             logger.error(errMsg)
         }
-    }
-
-    async buyListener(from, to, ids, chainId, address) {
-        logger.debug(`Contract.buyListener. Received from buy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
-        // //update db
-        // try {
-        //     await this.#updateDatabase(from, to, ids.map((id) => Number(id)), chainId, address)
-        // } catch (err) {
-        //     /**
-        //      * to-do:  
-        //      * 1. Report the err to compensator system which could try to do the same thing several times
-        //      * 2. Log err to db so that we could analyse why buying nfts is failed and recovery data manually if neccessary
-        //      */
-        //     logger.error(messageHelper.getMessage('listener_buy_nft_failed', from, to, ids, chainId, address, err))
-        //     throw err
-        // }
-        // //update cache
-        // try {
-        //     await this.#updateCache(from, to, ids, chainId, address)
-        // } catch (err) {
-        //     const errMsg = messageHelper.getMessage('listener_buy_cache_failed', from, to, ids, chainId, address, err)
-        //     logger.error(errMsg)
-        // }
-        this.#buyNFTs(from, to, ids, chainId, address)
     }
 
     async doSafeBuyListener(from, to, ids, chainId, address) {
