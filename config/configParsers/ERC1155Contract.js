@@ -84,7 +84,7 @@ module.exports = class ERC1155Contract {
         return created
     }
 
-    async #updateDatabase(from, to, ids, chainId, address) {
+    async #updateNFTs(from, to, ids, chainId, address) {
         const userByFrom = await userDao.findOneByFilter({address: from})
         if (!userByFrom) {
             const errMsg = messageHelper.getMessage('user_not_found_address', from)
@@ -156,7 +156,7 @@ module.exports = class ERC1155Contract {
         logger.debug(`Contract.buyListener. Received from buy_tracer event: from =${from} to =${to}  ids =${ids} under chainId ${chainId} and address ${address}`)
         //update db
         try {
-            await this.#updateDatabase(from, to, ids.map((id) => Number(id)), chainId, address)
+            await this.#updateNFTs(from, to, ids.map((id) => Number(id)), chainId, address)
         } catch (err) {
             /**
              * to-do:  
