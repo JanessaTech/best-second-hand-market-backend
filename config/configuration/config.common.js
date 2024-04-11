@@ -100,7 +100,7 @@ config.chains = {
         chainName: 'sepolia',
         currency: 'SepoliaETH',
         rpcUrl:'wss://ethereum-sepolia-rpc.publicnode.com',
-        exchange: 2000,
+        exchange: 900000000,
         contracts:[
           {
             address: '0xc4eC16B260aD902407AC3082AA75BB86281f8618', 
