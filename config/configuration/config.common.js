@@ -99,11 +99,11 @@ config.chains = {
         enabled: true,
         chainName: 'sepolia',
         currency: 'SepoliaETH',
-        rpcUrl:'https://rpc.sepolia.org',
-        exchange: 200,
+        rpcUrl:'wss://ethereum-sepolia-rpc.publicnode.com',
+        exchange: 2000,
         contracts:[
           {
-            address: '0x5FbDB2315678afecb367f032d93F642f64180aa3', 
+            address: '0xc4eC16B260aD902407AC3082AA75BB86281f8618', 
             abi: [
                 'function symbol() public view returns (string)',
                 'function ownerOfToken(uint _tokenId) public view returns (address)',
@@ -125,7 +125,7 @@ config.chains = {
             tokenStandard: 'ERC1155'
           },
           {
-            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
+            address: '0xcbe5F1893b598F5f571288087833435DD1319DF8', 
             abi: [
                 'function mint(address to, uint256 amount) public payable',
                 'function transferInBatch(address[] tos, uint256[] values) public',

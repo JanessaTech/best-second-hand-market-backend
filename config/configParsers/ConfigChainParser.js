@@ -37,7 +37,8 @@ class ConfigChainParser {
             logger.debug('currency =', currency)
             logger.debug('rpcUrl =', rpcUrl)
             logger.debug('contracts =', contracts)
-            const provider = new ethers.JsonRpcProvider(rpcUrl)
+            //const provider = new ethers.JsonRpcProvider(rpcUrl)
+            const provider = new ethers.WebSocketProvider(rpcUrl)
             logger.debug('Created a provider by rpcUrl', rpcUrl)
             const chain = new Chain(chainId, chainName, rpcUrl, currency)
             contracts.forEach((c, i) => {

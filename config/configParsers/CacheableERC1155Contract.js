@@ -65,7 +65,7 @@ module.exports = class CacheableERC1155Contract {
 
     async getAllTokenIds() {
         const allTokenIdsFromCache = await hGet(`${this.#chainId}:${this.#address}`, 'all_tokenids')
-        if (allTokenIdsFromCache) allTokenIdsFromCache.split(',').map((id) => Number(id))
+        if (allTokenIdsFromCache) return allTokenIdsFromCache.split(',').map((id) => Number(id))
         const allTokenIds = await this.#contract.getAllTokenIds()
         if (allTokenIds && allTokenIds.length > 0) {
             await hSet(`${this.#chainId}:${this.#address}`, 'all_tokenids', allTokenIds.join(','))
