@@ -23,8 +23,6 @@ module.exports = class CacheableERC1155Contract {
 
     async warmUp() {
         const startTime = performance.now()
-        //logger.info(`cleanup cache under chainId=${this.#chainId} and address=${this.#address}`)
-        //await this.cleanupCache()
         logger.info(`start filling cache under chainId=${this.#chainId} and address=${this.#address}`)
         const allTokenIds = await this.getAllTokenIds()
         if (allTokenIds && allTokenIds.length > 0) {
