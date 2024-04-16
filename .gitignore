@@ -40,6 +40,8 @@ dist
 ### nodejs ######
 /uploads
 /ipfs
+/test-pics
+/test-demo
 
 #### logs
 /logs/

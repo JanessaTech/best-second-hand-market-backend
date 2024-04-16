@@ -1,4 +1,5 @@
 //in commandline
+db.nfts_view.drop()
 db.createView("nfts_view", "nfts",[
     {
         $lookup: {

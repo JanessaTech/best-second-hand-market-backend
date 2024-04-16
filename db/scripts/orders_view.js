@@ -1,5 +1,6 @@
 
 //in commandline
+db.orders_view.drop()
 db.createView("orders_view", "orders",[
 	{
 		$lookup: 
