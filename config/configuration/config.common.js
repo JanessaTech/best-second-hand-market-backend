@@ -31,7 +31,7 @@ config.chains = {
       enabled: true,
       chainName: 'hardhat',
       currency: 'HardHatETH',
-      rpcUrl:'ws://127.0.0.1:8545/',
+      rpcUrl:'http://127.0.0.1:8545/',
       exchange: 100,
       contracts: [  // configure at least one
           {
