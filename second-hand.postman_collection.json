@@ -1,0 +1,998 @@
+{
+	"info": {
+		"_postman_id": "24f51ca1-b149-4805-92b0-465f287be3aa",
+		"name": "second-hand",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13369105"
+	},
+	"item": [
+		{
+			"name": "[User]user register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "fsfaf",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+							"type": "text"
+						},
+						{
+							"key": "intro",
+							"value": "user2 user2 user2",
+							"type": "text"
+						},
+						{
+							"key": "profile",
+							"type": "file",
+							"src": "/E:/doc/personal/pic/flucency.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/users/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User]get User By WalletAddress",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/users/0xb129c8aD40e31bC421F37b5B418CF1Bfe1175536",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"users",
+						"0xb129c8aD40e31bC421F37b5B418CF1Bfe1175536"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User]login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": \"0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User]logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": \"0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/users/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"users",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User] Update an user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "29",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "dddddddd",
+							"type": "text"
+						},
+						{
+							"key": "intro",
+							"value": "this is the new intro",
+							"type": "text"
+						},
+						{
+							"key": "profile",
+							"type": "file",
+							"src": "/E:/doc/personal/pic/flucency.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/users/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"users",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User] Get the overview for an user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/users/overview/29",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"users",
+						"overview",
+						"29"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[NFT]mint a nft",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tokenId\": 5,\r\n    \"title\": \"test25 title\",\r\n    \"category\": \"books\",\r\n    \"chainId\": 31337,\r\n    \"address\": \"0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512\",\r\n    \"status\":\"off\",\r\n    \"description\": \"This is the intro for the test25 nft\",\r\n    \"price\": 50\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/nfts/mint",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"nfts",
+						"mint"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[NFT]mint a nft 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tokenId\": 1,\r\n    \"ipfs\": \"ipfs://bafybeid6y74ulx4rmnum2z4poapjkgs2elbdnkroj6lsgxjw7cddx4asva/product__1711610721236.jpg\",\r\n    \"chainId\": 31337,\r\n    \"address\": \"0x5FbDB2315678afecb367f032d93F642f64180aa3\",\r\n    \"status\":\"off\",\r\n    \"price\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/nfts/mint",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"nfts",
+						"mint"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[NFT]update nft",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 5,\r\n    \"status\": \"on\",\r\n    \"price\": 64\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/nfts/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"nfts",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[NFT]get nft by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/nfts/11?userId=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"nfts",
+						"11"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[NFT]get all nfts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/nfts?page=1&limit=20&sortBy=updatedAt:desc&status=on",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"nfts"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "20"
+						},
+						{
+							"key": "sortBy",
+							"value": "updatedAt:desc"
+						},
+						{
+							"key": "status",
+							"value": "on"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[NFT]get nfts for an user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/nfts/users/5?page=1&limit=15&sortBy=id:desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"nfts",
+						"users",
+						"5"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "15"
+						},
+						{
+							"key": "sortBy",
+							"value": "id:desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[NFT]get nfts for an user again",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/nfts/users/5?page=1&limit=5&sortBy=id:desc&prices=min:54|max:56&category[]=cars&chainId=31337",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"nfts",
+						"users",
+						"5"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						},
+						{
+							"key": "sortBy",
+							"value": "id:desc"
+						},
+						{
+							"key": "prices",
+							"value": "min:54|max:56"
+						},
+						{
+							"key": "category[]",
+							"value": "cars"
+						},
+						{
+							"key": "chainId",
+							"value": "31337"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User] get favorite nfts  for an user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/nfts/favorite/5?page=1&limit=5&sortBy=id:desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"nfts",
+						"favorite",
+						"5"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						},
+						{
+							"key": "sortBy",
+							"value": "id:desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Cart]Add to cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 2,\r\n    \"nftId\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/cart",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Cart]remove item from a cart",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/cart?userId=2&nftId[]=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"cart"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "nftId[]",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Cart]query the list of nfts in cart for an user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/cart/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"cart",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Cart]isInCart",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/cart/isInCart?userId=2&nftId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"cart",
+						"isInCart"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "nftId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Like]increase a like",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 28,\r\n    \"nftId\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/likes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"likes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Like]decrease a like",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 28,\r\n    \"nftId\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/likes/unlike",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"likes",
+						"unlike"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Like] chek isLike",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 1,\r\n    \"nftId\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/likes/isLike",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"likes",
+						"isLike"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Like] countLike",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/likes/countLike/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"likes",
+						"countLike",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Comment] Add a new comment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"nftId\": 1,\r\n    \"content\": \"xxxxxx\",\r\n    \"user\": 6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/comments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Comment] Delete a comment(and their children)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/comments/21",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"comments",
+						"21"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Comment] Query all comments by nftId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/comments/1?limit=20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"comments",
+						"1"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "20"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Order] create a new order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"userId\" : 6,\r\n\t\"nftId\": 4,\r\n\t\"from\": \"0xb129c8aD40e31bC421F37b5B418CF1Bfe1175536\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3100/apis/v1/orders/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"orders",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Order] Create orders in batch",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"userId\":1,\r\n\t\"nftIds\":[4, 5, 6],\r\n\t\"froms\":[\"0x70997970C51812dc3A010C7d01b50e0d17dc79C1\", \"0x70997970C51812dc3A010C7d01b50e0d17dc79C2\", \"0x70997970C51812dc3A010C7d01b50e0d17dc79C3\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3100/apis/v1/orders/batch",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"orders",
+						"batch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Order] Query orders by  userId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3100/apis/v1/orders/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"orders",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[IPFS] upload file",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "product",
+							"type": "file",
+							"src": "/E:/doc/personal/pic/pp.png"
+						},
+						{
+							"key": "title",
+							"value": "my book1",
+							"type": "text"
+						},
+						{
+							"key": "category",
+							"value": "books",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "This is my book1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/ipfs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"ipfs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Balance]Get a balance for a user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/balances/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"balances",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Balance] update balance",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\" : 5,\r\n    \"value\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3100/apis/v1/balances",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"apis",
+						"v1",
+						"balances"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

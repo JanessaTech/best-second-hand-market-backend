@@ -158,6 +158,8 @@ http://localhost:3100/apis/v1/nfts?page=1&limit=20&sortBy=updatedAt:desc&status=
 
 If everything works well, there should have one NFT returned
 
+For more restful apis, check second-hand.postman_collection.json (You need to import it into postman)
+
 ### How to run on testnet
 
 - On windows:
