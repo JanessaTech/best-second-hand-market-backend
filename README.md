@@ -111,10 +111,15 @@ ping  => pong
 ### Edit config file
 
 - Update address for smart contracts
+
   Go to front-end part of this project, see https://github.com/JanessaTech/best-second-hand-market, check out readme. Make sure you should follow the readme in front-end part first.
+
   Once all smart contracts are deployed, edit config/configuration/config.common.js. Update address under chains.local.contracts. The updating steps for config.common.js is the same as what we did for front-end part.
+
   Once updating is done, make sure config.common.js in backend part is the same as config.common.js in front-end part
+
 - Update config for redis
+
   Edit config.global.js under config/configuration, update values defined in config.redis:
 
 ```
